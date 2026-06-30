@@ -25,13 +25,10 @@ public abstract class ServerPlayerEntityMixin {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         ServerWorld source = player.getServerWorld();
 
-        if (source.getRegistryKey() == World.OVERWORLD && destination.getRegistryKey() == World.NETHER) {
-            RankedRngState.resetBlindPortalSurface();
-        }
-
         if (source.getRegistryKey() == World.NETHER
                 && destination.getRegistryKey() == World.OVERWORLD
-                && player.getY() >= 48.0D) {
+                && player.getY() >= 48.0D
+                && RankedRngState.canUseBlindPortalSurface()) {
             int overworldX = (int) Math.floor(player.getX() * 8.0D);
             int overworldZ = (int) Math.floor(player.getZ() * 8.0D);
             int surfaceY = this.mcsreasymode$getGeneratedSurfaceY(destination, overworldX, overworldZ);

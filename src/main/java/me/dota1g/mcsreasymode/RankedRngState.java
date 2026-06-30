@@ -102,14 +102,12 @@ public final class RankedRngState {
         }
     }
 
-    public static void resetBlindPortalSurface() {
-        blindPortalSurfacePending = false;
-        blindPortalSurfaceUsed = false;
-        Mcsreasymode.debug("Blind portal surfacing state reset after entering the Nether.");
-    }
-
     public static boolean shouldSurfaceBlindPortal() {
         return blindPortalSurfacePending && !blindPortalSurfaceUsed;
+    }
+
+    public static boolean canUseBlindPortalSurface() {
+        return !blindPortalSurfaceUsed;
     }
 
     public static void consumeBlindPortalSurface() {
