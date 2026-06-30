@@ -25,6 +25,7 @@ public abstract class LivingEntityMixin {
 
         if (self instanceof IronGolemEntity) {
             ((LivingEntity) self).dropStack(new ItemStack(Items.IRON_INGOT, 4));
+            Mcsreasymode.debug("Iron golem loot standardized: dropped exactly 4 iron ingots.");
             ci.cancel();
             return;
         }
@@ -34,9 +35,11 @@ public abstract class LivingEntityMixin {
             boolean shouldDropRod = entity.getRandom().nextFloat() < 0.5F || mcsreasymode$blazeRodlessKills >= 2;
             if (shouldDropRod) {
                 entity.dropStack(new ItemStack(Items.BLAZE_ROD));
+                Mcsreasymode.debug("Blaze rod standardized: dropped 1 rod after " + mcsreasymode$blazeRodlessKills + " dry blaze kills.");
                 mcsreasymode$blazeRodlessKills = 0;
             } else {
                 mcsreasymode$blazeRodlessKills++;
+                Mcsreasymode.debug("Blaze rod standardized: no rod dropped, dry blaze kills now " + mcsreasymode$blazeRodlessKills + ".");
             }
             ci.cancel();
         }

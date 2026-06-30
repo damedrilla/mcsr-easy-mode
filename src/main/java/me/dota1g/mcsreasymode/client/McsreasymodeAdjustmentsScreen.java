@@ -13,9 +13,9 @@ public class McsreasymodeAdjustmentsScreen extends Screen {
             "[Implemented] Blaze rods use 50% chance with no more than 2 dry kills.",
             "[Implemented] Piglin barters pity pearls after 12 dry barters.",
             "[Implemented] Piglin barters pity obsidian after 16 dry barters.",
-            "[Planned] Flint streak protection.",
-            "[Planned] Nether portal Y behavior inspired by Ranked.",
-            "[Planned] Blind travel portal surfacing behavior inspired by Ranked.",
+            "[Implemented] First eligible bastion chest has 3+ iron and 5+ obsidian.",
+            "[Implemented] Gravel keeps 10% flint odds with no more than 9 dry breaks.",
+            "[Implemented] First Nether Y48+ blind travel portal creates on the surface.",
             "[Planned] Spawn coordinate behavior inspired by Ranked."
     };
 

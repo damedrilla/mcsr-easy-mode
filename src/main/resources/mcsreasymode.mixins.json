@@ -4,11 +4,15 @@
   "package": "me.dota1g.mcsreasymode.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BlockMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
+    "HoglinEntityMixin",
     "LivingEntityMixin",
+    "LootableContainerBlockEntityMixin",
     "MobEntityMixin",
-    "PiglinBrainMixin"
+    "PiglinBrainMixin",
+    "ServerPlayerEntityMixin"
   ],
   "client": [
   ],

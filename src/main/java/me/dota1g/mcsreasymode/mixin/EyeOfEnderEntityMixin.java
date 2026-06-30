@@ -18,6 +18,7 @@ public abstract class EyeOfEnderEntityMixin {
     private void mcsreasymode$makeEyeReturn(BlockPos pos, CallbackInfo ci) {
         if (Mcsreasymode.isRankedRngEnabled()) {
             this.dropsItem = true;
+            Mcsreasymode.debug("Eye of ender standardized: forced thrown eye to drop back.");
         }
     }
 }

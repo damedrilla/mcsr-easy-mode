@@ -11,6 +11,7 @@ public abstract class GhastShootFireballGoalMixin {
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$disableFireballs(CallbackInfoReturnable<Boolean> cir) {
         if (Mcsreasymode.isGhastAggressionDisabled()) {
+            Mcsreasymode.debugRateLimited("ghast.fireball", "Ghast aggression cancelled: fireball goal blocked.", 2000L);
             cir.setReturnValue(false);
         }
     }

@@ -18,6 +18,7 @@ public abstract class MobEntityMixin {
     @ModifyVariable(method = "setTarget", at = @At("HEAD"), argsOnly = true)
     private LivingEntity mcsreasymode$removeTarget(LivingEntity target) {
         if (this.mcsreasymode$shouldDisableAggression()) {
+            Mcsreasymode.debugRateLimited(this.mcsreasymode$getAggressionLogKey() + ".target", this.mcsreasymode$getAggressionLogName() + " aggression cancelled: target cleared.", 2000L);
             return null;
         }
         return target;
@@ -26,6 +27,7 @@ public abstract class MobEntityMixin {
     @Inject(method = "tryAttack", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$cancelAttack(Entity target, CallbackInfoReturnable<Boolean> cir) {
         if (this.mcsreasymode$shouldDisableAggression()) {
+            Mcsreasymode.debugRateLimited(this.mcsreasymode$getAggressionLogKey() + ".attack", this.mcsreasymode$getAggressionLogName() + " aggression cancelled: attack blocked.", 2000L);
             cir.setReturnValue(false);
         }
     }
@@ -42,5 +44,23 @@ public abstract class MobEntityMixin {
             return Mcsreasymode.isHoglinAggressionDisabled();
         }
         return false;
+    }
+
+    private String mcsreasymode$getAggressionLogName() {
+        Object self = this;
+        if (self instanceof PiglinEntity) {
+            return "Piglin";
+        }
+        if (self instanceof GhastEntity) {
+            return "Ghast";
+        }
+        if (self instanceof HoglinEntity) {
+            return "Hoglin";
+        }
+        return "Mob";
+    }
+
+    private String mcsreasymode$getAggressionLogKey() {
+        return this.mcsreasymode$getAggressionLogName().toLowerCase();
     }
 }
