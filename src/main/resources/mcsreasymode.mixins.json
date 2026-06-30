@@ -10,6 +10,7 @@
     "HoglinEntityMixin",
     "LivingEntityMixin",
     "LootableContainerBlockEntityMixin",
+    "MinecraftServerMixin",
     "MobEntityMixin",
     "PiglinBrainMixin",
     "ServerPlayerEntityMixin"

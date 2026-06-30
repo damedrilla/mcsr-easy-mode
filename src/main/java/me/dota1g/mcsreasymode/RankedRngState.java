@@ -24,6 +24,16 @@ public final class RankedRngState {
     private RankedRngState() {
     }
 
+    public static void reset() {
+        pearlDryBarters = 0;
+        obsidianDryBarters = 0;
+        flintDryBreaks = 0;
+        bastionChestAdjusted = false;
+        blindPortalSurfacePending = false;
+        blindPortalSurfaceUsed = false;
+        Mcsreasymode.debug("Ranked RNG state reset for new world.");
+    }
+
     public static List<ItemStack> applyPiglinBarterPity(List<ItemStack> original, Random random) {
         List<ItemStack> result = new ArrayList<>(original);
 
