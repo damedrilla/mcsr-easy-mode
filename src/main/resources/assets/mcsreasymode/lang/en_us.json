@@ -1,0 +1,12 @@
+{
+  "speedrunapi.config.mcsreasymode.category.rng": "RNG",
+  "speedrunapi.config.mcsreasymode.option.rngMode": "RNG",
+  "speedrunapi.config.mcsreasymode.option.rngMode.description": "Switches between vanilla Minecraft RNG and Ranked-style RNG adjustments.",
+  "speedrunapi.config.mcsreasymode.category.mobs": "Mobs",
+  "speedrunapi.config.mcsreasymode.option.disablePiglinAggression": "Disable piglin aggression",
+  "speedrunapi.config.mcsreasymode.option.disablePiglinAggression.description": "Prevents piglins from targeting or attacking.",
+  "speedrunapi.config.mcsreasymode.option.disableGhastAggression": "Disable ghast aggression",
+  "speedrunapi.config.mcsreasymode.option.disableGhastAggression.description": "Prevents ghasts from targeting, attacking, or shooting fireballs.",
+  "speedrunapi.config.mcsreasymode.option.disableHoglinAggression": "Disable hoglin aggression",
+  "speedrunapi.config.mcsreasymode.option.disableHoglinAggression.description": "Prevents hoglins from targeting or attacking."
+}

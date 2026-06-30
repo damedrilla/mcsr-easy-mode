@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.dota1g.mcsreasymode.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "EyeOfEnderEntityMixin",
+    "GhastShootFireballGoalMixin",
+    "LivingEntityMixin",
+    "MobEntityMixin",
+    "PiglinBrainMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
