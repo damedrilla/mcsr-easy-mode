@@ -12,8 +12,8 @@ MCSR Easy Mode is a client-side Fabric mod for Minecraft 1.16.1 that adds practi
   - Iron golems always drop exactly 4 iron ingots.
   - Thrown eyes of ender always drop back as items.
   - Blaze rods use 50% chance with no more than 2 dry player kills.
-  - Piglin barters pity ender pearls after 12 dry barters.
-  - Piglin barters pity obsidian after 16 dry barters.
+  - Piglin barters pity a trade of ender pearls after 72 dry barters.
+  - Piglin barters pity 1 obsidian after 24 dry barters.
 - An `Adjustments` screen in the config menu lists implemented and planned RNG changes.
 
 ## Requirements
