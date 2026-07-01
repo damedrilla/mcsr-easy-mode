@@ -2,9 +2,6 @@ package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.RankedRngState;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -13,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
@@ -45,12 +41,6 @@ public abstract class LootableContainerBlockEntityMixin {
     private boolean mcsreasymode$adjustingLoot;
 
     @Unique
-    private boolean mcsreasymode$ruinedPortalStandardized;
-
-    @Unique
-    private boolean mcsreasymode$buriedTreasureStandardized;
-
-    @Unique
     private boolean mcsreasymode$bastionStandardized;
 
     @Inject(method = "setLootTable(Lnet/minecraft/util/Identifier;J)V", at = @At("TAIL"))
@@ -78,108 +68,27 @@ public abstract class LootableContainerBlockEntityMixin {
 
         this.mcsreasymode$adjustingLoot = true;
         try {
-            this.mcsreasymode$adjustLoot(player);
+            this.mcsreasymode$adjustBastionLoot();
         } finally {
             this.mcsreasymode$adjustingLoot = false;
         }
     }
 
     @Unique
-    private void mcsreasymode$adjustLoot(PlayerEntity player) {
-        Inventory inventory = (Inventory) this;
-        Identifier generatedLootTableId = this.mcsreasymode$lootTableIdBeforeGeneration != null
-                ? this.mcsreasymode$lootTableIdBeforeGeneration
-                : this.mcsreasymode$assignedLootTableId;
-
-        if (!this.mcsreasymode$ruinedPortalStandardized && (LootTables.RUINED_PORTAL_CHEST.equals(generatedLootTableId) || this.mcsreasymode$isLikelyRuinedPortalChest(inventory))) {
-            this.mcsreasymode$ensureAtLeast(inventory, Items.FIRE_CHARGE, 2, 0);
-            this.mcsreasymode$ensureAtLeastRandom(inventory, Items.IRON_NUGGET, 55, 60, 1);
-            this.mcsreasymode$ensureAtLeastRandom(inventory, Items.OBSIDIAN, 6, 7, 2);
-            this.mcsreasymode$ensureAtLeastRandom(inventory, Items.GOLDEN_CARROT, 6, 12, 3);
-            this.mcsreasymode$ruinedPortalStandardized = true;
-            inventory.markDirty();
-            Mcsreasymode.debug("Ruined portal chest standardized.");
-            return;
-        }
-
-        if (!this.mcsreasymode$buriedTreasureStandardized && (LootTables.BURIED_TREASURE_CHEST.equals(generatedLootTableId) || this.mcsreasymode$isLikelyBuriedTreasureChest(inventory))) {
-            this.mcsreasymode$ensureAtLeast(inventory, Items.HEART_OF_THE_SEA, 1, 0);
-            this.mcsreasymode$ensureAtLeastRandom(inventory, Items.IRON_INGOT, 7, 13, 1);
-            this.mcsreasymode$ensureAtLeast(inventory, Items.TNT, 1, 2);
-            this.mcsreasymode$buriedTreasureStandardized = true;
-            inventory.markDirty();
-            Mcsreasymode.debug("Buried treasure chest standardized.");
-            return;
-        }
-
+    private void mcsreasymode$adjustBastionLoot() {
         if (this.mcsreasymode$bastionStandardized || !this.mcsreasymode$isEligibleBastionChest() || !RankedRngState.shouldAdjustBastionChest()) {
             return;
         }
 
-        this.mcsreasymode$ensureAtLeast(inventory, Items.IRON_INGOT, RankedRngState.getBastionIronMinimum(), 0);
-        this.mcsreasymode$ensureAtLeast(inventory, Items.OBSIDIAN, RankedRngState.getBastionObsidianMinimum(), 1);
+        Inventory inventory = (Inventory) this;
+        int[] slots = this.mcsreasymode$shuffledSlots(inventory.size());
+        this.mcsreasymode$ensureAtLeast(Items.IRON_INGOT, RankedRngState.getBastionIronMinimum(), slots);
+        this.mcsreasymode$ensureAtLeast(Items.OBSIDIAN, RankedRngState.getBastionObsidianMinimum(), slots);
         this.mcsreasymode$bastionStandardized = true;
         inventory.markDirty();
         Mcsreasymode.debug("Bastion chest standardized: ensured at least "
                 + RankedRngState.getBastionIronMinimum() + " iron ingots and "
                 + RankedRngState.getBastionObsidianMinimum() + " obsidian.");
-    }
-
-    @Unique
-    private boolean mcsreasymode$isLikelyRuinedPortalChest(Inventory inventory) {
-        return this.mcsreasymode$hasNearbyRuinedPortalBlocks()
-                && (this.mcsreasymode$countItem(Items.OBSIDIAN) > 0
-                || this.mcsreasymode$countItem(Items.CRYING_OBSIDIAN) > 0
-                || this.mcsreasymode$countItem(Items.FIRE_CHARGE) > 0
-                || this.mcsreasymode$countItem(Items.FLINT_AND_STEEL) > 0
-                || this.mcsreasymode$countItem(Items.FLINT) > 0
-                || this.mcsreasymode$countItem(Items.IRON_NUGGET) > 0
-                || this.mcsreasymode$countItem(Items.GOLD_NUGGET) > 0
-                || this.mcsreasymode$countItem(Items.GOLD_INGOT) > 0
-                || this.mcsreasymode$countItem(Items.GOLD_BLOCK) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_APPLE) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_CARROT) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_AXE) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_SWORD) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_SHOVEL) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_PICKAXE) > 0
-                || this.mcsreasymode$countItem(Items.GOLDEN_HOE) > 0
-                || this.mcsreasymode$countItem(Items.BELL) > 0
-                || this.mcsreasymode$countItem(Items.CLOCK) > 0);
-    }
-
-    @Unique
-    private boolean mcsreasymode$isLikelyBuriedTreasureChest(Inventory inventory) {
-        return this.mcsreasymode$countItem(Items.HEART_OF_THE_SEA) > 0;
-    }
-
-    @Unique
-    private boolean mcsreasymode$hasNearbyRuinedPortalBlocks() {
-        BlockEntity blockEntity = (BlockEntity) (Object) this;
-        World world = blockEntity.getWorld();
-        BlockPos pos = blockEntity.getPos();
-        if (world == null || pos == null) {
-            return false;
-        }
-
-        int portalBlocks = 0;
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        for (int x = -8; x <= 8; x++) {
-            for (int y = -6; y <= 6; y++) {
-                for (int z = -8; z <= 8; z++) {
-                    mutable.set(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                    Block block = world.getBlockState(mutable).getBlock();
-                    if (block == Blocks.OBSIDIAN || block == Blocks.CRYING_OBSIDIAN || block == Blocks.NETHERRACK || block == Blocks.MAGMA_BLOCK) {
-                        portalBlocks++;
-                        if (portalBlocks >= 6) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     @Unique
@@ -192,7 +101,7 @@ public abstract class LootableContainerBlockEntityMixin {
     }
 
     @Unique
-    private void mcsreasymode$ensureAtLeast(Inventory inventory, Item item, int minimum, int... preferredSlots) {
+    private void mcsreasymode$ensureAtLeast(Item item, int minimum, int... preferredSlots) {
         int current = this.mcsreasymode$countItem(item);
         int missing = minimum - current;
         if (missing <= 0) {
@@ -219,16 +128,6 @@ public abstract class LootableContainerBlockEntityMixin {
                 return;
             }
         }
-
-        int replacementSlot = this.mcsreasymode$findReplaceableSlot(stacks);
-        if (replacementSlot >= 0) {
-            ItemStack replaced = stacks.get(replacementSlot);
-            stacks.set(replacementSlot, new ItemStack(item, missing));
-            Mcsreasymode.debug("Chest standardization made room: replaced " + replaced.getCount() + "x " + replaced.getItem() + " with " + missing + "x " + item + ".");
-            return;
-        }
-
-        Mcsreasymode.debug("Chest standardization warning: could not place " + missing + "x " + item + " because the chest had no replaceable slot.");
     }
 
     @Unique
@@ -245,10 +144,12 @@ public abstract class LootableContainerBlockEntityMixin {
         }
 
         int emptySlot = this.mcsreasymode$findEmptySlot(stacks, slot);
-        if (emptySlot >= 0 && !this.mcsreasymode$isStandardizedItem(current.getItem())) {
+        if (emptySlot >= 0 && !this.mcsreasymode$isBastionStandardizedItem(current.getItem())) {
             stacks.set(emptySlot, current.copy());
             stacks.set(slot, new ItemStack(item, count));
-            Mcsreasymode.debug("Chest standardization moved blocking item: moved " + current.getCount() + "x " + current.getItem() + " from slot " + slot + " to slot " + emptySlot + " for " + item + ".");
+            Mcsreasymode.debug("Bastion chest standardization moved blocking item: moved "
+                    + current.getCount() + "x " + current.getItem() + " from slot "
+                    + slot + " to slot " + emptySlot + " for " + item + ".");
             return true;
         }
 
@@ -266,36 +167,31 @@ public abstract class LootableContainerBlockEntityMixin {
     }
 
     @Unique
-    private int mcsreasymode$findReplaceableSlot(DefaultedList<ItemStack> stacks) {
-        for (int slot = 0; slot < stacks.size(); slot++) {
-            ItemStack stack = stacks.get(slot);
-            if (!stack.isEmpty() && !this.mcsreasymode$isStandardizedItem(stack.getItem())) {
-                return slot;
-            }
+    private boolean mcsreasymode$isBastionStandardizedItem(Item item) {
+        return item == Items.IRON_INGOT || item == Items.OBSIDIAN;
+    }
+
+    @Unique
+    private int[] mcsreasymode$shuffledSlots(int size) {
+        int[] slots = new int[size];
+        for (int slot = 0; slot < size; slot++) {
+            slots[slot] = slot;
         }
-        return -1;
-    }
 
-    @Unique
-    private boolean mcsreasymode$isStandardizedItem(Item item) {
-        return item == Items.FIRE_CHARGE
-                || item == Items.IRON_NUGGET
-                || item == Items.OBSIDIAN
-                || item == Items.GOLDEN_CARROT
-                || item == Items.HEART_OF_THE_SEA
-                || item == Items.IRON_INGOT
-                || item == Items.TNT;
-    }
+        Random random = this.mcsreasymode$getRandom();
+        for (int slot = size - 1; slot > 0; slot--) {
+            int swapSlot = random.nextInt(slot + 1);
+            int original = slots[slot];
+            slots[slot] = slots[swapSlot];
+            slots[swapSlot] = original;
+        }
 
-    @Unique
-    private void mcsreasymode$ensureAtLeastRandom(Inventory inventory, Item item, int minimum, int maximum, int... preferredSlots) {
-        int target = minimum + this.mcsreasymode$getRandom().nextInt(maximum - minimum + 1);
-        this.mcsreasymode$ensureAtLeast(inventory, item, target, preferredSlots);
+        return slots;
     }
 
     @Unique
     private Random mcsreasymode$getRandom() {
-        World world = ((BlockEntity) (Object) this).getWorld();
+        World world = ((LootableContainerBlockEntity) (Object) this).getWorld();
         if (world != null) {
             return world.getRandom();
         }
