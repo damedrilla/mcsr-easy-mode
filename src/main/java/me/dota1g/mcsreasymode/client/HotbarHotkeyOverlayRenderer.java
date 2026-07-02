@@ -1,5 +1,6 @@
 package me.dota1g.mcsreasymode.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.dota1g.mcsreasymode.McsreasymodeConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -66,6 +67,8 @@ public final class HotbarHotkeyOverlayRenderer {
         int x = getLabelX(config.hotbarHotkeyPosition, slotX, textWidth);
         int y = getLabelY(config.hotbarHotkeyPosition, slotY, textHeight);
         int background = config.hotbarHotkeyBackground.color();
+
+        RenderSystem.disableDepthTest();
         if ((background >>> 24) != 0) {
             DrawableHelper.fill(matrices, x - 1, y - 1, x + textWidth + 1, y + textHeight, background);
         }
@@ -74,6 +77,7 @@ public final class HotbarHotkeyOverlayRenderer {
         matrices.scale(scale, scale, 1.0F);
         client.textRenderer.drawWithShadow(matrices, label, x / scale, y / scale, TEXT_COLOR);
         matrices.pop();
+        RenderSystem.enableDepthTest();
     }
 
     private static float getTextScale(McsreasymodeConfig config) {
