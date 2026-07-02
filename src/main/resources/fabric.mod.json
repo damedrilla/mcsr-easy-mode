@@ -3,10 +3,10 @@
   "id": "mcsreasymode",
   "version": "${version}",
   "name": "MCSR Easy Mode",
-  "description": "",
+  "description": "minecraft speedrunning if its all sunshine and rainbows",
   "authors": [],
   "contact": {},
-  "license": "Apache-2.0",
+  "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -19,6 +19,7 @@
   "mixins": [
     "mcsreasymode.mixins.json"
   ],
+  "icon": "assets/mcsreasymode/icon.png",
   "custom": {
     "speedrunapi": {
       "config": "me.dota1g.mcsreasymode.McsreasymodeConfig"

@@ -8,5 +8,16 @@
   "speedrunapi.config.mcsreasymode.option.disableGhastAggression": "Disable ghast aggression",
   "speedrunapi.config.mcsreasymode.option.disableGhastAggression.description": "Prevents ghasts from targeting, attacking, or shooting fireballs.",
   "speedrunapi.config.mcsreasymode.option.disableHoglinAggression": "Disable hoglin aggression",
-  "speedrunapi.config.mcsreasymode.option.disableHoglinAggression.description": "Prevents hoglins from targeting or attacking."
+  "speedrunapi.config.mcsreasymode.option.disableHoglinAggression.description": "Prevents hoglins from targeting or attacking.",
+  "speedrunapi.config.mcsreasymode.category.ui": "UI",
+  "speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton": "Move Save and Quit button",
+  "speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description": "Moves the pause menu Save and Quit button away from the center stack to reduce misclicks.",
+  "speedrunapi.config.mcsreasymode.option.showHotbarHotkeys": "Show hotbar hotkeys",
+  "speedrunapi.config.mcsreasymode.option.showHotbarHotkeys.description": "Displays keybind labels for hotbar slots and offhand.",
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition": "Hotbar hotkey position",
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description": "Sets where the hotbar hotkey overlay appears.",
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyTextSize": "Hotbar hotkey text size",
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyTextSize.description": "Sets the hotbar hotkey overlay text size.",
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground": "Hotbar hotkey background",
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground.description": "Sets the hotbar hotkey overlay background color."
 }

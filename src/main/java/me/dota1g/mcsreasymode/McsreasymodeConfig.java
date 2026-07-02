@@ -38,6 +38,34 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Hide
     public boolean disableAggression = true;
 
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")
+    public boolean moveSaveAndQuitButton = true;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showHotbarHotkeys")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showHotbarHotkeys.description")
+    public boolean showHotbarHotkeys = true;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description")
+    @Config.Text(getter = "getHotbarHotkeyPositionText")
+    public HotbarHotkeyPosition hotbarHotkeyPosition = HotbarHotkeyPosition.BOTTOM_RIGHT;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyTextSize")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyTextSize.description")
+    @Config.Numbers.Whole.Bounds(min = 1, max = 4)
+    public int hotbarHotkeyTextSize = 2;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground.description")
+    @Config.Text(getter = "getHotbarHotkeyBackgroundText")
+    public HotbarHotkeyBackground hotbarHotkeyBackground = HotbarHotkeyBackground.DARK;
+
     @Config.Ignored
     public SpeedrunConfigContainer<?> container;
 
@@ -62,6 +90,14 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     public Text getRngModeText(RngMode rngMode) {
         return new LiteralText(rngMode.displayName);
+    }
+
+    public Text getHotbarHotkeyPositionText(HotbarHotkeyPosition position) {
+        return new LiteralText(position.displayName);
+    }
+
+    public Text getHotbarHotkeyBackgroundText(HotbarHotkeyBackground background) {
+        return new LiteralText(background.displayName);
     }
 
     @Override
@@ -97,6 +133,56 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
         public String displayName() {
             return this.displayName;
+        }
+    }
+
+    public enum HotbarHotkeyPosition {
+        TOP_LEFT("Top Left"),
+        TOP_RIGHT("Top Right"),
+        BOTTOM_LEFT("Bottom Left"),
+        BOTTOM_RIGHT("Bottom Right");
+
+        private final String displayName;
+
+        HotbarHotkeyPosition(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String displayName() {
+            return this.displayName;
+        }
+
+        public HotbarHotkeyPosition next() {
+            HotbarHotkeyPosition[] values = values();
+            return values[(this.ordinal() + 1) % values.length];
+        }
+    }
+
+    public enum HotbarHotkeyBackground {
+        DARK("Dark", 0x88000000),
+        LIGHT("Light", 0x88FFFFFF),
+        BLUE("Blue", 0x883050B8),
+        NONE("None", 0x00000000);
+
+        private final String displayName;
+        private final int color;
+
+        HotbarHotkeyBackground(String displayName, int color) {
+            this.displayName = displayName;
+            this.color = color;
+        }
+
+        public String displayName() {
+            return this.displayName;
+        }
+
+        public int color() {
+            return this.color;
+        }
+
+        public HotbarHotkeyBackground next() {
+            HotbarHotkeyBackground[] values = values();
+            return values[(this.ordinal() + 1) % values.length];
         }
     }
 }

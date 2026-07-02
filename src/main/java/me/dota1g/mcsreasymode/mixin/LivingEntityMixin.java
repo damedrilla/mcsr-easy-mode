@@ -39,7 +39,7 @@ public abstract class LivingEntityMixin {
                 mcsreasymode$blazeRodlessKills = 0;
             } else {
                 mcsreasymode$blazeRodlessKills++;
-                Mcsreasymode.debug("Blaze rod standardized: no rod dropped, dry blaze kills now " + mcsreasymode$blazeRodlessKills + ".");
+                Mcsreasymode.debug("Blaze: no rod dropped, dry blaze kills now " + mcsreasymode$blazeRodlessKills + ".");
             }
             ci.cancel();
         }

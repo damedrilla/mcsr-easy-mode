@@ -2,9 +2,20 @@
 
 Making minecraft speedrunning less RWDA. For practicing only, not legal for leaderboards
 
+Current release: `0.3`
+
 ## Features
 
 - Toggle piglin, ghast, and hoglin aggression individually.
+  - Piglin anti-aggression spoofs gold armor checks, so the player does not need to wear gold armor. Vanilla anger triggers such as attacking piglins, opening guarded containers, or mining guarded gold-related blocks can still provoke piglins.
+  - Hoglin anti-aggression clears attack targeting and suppresses angry ambient behavior.
+  - Ghast anti-aggression blocks targeting and fireball behavior.
+- Move the pause menu `Save and Quit` button to the bottom-left corner to reduce accidental quits.
+- Display hotbar hotkey labels directly on the vanilla hotbar slots.
+  - Uses the player's current Minecraft keybinds.
+  - Includes the offhand swap key when the offhand slot is visible.
+  - Shortens side mouse buttons to compact labels such as `M4` and `M5`.
+  - Includes a customization screen with a live preview, label corner, text size, and background options.
 - `RNG` mode selector:
   - `Vanilla` keeps normal Minecraft behavior.
   - `Ranked` enables reliability adjustments inspired by MCSR Ranked.
@@ -15,7 +26,7 @@ Making minecraft speedrunning less RWDA. For practicing only, not legal for lead
   - Piglin barters pity a trade of ender pearls after 24 dry barters.
   - Piglin barters pity 1 obsidian after 24 dry barters.
   - Gravel keeps its vanilla 10% flint chance, but forces flint after 9 failed drops.
-  - The first eligible bastion chest guarantees at least 3 iron ingots and 5 obsidian.
+  - The first eligible bastion ramparts or housing chest guarantees at least 3 iron ingots and 5 obsidian.
   - Ruined portal chests guarantee speedrun-useful resources.
   - Buried treasure chests guarantee speedrun-useful resources.
   - The first eligible blind travel portal from the Nether is surfaced to avoid cave spawns.
@@ -37,20 +48,24 @@ When `RNG` is set to `Ranked`, the mod applies the following standardizations.
 
 ### Chest Standardization
 
-- The first eligible bastion ramparts or housing chest ensures at least:
+- When `RNG` is set to `Ranked`, the first eligible bastion ramparts or housing chest ensures at least:
   - 3 iron ingots
   - 5 obsidian
-- Ruined portal chests ensure at least:
+- The bastion adjustment uses the generated vanilla chest contents as a base, counts existing iron and obsidian first, and only adds the missing amount.
+- If a standardized item needs a slot that is already occupied, the mod tries to move the blocking vanilla item into a free slot before placing the standardized item.
+- The standardized bastion slots are randomized to keep the result closer to vanilla chest layouts.
+
+The mod also ships custom loot table overrides for other speedrun-relevant chests:
+
+- Ruined portal chests can include guaranteed speedrun-useful resources such as:
   - fire charges
   - iron nuggets
   - obsidian
   - golden carrots
-- Buried treasure chests ensure at least:
+- Buried treasure chests can include guaranteed speedrun-useful resources such as:
   - heart of the sea
   - iron ingots
   - TNT
-
-When a standardized item needs a preferred slot, the mod tries to move the blocking vanilla item into a free slot first. If the chest already has enough of the standardized item, it does not add more.
 
 ### Blind Portal Anti-Cave
 
@@ -69,7 +84,7 @@ This is intended for the first Nether exit used for stronghold triangulation. It
 - Fabric Loader `0.16.3` or newer compatible loader
 - SpeedrunAPI for Minecraft `1.16.1`
 
-This mod does not require the full Fabric API.
+This mod does not require the full Fabric API. It bundles Fabric Resource Loader v0 so the included loot table resources can load.
 
 ## Download
 
@@ -94,10 +109,20 @@ Launch Minecraft with Fabric, then open:
 Available options:
 
 - `RNG: Vanilla / Ranked`
+- `Adjustments`, which opens a summary of RNG changes
 - `Piglins aggression: Disabled / Vanilla`
 - `Ghasts aggression: Disabled / Vanilla`
 - `Hoglins aggression: Disabled / Vanilla`
-- `Adjustments`, which opens a summary of RNG changes
+- `Move Save & Quit: On / Off`
+- `Display Hotbar Hotkeys: On / Off`
+- `Customize Hotbar Hotkeys`, available when hotbar hotkeys are enabled
+
+Hotbar hotkey customization:
+
+- `Label Corner`: chooses which corner of each hotbar slot receives the keybind label
+- `Text Size`: cycles through sizes `1` to `4`
+- `Background`: cycles through available label backgrounds
+- The preview uses your current Minecraft hotbar and offhand keybinds
 
 ## Building From Source
 
@@ -127,7 +152,7 @@ gradle build
 The compiled jar will be created at:
 
 ```text
-build/libs/mcsreasymode-0.2.jar
+build/libs/mcsreasymode-0.3.jar
 ```
 
 Install that jar into your `mods` folder alongside SpeedrunAPI.
@@ -138,4 +163,5 @@ Install that jar into your `mods` folder alongside SpeedrunAPI.
 - Yarn mappings: `1.16.1+build.21`
 - Fabric Loom: `1.15.5`
 - SpeedrunAPI dependency: `com.github.contariaa:SpeedrunAPI:v2.1-1.16.1`
+- Fabric Resource Loader v0 is bundled through Gradle for resource loading.
 - Full Fabric API is intentionally not used.

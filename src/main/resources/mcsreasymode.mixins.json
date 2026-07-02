@@ -16,6 +16,8 @@
     "ServerPlayerEntityMixin"
   ],
   "client": [
+    "GameMenuScreenMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

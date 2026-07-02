@@ -33,6 +33,14 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG == null || CONFIG.disableHoglinAggression;
     }
 
+    public static boolean shouldMoveSaveAndQuitButton() {
+        return CONFIG == null || CONFIG.moveSaveAndQuitButton;
+    }
+
+    public static boolean shouldShowHotbarHotkeys() {
+        return CONFIG != null && CONFIG.showHotbarHotkeys;
+    }
+
     public static void debug(String message) {
         LOGGER.info("[MCSR Easy Mode] {}", message);
     }

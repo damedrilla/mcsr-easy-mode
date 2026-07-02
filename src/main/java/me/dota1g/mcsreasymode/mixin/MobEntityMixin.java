@@ -6,7 +6,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.HoglinEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PiglinEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -34,9 +33,6 @@ public abstract class MobEntityMixin {
 
     private boolean mcsreasymode$shouldDisableAggression() {
         Object self = this;
-        if (self instanceof PiglinEntity) {
-            return Mcsreasymode.isPiglinAggressionDisabled();
-        }
         if (self instanceof GhastEntity) {
             return Mcsreasymode.isGhastAggressionDisabled();
         }
@@ -48,9 +44,6 @@ public abstract class MobEntityMixin {
 
     private String mcsreasymode$getAggressionLogName() {
         Object self = this;
-        if (self instanceof PiglinEntity) {
-            return "Piglin";
-        }
         if (self instanceof GhastEntity) {
             return "Ghast";
         }
