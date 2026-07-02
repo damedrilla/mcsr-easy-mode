@@ -27,6 +27,7 @@ Current release: `0.3`
   - Piglin barters pity 1 obsidian after 24 dry barters.
   - Gravel keeps its vanilla 10% flint chance, but forces flint after 9 failed drops.
   - The first eligible bastion ramparts or housing chest guarantees at least 3 iron ingots and 5 obsidian.
+  - Hoglin stable bastions guarantee at least 2 adjacent full-height triple-chest ramparts.
   - Ruined portal chests guarantee speedrun-useful resources.
   - Buried treasure chests guarantee speedrun-useful resources.
   - The first eligible blind travel portal from the Nether is surfaced to avoid cave spawns.
@@ -66,6 +67,14 @@ The mod also ships custom loot table overrides for other speedrun-relevant chest
   - heart of the sea
   - iron ingots
   - TNT
+
+### Bastion Structure Standardization
+
+- When `RNG` is set to `Ranked`, hoglin stable bastions guarantee at least 2 adjacent full-height ramparts.
+- Full-height ramparts are the triple-chest hoglin stable rampart template.
+- The mod preserves vanilla bastion placement, spacing, and quadrant rules. It does not force bastion locations or change fortress/bastion region placement.
+- To keep placement vanilla-adjacent, the mod rerolls the vanilla hoglin stable jigsaw assembly at the same generated bastion position until it finds an assembly with adjacent full-height ramparts, or keeps the best fallback after a limited number of attempts.
+- Only hoglin stable internals are standardized this way. Other bastion types use their vanilla structure assembly.
 
 ### Blind Portal Anti-Cave
 

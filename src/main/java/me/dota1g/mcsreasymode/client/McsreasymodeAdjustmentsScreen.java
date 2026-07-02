@@ -8,17 +8,17 @@ import net.minecraft.text.LiteralText;
 
 public class McsreasymodeAdjustmentsScreen extends Screen {
     private static final String[] ADJUSTMENTS = {
-            "[Implemented] Iron golems always drop exactly 4 iron ingots.",
-            "[Implemented] Thrown eyes of ender always drop back as items.",
-            "[Implemented] Blaze rods use 50% chance with no more than 2 dry kills.",
-            "[Implemented] Piglin barters pity pearls after 24 dry barters.",
-            "[Implemented] Piglin barters pity obsidian after 24 dry barters.",
-            "[Implemented] Gravel keeps 10% flint odds with no more than 9 dry breaks.",
-            "[Implemented] First Nether Y48+ blind travel portal creates on the surface.",
-            "[Implemented] First eligible bastion chest has 3+ iron and 5+ obsidian.",
-            "[Implemented] Ruined portal chests ensure fire charges, nuggets, obsidian, golden carrots.",
-            "[Implemented] Buried treasure chests ensure heart, iron ingots, and TNT.",
-            "[Planned] Spawn coordinate behavior inspired by MCSR Ranked."
+            "Iron golems always drop exactly 4 iron ingots.",
+            "Thrown eyes of ender always drop back as items.",
+            "Blaze rods use 50% chance with no more than 2 dry kills.",
+            "Piglin barters pity pearls after 24 dry barters.",
+            "Piglin barters pity obsidian after 24 dry barters.",
+            "Gravel keeps 10% flint odds with no more than 9 dry breaks.",
+            "First Nether Y48+ blind travel portal creates on the surface.",
+            "First eligible bastion chest has 3+ iron and 5+ obsidian.",
+            "Ruined portal chests ensure fire charges, nuggets, obsidian, golden carrots.",
+            "Buried treasure chests ensure heart, iron ingots, and TNT.",
+            "Stables are guaranteed to have adjacent double triple chest ramparts"
     };
 
     private final Screen parent;

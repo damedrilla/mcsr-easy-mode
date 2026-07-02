@@ -4,6 +4,7 @@
   "package": "me.dota1g.mcsreasymode.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BastionRemnantGeneratorMixin",
     "BlockMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
