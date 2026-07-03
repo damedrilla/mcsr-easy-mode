@@ -17,6 +17,7 @@
     "ServerPlayerEntityMixin"
   ],
   "client": [
+    "DebugHudMixin",
     "GameMenuScreenMixin",
     "InGameHudMixin"
   ],

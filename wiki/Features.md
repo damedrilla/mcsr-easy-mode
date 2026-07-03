@@ -32,7 +32,7 @@ Hoglin anti-aggression clears attack targeting and suppresses angry ambient beha
 ## Ranked Drops And Barters
 
 - Iron golems always drop exactly 4 iron ingots.
-- Thrown eyes of ender always drop back as items.
+- The second thrown eye of ender never breaks; the first and later throws use vanilla break odds.
 - Blaze rods use 50% chance with no more than 2 dry player kills.
 - Piglin barters pity ender pearls after 24 dry barters.
 - Piglin barters pity obsidian after 24 dry barters.

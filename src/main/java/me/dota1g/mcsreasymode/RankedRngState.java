@@ -19,6 +19,7 @@ public final class RankedRngState {
     private static int obsidianDryBarters;
     private static int stringDryBarters;
     private static int flintDryBreaks;
+    private static int thrownEyeCount;
     private static boolean bastionChestAdjusted;
     private static boolean blindPortalSurfacePending;
     private static boolean blindPortalSurfaceUsed;
@@ -31,6 +32,7 @@ public final class RankedRngState {
         obsidianDryBarters = 0;
         stringDryBarters = 0;
         flintDryBreaks = 0;
+        thrownEyeCount = 0;
         bastionChestAdjusted = false;
         blindPortalSurfacePending = false;
         blindPortalSurfaceUsed = false;
@@ -119,6 +121,17 @@ public final class RankedRngState {
         }
 
         return result;
+    }
+
+    public static boolean shouldProtectThrownEye() {
+        thrownEyeCount++;
+        boolean protect = thrownEyeCount == 2;
+        if (protect) {
+            Mcsreasymode.debug("Eye of ender standardized: protected throw #2 from breaking.");
+        } else {
+            Mcsreasymode.debug("Eye of ender throw #" + thrownEyeCount + " uses vanilla break rate.");
+        }
+        return protect;
     }
 
     public static void armBlindPortalSurface() {

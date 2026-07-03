@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
+import me.dota1g.mcsreasymode.RankedRngState;
 import net.minecraft.entity.EyeOfEnderEntity;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,10 +16,9 @@ public abstract class EyeOfEnderEntityMixin {
     private boolean dropsItem;
 
     @Inject(method = "moveTowards", at = @At("TAIL"))
-    private void mcsreasymode$makeEyeReturn(BlockPos pos, CallbackInfo ci) {
-        if (Mcsreasymode.isRankedRngEnabled()) {
+    private void mcsreasymode$protectSecondEye(BlockPos pos, CallbackInfo ci) {
+        if (Mcsreasymode.isRankedRngEnabled() && RankedRngState.shouldProtectThrownEye()) {
             this.dropsItem = true;
-            Mcsreasymode.debug("Eye of ender standardized: forced thrown eye to drop back.");
         }
     }
 }
