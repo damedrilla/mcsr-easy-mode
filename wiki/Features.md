@@ -43,23 +43,22 @@ Piglin barter pity is tracked across all piglins in the world.
 
 ## Chest Standardization
 
-When `RNG` is set to `Ranked`, the first eligible bastion ramparts or housing chest ensures at least:
+When `RNG` is set to `Ranked`, the first eligible bastion ramparts or housing chest uses a Ranked loot table that includes the vanilla table plus guaranteed:
 
 - 3 iron ingots
 - 5 obsidian
 
 The bastion chest adjustment:
 
-- starts from generated vanilla chest contents
-- counts existing iron and obsidian first
-- only adds the missing amount
-- moves a blocking vanilla item into a free slot when needed
-- randomizes standardized item slots to stay closer to vanilla layouts
+- only applies once per world
+- falls back to vanilla bastion loot tables after the guaranteed chest has generated
+- keeps the original vanilla bastion table inside the Ranked table before adding the guaranteed items
 
-The mod also ships custom loot table overrides for other speedrun-relevant chests:
+When `RNG` is set to `Ranked`, the mod swaps selected vanilla chest loot tables to mod-owned Ranked tables at generation time. When `RNG` is set to `Vanilla`, these chests use the normal Minecraft loot tables.
 
 - Ruined portal chests can include useful resources such as fire charges, iron nuggets, obsidian, and golden carrots.
 - Buried treasure chests can include useful resources such as heart of the sea, iron ingots, and TNT.
+- Desert pyramid, shipwreck supply, shipwreck treasure, and village weaponsmith chests also use their Ranked tables only while Ranked mode is enabled.
 
 ## Hoglin Stable Standardization
 

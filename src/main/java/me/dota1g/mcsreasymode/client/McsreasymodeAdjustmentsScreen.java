@@ -15,9 +15,9 @@ public class McsreasymodeAdjustmentsScreen extends Screen {
             "Piglin barters pity obsidian after 24 dry barters.",
             "Gravel keeps 10% flint odds with no more than 9 dry breaks.",
             "First Nether Y48+ blind travel portal creates on the surface.",
-            "First eligible bastion chest has 3+ iron and 5+ obsidian.",
-            "Ruined portal chests ensure fire charges, nuggets, obsidian, golden carrots.",
-            "Buried treasure chests ensure heart, iron ingots, and TNT.",
+            "First eligible bastion chest uses Ranked loot, then later ones are vanilla.",
+            "Selected chest loot tables swap to Ranked versions only in Ranked mode.",
+            "Ruined portal and buried treasure chests use speedrun-focused tables.",
             "Stables are guaranteed to have adjacent double triple chest ramparts"
     };
 
