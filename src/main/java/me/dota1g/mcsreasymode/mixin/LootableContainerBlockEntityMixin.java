@@ -25,6 +25,23 @@ import java.util.Random;
 
 @Mixin(LootableContainerBlockEntity.class)
 public abstract class LootableContainerBlockEntityMixin {
+    @Unique
+    private static final Identifier MCSREASYMODE_RUINED_PORTAL_CHEST = new Identifier("minecraft", "chests/ruined_portal");
+    @Unique
+    private static final Identifier MCSREASYMODE_BURIED_TREASURE_CHEST = new Identifier("minecraft", "chests/buried_treasure");
+    @Unique
+    private static final Identifier MCSREASYMODE_DESERT_PYRAMID_CHEST = new Identifier("minecraft", "chests/desert_pyramid");
+    @Unique
+    private static final Identifier MCSREASYMODE_SHIPWRECK_SUPPLY_CHEST = new Identifier("minecraft", "chests/shipwreck_supply");
+    @Unique
+    private static final Identifier MCSREASYMODE_SHIPWRECK_TREASURE_CHEST = new Identifier("minecraft", "chests/shipwreck_treasure");
+    @Unique
+    private static final Identifier MCSREASYMODE_VILLAGE_WEAPONSMITH_CHEST = new Identifier("minecraft", "chests/village/village_weaponsmith");
+    @Unique
+    private static final Identifier MCSREASYMODE_BASTION_OTHER_CHEST = new Identifier("minecraft", "chests/bastion_other");
+    @Unique
+    private static final Identifier MCSREASYMODE_BASTION_BRIDGE_CHEST = new Identifier("minecraft", "chests/bastion_bridge");
+
     @Shadow
     protected Identifier lootTableId;
 
@@ -38,10 +55,7 @@ public abstract class LootableContainerBlockEntityMixin {
     private Identifier mcsreasymode$assignedLootTableId;
 
     @Unique
-    private boolean mcsreasymode$adjustingLoot;
-
-    @Unique
-    private boolean mcsreasymode$bastionStandardized;
+    private boolean mcsreasymode$usingRankedBastionLootTable;
 
     @Inject(method = "setLootTable(Lnet/minecraft/util/Identifier;J)V", at = @At("TAIL"))
     private void mcsreasymode$rememberAssignedLootTable(Identifier lootTableId, long lootTableSeed, CallbackInfo ci) {
@@ -56,48 +70,70 @@ public abstract class LootableContainerBlockEntityMixin {
     }
 
     @Inject(method = "checkLootInteraction", at = @At("HEAD"))
-    private void mcsreasymode$captureLootTable(PlayerEntity player, CallbackInfo ci) {
+    private void mcsreasymode$captureAndMaybeSwapLootTable(PlayerEntity player, CallbackInfo ci) {
         this.mcsreasymode$lootTableIdBeforeGeneration = this.lootTableId != null ? this.lootTableId : this.mcsreasymode$assignedLootTableId;
+        this.mcsreasymode$usingRankedBastionLootTable = false;
+        if (!Mcsreasymode.isRankedRngEnabled() || this.mcsreasymode$lootTableIdBeforeGeneration == null) {
+            return;
+        }
+
+        Identifier rankedLootTableId = this.mcsreasymode$getRankedLootTable(this.mcsreasymode$lootTableIdBeforeGeneration);
+        if (rankedLootTableId != null && this.lootTableId != null) {
+            this.lootTableId = rankedLootTableId;
+            Mcsreasymode.debug("Ranked chest loot table selected: " + this.mcsreasymode$lootTableIdBeforeGeneration + " -> " + rankedLootTableId + ".");
+        }
     }
 
     @Inject(method = "checkLootInteraction", at = @At("TAIL"))
-    private void mcsreasymode$adjustBastionChest(PlayerEntity player, CallbackInfo ci) {
-        if (!Mcsreasymode.isRankedRngEnabled() || this.mcsreasymode$adjustingLoot) {
-            return;
-        }
-
-        this.mcsreasymode$adjustingLoot = true;
-        try {
-            this.mcsreasymode$adjustBastionLoot();
-        } finally {
-            this.mcsreasymode$adjustingLoot = false;
+    private void mcsreasymode$logRankedBastionChest(PlayerEntity player, CallbackInfo ci) {
+        if (this.mcsreasymode$usingRankedBastionLootTable) {
+            Mcsreasymode.debug("Bastion chest standardized: generated Ranked bastion loot table with guaranteed "
+                    + RankedRngState.getBastionIronMinimum() + " iron ingots and "
+                    + RankedRngState.getBastionObsidianMinimum() + " obsidian. Later bastion chests use vanilla.");
+            this.mcsreasymode$usingRankedBastionLootTable = false;
         }
     }
 
     @Unique
-    private void mcsreasymode$adjustBastionLoot() {
-        if (this.mcsreasymode$bastionStandardized || !this.mcsreasymode$isEligibleBastionChest() || !RankedRngState.shouldAdjustBastionChest()) {
-            return;
+    private Identifier mcsreasymode$getRankedLootTable(Identifier vanillaLootTableId) {
+        Identifier rankedBastionLootTable = this.mcsreasymode$getRankedBastionLootTable(vanillaLootTableId);
+        if (rankedBastionLootTable != null) {
+            return rankedBastionLootTable;
         }
-
-        Inventory inventory = (Inventory) this;
-        int[] slots = this.mcsreasymode$shuffledSlots(inventory.size());
-        this.mcsreasymode$ensureAtLeast(Items.IRON_INGOT, RankedRngState.getBastionIronMinimum(), slots);
-        this.mcsreasymode$ensureAtLeast(Items.OBSIDIAN, RankedRngState.getBastionObsidianMinimum(), slots);
-        this.mcsreasymode$bastionStandardized = true;
-        inventory.markDirty();
-        Mcsreasymode.debug("Bastion chest standardized: ensured at least "
-                + RankedRngState.getBastionIronMinimum() + " iron ingots and "
-                + RankedRngState.getBastionObsidianMinimum() + " obsidian.");
+        if (MCSREASYMODE_RUINED_PORTAL_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/ruined_portal");
+        }
+        if (MCSREASYMODE_BURIED_TREASURE_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/buried_treasure");
+        }
+        if (MCSREASYMODE_DESERT_PYRAMID_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/desert_pyramid");
+        }
+        if (MCSREASYMODE_SHIPWRECK_SUPPLY_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/shipwreck_supply");
+        }
+        if (MCSREASYMODE_SHIPWRECK_TREASURE_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/shipwreck_treasure");
+        }
+        if (MCSREASYMODE_VILLAGE_WEAPONSMITH_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/village/village_weaponsmith");
+        }
+        return null;
     }
 
     @Unique
-    private boolean mcsreasymode$isEligibleBastionChest() {
-        Identifier generatedLootTableId = this.mcsreasymode$lootTableIdBeforeGeneration != null
-                ? this.mcsreasymode$lootTableIdBeforeGeneration
-                : this.mcsreasymode$assignedLootTableId;
-        return LootTables.BASTION_OTHER_CHEST.equals(generatedLootTableId)
-                || LootTables.BASTION_BRIDGE_CHEST.equals(generatedLootTableId);
+    private Identifier mcsreasymode$getRankedBastionLootTable(Identifier vanillaLootTableId) {
+        if (!MCSREASYMODE_BASTION_OTHER_CHEST.equals(vanillaLootTableId) && !MCSREASYMODE_BASTION_BRIDGE_CHEST.equals(vanillaLootTableId)) {
+            return null;
+        }
+        if (!RankedRngState.shouldAdjustBastionChest()) {
+            return null;
+        }
+        this.mcsreasymode$usingRankedBastionLootTable = true;
+        if (MCSREASYMODE_BASTION_OTHER_CHEST.equals(vanillaLootTableId)) {
+            return new Identifier(Mcsreasymode.MOD_ID, "chests/bastion_other");
+        }
+        return new Identifier(Mcsreasymode.MOD_ID, "chests/bastion_bridge");
     }
 
     @Unique

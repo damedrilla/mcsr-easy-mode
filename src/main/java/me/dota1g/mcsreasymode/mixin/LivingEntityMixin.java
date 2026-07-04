@@ -1,19 +1,22 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.BlazeEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.function.Consumer;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
@@ -44,12 +47,14 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Redirect(method = "dropLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;dropStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/ItemEntity;"))
-    private ItemEntity mcsreasymode$trackDroppedStacks(LivingEntity entity, ItemStack stack) {
-        if (this.mcsreasymode$trackingBlazeRodDrop && stack.getItem() == Items.BLAZE_ROD && !stack.isEmpty()) {
-            this.mcsreasymode$droppedBlazeRod = true;
-        }
-        return entity.dropStack(stack);
+    @Redirect(method = "dropLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/loot/LootTable;generateLoot(Lnet/minecraft/loot/context/LootContext;Ljava/util/function/Consumer;)V"))
+    private void mcsreasymode$trackGeneratedLoot(LootTable lootTable, LootContext context, Consumer<ItemStack> dropper) {
+        lootTable.generateLoot(context, stack -> {
+            if (this.mcsreasymode$trackingBlazeRodDrop && stack.getItem() == Items.BLAZE_ROD && !stack.isEmpty()) {
+                this.mcsreasymode$droppedBlazeRod = true;
+            }
+            dropper.accept(stack);
+        });
     }
 
     @Inject(method = "dropLoot", at = @At("TAIL"))

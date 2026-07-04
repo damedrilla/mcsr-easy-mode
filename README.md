@@ -31,12 +31,7 @@ This mod does not require the full Fabric API. It bundles Fabric Resource Loader
 
 Download the mod jar from releases and place it in your instance `mods` folder alongside SpeedrunAPI.
 
-For more details, see the wiki:
-
-- [Features](wiki/Features.md)
-- [Configuration](wiki/Configuration.md)
-- [Installation](wiki/Installation.md)
-- [Building From Source](wiki/Building.md)
+For more details, see the [wiki](https://codeberg.org/dota1g/mcsr-easy-mode/wiki):
 
 On Codeberg, these pages can be copied into the repository wiki.
 
