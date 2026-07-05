@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mixin(DebugHud.class)
 public abstract class DebugHudMixin {
-    @Inject(method = "getLeftText", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getRightText", at = @At("RETURN"), cancellable = true)
     private void mcsreasymode$addEasyModeMarker(CallbackInfoReturnable<List<String>> cir) {
         List<String> lines = new ArrayList<>(cir.getReturnValue());
         String rngMode = Mcsreasymode.isRankedRngEnabled() ? "Ranked RNG" : "Vanilla RNG";

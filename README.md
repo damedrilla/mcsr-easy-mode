@@ -4,7 +4,7 @@ Minecraft speedrunning practice, but less RWDA.
 
 This mod is for practice only and is not legal for leaderboard submissions.
 
-Current release: `0.5`
+Current release: `0.6`
 
 ## What It Does
 
