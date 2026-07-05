@@ -1,6 +1,6 @@
 # MCSR Easy Mode
 
-Minecraft speedrunning practice, but less RWDA.
+Minecraft speedrunning, but less RWDA.
 
 This mod is for practice only and is not legal for leaderboard submissions.
 
