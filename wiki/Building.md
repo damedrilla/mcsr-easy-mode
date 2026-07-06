@@ -28,7 +28,7 @@ gradle build
 The compiled jar will be created at:
 
 ```text
-build/libs/mcsreasymode-0.4.jar
+build/libs/mcsreasymode-<version>.jar
 ```
 
 Install that jar into your `mods` folder alongside SpeedrunAPI.
@@ -41,3 +41,4 @@ Install that jar into your `mods` folder alongside SpeedrunAPI.
 - SpeedrunAPI dependency: `com.github.contariaa:SpeedrunAPI:v2.1-1.16.1`
 - Fabric Resource Loader v0 is bundled through Gradle for resource loading.
 - Full Fabric API is intentionally not used.
+- Local Gradle temp folders such as `.gradle-tmp*` should not be committed.

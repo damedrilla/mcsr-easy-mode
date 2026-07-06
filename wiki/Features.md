@@ -22,6 +22,7 @@ Hoglin anti-aggression clears attack targeting and suppresses angry ambient beha
 - The offhand swap key is shown when the offhand slot is visible.
 - Side mouse buttons are shortened to labels such as `M4` and `M5`.
 - Hotbar label customization includes label corner, text size, background, and live preview.
+- The F3 debug HUD shows `MCSR Easy Mode` and the active RNG mode.
 
 ## RNG Modes
 
@@ -43,7 +44,7 @@ Piglin barter pity is tracked across all piglins in the world.
 
 ## Chest Standardization
 
-When `RNG` is set to `Ranked`, the first eligible bastion ramparts or housing chest uses a Ranked loot table that includes the vanilla table plus guaranteed:
+When `RNG` is set to `Ranked`, the first eligible `bastion_other` or `bastion_bridge` chest uses a Ranked loot table that includes the vanilla table plus guaranteed:
 
 - 3 iron ingots
 - 5 obsidian
@@ -53,8 +54,9 @@ The bastion chest adjustment:
 - only applies once per world
 - falls back to vanilla bastion loot tables after the guaranteed chest has generated
 - keeps the original vanilla bastion table inside the Ranked table before adding the guaranteed items
+- does not currently apply to `bastion_hoglin_stable` or `bastion_treasure` chests
 
-When `RNG` is set to `Ranked`, the mod swaps selected vanilla chest loot tables to mod-owned Ranked tables at generation time. When `RNG` is set to `Vanilla`, these chests use the normal Minecraft loot tables.
+When `RNG` is set to `Ranked`, the mod swaps selected vanilla chest loot tables to mod-owned Ranked tables at generation time. When `RNG` is set to `Vanilla`, these chests use the normal Minecraft loot tables because the mod does not globally override the `minecraft` namespace loot tables.
 
 - Ruined portal chests can include useful resources such as fire charges, iron nuggets, obsidian, and golden carrots.
 - Buried treasure chests can include useful resources such as heart of the sea, iron ingots, and TNT.
@@ -74,11 +76,11 @@ Only hoglin stable internals are standardized this way. Other bastion types use 
 
 ## Blind Portal Anti-Cave
 
-The first blind travel portal from the Nether to the Overworld is moved to the surface when:
+The first blind travel portal from the Nether to the Overworld is created on the surface when:
 
 - `RNG` is set to `Ranked`
 - the player enters the portal from the Nether
 - the Nether portal is built at Y level 48 or above
 - the anti-cave surfacing has not already been used in that world
 
-This is intended for the first Nether exit used for stronghold triangulation. It is once per world, so later Nether-to-Overworld portals keep vanilla behavior.
+This is intended for the first Nether exit used for stronghold triangulation. It is once per world, so later Nether-to-Overworld portals keep vanilla behavior. If the target surface is liquid, the mod builds the portal with a small footing instead of placing it in the cave search result.
