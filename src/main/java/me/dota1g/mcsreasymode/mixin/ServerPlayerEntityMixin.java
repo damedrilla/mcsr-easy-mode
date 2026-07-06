@@ -33,8 +33,8 @@ public abstract class ServerPlayerEntityMixin {
             int overworldZ = (int) Math.floor(player.getZ() * 8.0D);
             int surfaceY = this.mcsreasymode$getGeneratedSurfaceY(destination, overworldX, overworldZ);
 
-            player.refreshPositionAndAngles(player.getX(), surfaceY, player.getZ(), player.getYaw(1.0F), player.getPitch(1.0F));
-            Mcsreasymode.debug("Blind portal surfacing applied pre-search: moved player to surface Y " + surfaceY + " at Overworld X " + overworldX + ", Z " + overworldZ + ".");
+            RankedRngState.setBlindPortalForcedSurfaceY(surfaceY);
+            Mcsreasymode.debug("Blind portal surfacing armed portal creation at surface Y " + surfaceY + " for Overworld X " + overworldX + ", Z " + overworldZ + ".");
 
             RankedRngState.consumeBlindPortalSurface();
         }

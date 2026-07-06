@@ -23,6 +23,7 @@ public final class RankedRngState {
     private static boolean bastionChestAdjusted;
     private static boolean blindPortalSurfacePending;
     private static boolean blindPortalSurfaceUsed;
+    private static Integer blindPortalForcedSurfaceY;
 
     private RankedRngState() {
     }
@@ -36,6 +37,7 @@ public final class RankedRngState {
         bastionChestAdjusted = false;
         blindPortalSurfacePending = false;
         blindPortalSurfaceUsed = false;
+        blindPortalForcedSurfaceY = null;
         Mcsreasymode.debug("Ranked RNG state reset for new world.");
     }
 
@@ -157,5 +159,14 @@ public final class RankedRngState {
 
     public static void clearPendingBlindPortalSurface() {
         blindPortalSurfacePending = false;
+        blindPortalForcedSurfaceY = null;
+    }
+
+    public static void setBlindPortalForcedSurfaceY(int surfaceY) {
+        blindPortalForcedSurfaceY = surfaceY;
+    }
+
+    public static Integer getBlindPortalForcedSurfaceY() {
+        return blindPortalForcedSurfaceY;
     }
 }
