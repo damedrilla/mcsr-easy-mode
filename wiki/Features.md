@@ -18,10 +18,12 @@ Hoglin anti-aggression clears attack targeting and suppresses angry ambient beha
 
 - Move the pause menu `Save and Quit` button to the bottom-left corner.
 - Display hotbar hotkey labels directly on vanilla hotbar slots.
+- Display the same hotkey labels on hotbar slots inside inventory, chest, and other handled screens.
 - Hotbar labels use the player's current Minecraft keybinds.
 - The offhand swap key is shown when the offhand slot is visible.
 - Side mouse buttons are shortened to labels such as `M4` and `M5`.
-- Hotbar label customization includes label corner, text size, background, and live preview.
+- Hotbar label customization includes label corner, text size, background, and live previews.
+- HUD hotbar labels and inventory/container hotbar labels have separate styling controls.
 - The F3 debug HUD shows `MCSR Easy Mode` and the active RNG mode.
 
 ## RNG Modes
@@ -34,10 +36,10 @@ Hoglin anti-aggression clears attack targeting and suppresses angry ambient beha
 
 - Iron golems always drop exactly 4 iron ingots.
 - The second thrown eye of ender never breaks; the first and later throws use vanilla break odds.
-- Blaze rods use 50% chance with no more than 2 dry player kills.
-- Piglin barters pity ender pearls after 24 dry barters.
-- Piglin barters pity obsidian after 24 dry barters.
-- Piglin barters pity string after 24 dry barters.
+- Blaze rods use vanilla drop rates with no more than 2 dry player kills.
+- Piglin barters pity 4-8 ender pearls after 24 dry barters.
+- Piglin barters pity 1 obsidian after 24 dry barters.
+- Piglin barters pity 8-24 string after 24 dry barters.
 - Gravel keeps vanilla 10% flint odds, with a guaranteed flint drop on the 10th failed gravel drop.
 
 Piglin barter pity is tracked across all piglins in the world.
