@@ -20,7 +20,9 @@
   "client": [
     "DebugHudMixin",
     "GameMenuScreenMixin",
-    "InGameHudMixin"
+    "HandledScreenMixin",
+    "InGameHudMixin",
+    "SlotAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

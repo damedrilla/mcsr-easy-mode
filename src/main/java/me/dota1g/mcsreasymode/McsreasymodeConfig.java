@@ -66,6 +66,24 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Text(getter = "getHotbarHotkeyBackgroundText")
     public HotbarHotkeyBackground hotbarHotkeyBackground = HotbarHotkeyBackground.DARK;
 
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyPosition")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyPosition.description")
+    @Config.Text(getter = "getHotbarHotkeyPositionText")
+    public HotbarHotkeyPosition handledHotbarHotkeyPosition = HotbarHotkeyPosition.TOP_LEFT;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyTextSize")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyTextSize.description")
+    @Config.Numbers.Whole.Bounds(min = 1, max = 4)
+    public int handledHotbarHotkeyTextSize = 2;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyBackground")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyBackground.description")
+    @Config.Text(getter = "getHotbarHotkeyBackgroundText")
+    public HotbarHotkeyBackground handledHotbarHotkeyBackground = HotbarHotkeyBackground.DARK;
+
     @Config.Ignored
     public SpeedrunConfigContainer<?> container;
 

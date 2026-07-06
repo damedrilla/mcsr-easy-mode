@@ -23,10 +23,12 @@ Configs are only available from the SpeedrunAPI Mods menu while outside a world.
 
 ## Hotbar Hotkey Customization
 
-- `Label Corner`: chooses which corner of each hotbar slot receives the keybind label.
-- `Text Size`: cycles through sizes `1` to `4`.
-- `Background`: cycles through available label backgrounds.
-- The preview uses your current Minecraft hotbar and offhand keybinds.
+- HUD controls style the in-world hotbar overlay.
+- Screen controls style hotbar labels shown inside inventory and container screens.
+- `Corner`: chooses which corner of each hotbar slot receives the keybind label.
+- `Size`: cycles through sizes `1` to `4`.
+- `BG`: cycles through available label backgrounds.
+- The previews use your current Minecraft hotbar and offhand keybinds.
 
 ## RNG Adjustments Screen
 
