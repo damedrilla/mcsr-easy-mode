@@ -21,6 +21,14 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget moveSaveAndQuitButton;
     private ButtonWidget hotbarHotkeysButton;
     private ButtonWidget hotbarHotkeysCustomizeButton;
+    private ButtonWidget handledHotkeysCustomizeButton;
+    private int sectionLeftX;
+    private int sectionRightX;
+    private int valueButtonX;
+    private int valueButtonWidth;
+    private int rngSectionY;
+    private int aggressionSectionY;
+    private int uiSectionY;
 
     public McsreasymodeConfigScreen(McsreasymodeConfig config, Screen parent) {
         super(new LiteralText("MCSR Easy Mode"));
@@ -30,76 +38,119 @@ public class McsreasymodeConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        int buttonWidth = Math.min(200, (this.width - 36) / 2);
-        int leftX = this.width / 2 - buttonWidth - 4;
-        int rightX = this.width / 2 + 4;
-        int y = Math.max(42, this.height / 2 - 76);
+        int contentWidth = Math.min(420, this.width - 36);
+        int leftX = this.width / 2 - contentWidth / 2;
+        int rightX = leftX + contentWidth;
+        int infoButtonWidth = 20;
+        int gap = 4;
+        this.valueButtonWidth = Math.min(180, Math.max(132, contentWidth / 2));
+        this.valueButtonX = rightX - this.valueButtonWidth;
+        int rngValueButtonWidth = this.valueButtonWidth - infoButtonWidth - gap;
+        int rngInfoButtonX = rightX - infoButtonWidth;
+        int hotbarToggleWidth = Math.min(179, Math.max(132, contentWidth / 2) )/ 2;
+        int hotbarCustomizeWidth = Math.min(179, Math.max(132, contentWidth / 2) )/ 2;
+        int y = Math.max(28, this.height / 2 - 116);
         if (this.height < 300) {
-            y = 42;
+            y = 35;
         }
+        this.sectionLeftX = leftX;
+        this.sectionRightX = rightX;
+        this.rngSectionY = y;
+        this.aggressionSectionY = y + 34;
+        this.uiSectionY = y + 106;
 
-        this.rngModeButton = this.addButton(new ButtonWidget(leftX, y, buttonWidth, 20, this.rngModeText(), button -> {
+        this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, this.rngSectionY + 12, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
             this.config.rngMode = this.config.rngMode == McsreasymodeConfig.RngMode.VANILLA ? McsreasymodeConfig.RngMode.RANKED : McsreasymodeConfig.RngMode.VANILLA;
-            button.setMessage(this.rngModeText());
+            button.setMessage(this.rngModeValueText());
         }));
 
-        this.addButton(new ButtonWidget(rightX, y, buttonWidth, 20, new LiteralText("Adjustments"), button -> {
+        this.addButton(new ButtonWidget(rngInfoButtonX, this.rngSectionY + 12, infoButtonWidth, 20, new LiteralText("i"), button -> {
             assert this.client != null;
             this.client.openScreen(new McsreasymodeAdjustmentsScreen(this));
         }));
 
-        this.piglinAggressionButton = this.addButton(new ButtonWidget(leftX, y + 34, buttonWidth, 20, this.booleanText("Piglins", this.config.disablePiglinAggression), button -> {
+        this.piglinAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, this.aggressionSectionY + 12, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disablePiglinAggression), button -> {
             this.config.disablePiglinAggression = !this.config.disablePiglinAggression;
-            button.setMessage(this.booleanText("Piglins", this.config.disablePiglinAggression));
+            button.setMessage(this.aggressionValueText(this.config.disablePiglinAggression));
         }));
 
-        this.ghastAggressionButton = this.addButton(new ButtonWidget(rightX, y + 34, buttonWidth, 20, this.booleanText("Ghasts", this.config.disableGhastAggression), button -> {
+        this.ghastAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, this.aggressionSectionY + 33, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disableGhastAggression), button -> {
             this.config.disableGhastAggression = !this.config.disableGhastAggression;
-            button.setMessage(this.booleanText("Ghasts", this.config.disableGhastAggression));
+            button.setMessage(this.aggressionValueText(this.config.disableGhastAggression));
         }));
 
-        this.hoglinAggressionButton = this.addButton(new ButtonWidget(leftX, y + 58, buttonWidth, 20, this.booleanText("Hoglins", this.config.disableHoglinAggression), button -> {
+        this.hoglinAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, this.aggressionSectionY + 54, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disableHoglinAggression), button -> {
             this.config.disableHoglinAggression = !this.config.disableHoglinAggression;
-            button.setMessage(this.booleanText("Hoglins", this.config.disableHoglinAggression));
+            button.setMessage(this.aggressionValueText(this.config.disableHoglinAggression));
         }));
 
-        this.moveSaveAndQuitButton = this.addButton(new ButtonWidget(rightX, y + 58, buttonWidth, 20, this.toggleText("Move Save & Quit", this.config.moveSaveAndQuitButton), button -> {
+        this.moveSaveAndQuitButton = this.addButton(new ButtonWidget(this.valueButtonX, this.uiSectionY + 12, this.valueButtonWidth, 20, this.toggleValueText(this.config.moveSaveAndQuitButton), button -> {
             this.config.moveSaveAndQuitButton = !this.config.moveSaveAndQuitButton;
-            button.setMessage(this.toggleText("Move Save & Quit", this.config.moveSaveAndQuitButton));
+            button.setMessage(this.toggleValueText(this.config.moveSaveAndQuitButton));
         }));
 
-        this.hotbarHotkeysButton = this.addButton(new ButtonWidget(leftX, y + 92, buttonWidth, 20, this.toggleText("Display Hotbar Hotkeys", this.config.showHotbarHotkeys), button -> {
+        this.hotbarHotkeysButton = this.addButton(new ButtonWidget(this.valueButtonX, this.uiSectionY + 33, hotbarToggleWidth, 20, this.toggleValueText(this.config.showHotbarHotkeys), button -> {
             this.config.showHotbarHotkeys = !this.config.showHotbarHotkeys;
-            button.setMessage(this.toggleText("Hotbar Hotkeys", this.config.showHotbarHotkeys));
+            button.setMessage(this.toggleValueText(this.config.showHotbarHotkeys));
             this.hotbarHotkeysCustomizeButton.active = this.config.showHotbarHotkeys;
         }));
 
-        this.hotbarHotkeysCustomizeButton = this.addButton(new ButtonWidget(rightX, y + 92, buttonWidth, 20, new LiteralText("Customize Hotbar Hotkeys"), button -> {
+        this.hotbarHotkeysCustomizeButton = this.addButton(new ButtonWidget(this.valueButtonX + hotbarToggleWidth + gap, this.uiSectionY + 33, hotbarCustomizeWidth, 20, new LiteralText("Customize"), button -> {
             assert this.client != null;
             this.client.openScreen(new McsreasymodeHotbarHotkeysScreen(this.config, this));
         }));
         this.hotbarHotkeysCustomizeButton.active = this.config.showHotbarHotkeys;
 
+
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
     }
 
-    private Text rngModeText() {
-        return new LiteralText("RNG: " + this.config.rngMode.displayName());
+    private Text rngModeValueText() {
+        return new LiteralText(this.config.rngMode.displayName());
     }
 
-    private Text booleanText(String label, boolean enabled) {
-        return new LiteralText(label + " aggression: " + (enabled ? "Disabled" : "Vanilla"));
+    private Text aggressionValueText(boolean enabled) {
+        return new LiteralText(enabled ? "Disabled" : "Vanilla");
     }
 
-    private Text toggleText(String label, boolean enabled) {
-        return new LiteralText(label + ": " + (enabled ? "On" : "Off"));
+    private Text toggleValueText(boolean enabled) {
+        return new LiteralText(enabled ? "On" : "Off");
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 18, 0xFFFFFF);
+        this.drawSectionDivider(matrices, "RNG", this.rngSectionY);
+        this.drawSectionDivider(matrices, "Anti-Aggression", this.aggressionSectionY);
+        this.drawSectionDivider(matrices, "UI", this.uiSectionY);
+        this.drawRowLabel(matrices, "RNG", this.rngSectionY + 12);
+        this.drawRowLabel(matrices, "Piglins", this.aggressionSectionY + 12);
+        this.drawRowLabel(matrices, "Ghasts", this.aggressionSectionY + 33);
+        this.drawRowLabel(matrices, "Hoglins", this.aggressionSectionY + 54);
+        this.drawRowLabel(matrices, "Move Save & Quit", this.uiSectionY + 12);
+        this.drawRowLabel(matrices, "Hotbar Hotkeys", this.uiSectionY + 33);
         super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    private void drawRowLabel(MatrixStack matrices, String label, int y) {
+        this.textRenderer.drawWithShadow(matrices, label, this.sectionLeftX, y + 6, 0xFFFFFF);
+    }
+
+    private void drawSectionDivider(MatrixStack matrices, String label, int y) {
+        int centerX = this.width / 2;
+        int labelWidth = this.textRenderer.getWidth(label);
+        int labelX = centerX - labelWidth / 2;
+        int lineY = y + 4;
+        int leftEnd = labelX - 8;
+        int rightStart = labelX + labelWidth + 8;
+        if (leftEnd > this.sectionLeftX) {
+            fill(matrices, this.sectionLeftX, lineY, leftEnd, lineY + 1, 0xFF666666);
+        }
+        if (rightStart < this.sectionRightX) {
+            fill(matrices, rightStart, lineY, this.sectionRightX, lineY + 1, 0xFF666666);
+        }
+        this.drawCenteredText(matrices, this.textRenderer, new LiteralText(label), centerX, y, 0xFFFFFF);
     }
 
     @Override

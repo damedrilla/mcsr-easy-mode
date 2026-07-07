@@ -19,5 +19,11 @@
   "speedrunapi.config.mcsreasymode.option.hotbarHotkeyTextSize": "Hotbar hotkey text size",
   "speedrunapi.config.mcsreasymode.option.hotbarHotkeyTextSize.description": "Sets the hotbar hotkey overlay text size.",
   "speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground": "Hotbar hotkey background",
-  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground.description": "Sets the hotbar hotkey overlay background color."
+  "speedrunapi.config.mcsreasymode.option.hotbarHotkeyBackground.description": "Sets the hotbar hotkey overlay background color.",
+  "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyPosition": "Inventory hotbar hotkey position",
+  "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyPosition.description": "Sets where hotkey labels appear on hotbar slots in inventory and container screens.",
+  "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyTextSize": "Inventory hotbar hotkey text size",
+  "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyTextSize.description": "Sets the hotkey label text size in inventory and container screens.",
+  "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyBackground": "Inventory hotbar hotkey background",
+  "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyBackground.description": "Sets the hotkey label background color in inventory and container screens."
 }

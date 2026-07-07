@@ -6,26 +6,34 @@ Open the config through:
 Options -> SpeedrunAPI Mods -> MCSR Easy Mode
 ```
 
-Available options:
+The main config screen uses section dividers and compact rows:
 
-- `RNG: Vanilla / Ranked`
-- `Adjustments`
-- `Piglins aggression: Disabled / Vanilla`
-- `Ghasts aggression: Disabled / Vanilla`
-- `Hoglins aggression: Disabled / Vanilla`
-- `Move Save & Quit: On / Off`
-- `Display Hotbar Hotkeys: On / Off`
-- `Customize Hotbar Hotkeys`
+- `RNG` -> `Vanilla / Ranked`
+- `i` -> opens the Ranked standardization summary
+- `Piglins` -> `Disabled / Vanilla`
+- `Ghasts` -> `Disabled / Vanilla`
+- `Hoglins` -> `Disabled / Vanilla`
+- `Move Save & Quit` -> `On / Off`
+- `Hotbar Hotkeys` -> `On / Off`, plus `HUD` and `Screen` customization buttons
 
-`Customize Hotbar Hotkeys` is available when hotbar hotkeys are enabled.
+The `HUD` and `Screen` hotkey customization buttons are available when hotbar hotkeys are enabled.
+
+Configs are only available from the SpeedrunAPI Mods menu while outside a world.
 
 ## Hotbar Hotkey Customization
 
-- `Label Corner`: chooses which corner of each hotbar slot receives the keybind label.
-- `Text Size`: cycles through sizes `1` to `4`.
-- `Background`: cycles through available label backgrounds.
-- The preview uses your current Minecraft hotbar and offhand keybinds.
+- `HUD` controls style the in-world hotbar overlay.
+- `Screen` controls style hotbar labels shown inside inventory, chest, and other handled screens.
+- `Corner`: chooses which corner of each hotbar slot receives the keybind label.
+- `Size`: cycles through sizes `1` to `4`.
+- `BG`: cycles through available label backgrounds.
+- The previews use your current Minecraft hotbar and offhand keybinds.
+- Labels are drawn above item stacks and stack counts. In inventory/container screens, item tooltips stay on top of labels.
 
 ## RNG Adjustments Screen
 
-The `Adjustments` button opens an in-game summary of the implemented Ranked RNG changes.
+The `i` button beside the RNG mode opens an in-game summary of the implemented Ranked RNG changes.
+
+## Debug HUD Marker
+
+When the F3 debug HUD is open, the right-side debug text shows `MCSR Easy Mode` plus the active RNG mode. This makes recordings visibly distinguishable from vanilla gameplay.

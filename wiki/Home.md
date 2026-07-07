@@ -7,6 +7,7 @@ It focuses on:
 - reducing run-ending practice variance
 - preserving vanilla route knowledge where possible
 - keeping features toggleable through the SpeedrunAPI Mods menu
+- clearly marking runs as `MCSR Easy Mode` in the debug HUD
 
 Pages:
 

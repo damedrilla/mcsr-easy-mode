@@ -4,7 +4,7 @@ Minecraft speedrunning, but less RWDA.
 
 This mod is for practice only and is not legal for leaderboard submissions.
 
-Current release: `0.6`
+Current release: `0.7`
 
 ## What It Does
 
@@ -17,7 +17,8 @@ Highlights:
 - Standardize key speedrun resources such as rods, pearls, obsidian, flint, and selected bastion loot.
 - Improve hoglin stable layouts while preserving vanilla bastion placement rules.
 - Move the pause menu Save and Quit button away from common misclick paths.
-- Display hotbar keybind labels directly on the vanilla hotbar.
+- Display keybind labels on the vanilla hotbar and hotbar slots inside inventory/container screens.
+- Customize hotkey label position, size, and background separately for HUD and handled screens.
 
 ## Requirements
 
@@ -31,9 +32,7 @@ This mod does not require the full Fabric API. It bundles Fabric Resource Loader
 
 Download the mod jar from releases and place it in your instance `mods` folder alongside SpeedrunAPI.
 
-For more details, see the [wiki](https://codeberg.org/dota1g/mcsr-easy-mode/wiki):
-
-On Codeberg, these pages can be copied into the repository wiki.
+For more details, see the [wiki](https://codeberg.org/dota1g/mcsr-easy-mode/wiki).
 
 ## Build Quickstart
 
@@ -52,5 +51,5 @@ gradle build
 The compiled jar is created at:
 
 ```text
-build/libs/mcsreasymode-0.4.jar
+build/libs/mcsreasymode-<version>.jar
 ```

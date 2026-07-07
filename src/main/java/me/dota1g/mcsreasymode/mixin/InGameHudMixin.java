@@ -21,7 +21,7 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void mcsreasymode$renderHotbarHotkeys(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (!Mcsreasymode.shouldShowHotbarHotkeys() || Mcsreasymode.CONFIG == null || this.client.options.hudHidden) {
+        if (!Mcsreasymode.shouldShowHotbarHotkeys() || Mcsreasymode.CONFIG == null || this.client.options.hudHidden || this.client.currentScreen != null) {
             return;
         }
 
