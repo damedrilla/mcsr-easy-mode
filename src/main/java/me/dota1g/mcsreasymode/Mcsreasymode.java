@@ -41,6 +41,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.rankedPiglinBarters;
     }
 
+    public static boolean isRankedPiglinStringEnabled() {
+        return CONFIG != null && CONFIG.rankedPiglinString;
+    }
+
     public static boolean isRankedFlintEnabled() {
         return CONFIG != null && CONFIG.rankedFlint;
     }

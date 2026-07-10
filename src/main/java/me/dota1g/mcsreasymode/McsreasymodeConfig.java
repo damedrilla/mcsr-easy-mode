@@ -33,6 +33,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean rankedPiglinBarters = false;
 
     @Config.Hide
+    public boolean rankedPiglinString = false;
+
+    @Config.Hide
     public boolean rankedFlint = false;
 
     @Config.Hide
@@ -170,6 +173,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         this.rankedEyeBreaks = ranked;
         this.rankedBlazeRods = ranked;
         this.rankedPiglinBarters = ranked;
+        this.rankedPiglinString = ranked;
         this.rankedFlint = ranked;
         this.rankedBlindPortal = ranked;
         this.rankedBastionChestLoot = ranked;
@@ -183,6 +187,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && this.rankedEyeBreaks
                 && this.rankedBlazeRods
                 && this.rankedPiglinBarters
+                && this.rankedPiglinString
                 && this.rankedFlint
                 && this.rankedBlindPortal
                 && this.rankedBastionChestLoot
@@ -195,6 +200,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && !this.rankedEyeBreaks
                 && !this.rankedBlazeRods
                 && !this.rankedPiglinBarters
+                && !this.rankedPiglinString
                 && !this.rankedFlint
                 && !this.rankedBlindPortal
                 && !this.rankedBastionChestLoot
@@ -244,6 +250,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             this.migrateRngFeature(jsonObject, "rankedEyeBreaks", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBlazeRods", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedPiglinBarters", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedPiglinString", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedFlint", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBlindPortal", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBastionChestLoot", oldRankedMode);
