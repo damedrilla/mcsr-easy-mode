@@ -19,7 +19,6 @@
   "mixins": [
     "mcsreasymode.mixins.json"
   ],
-  "accessWidener": "mcsreasymode.accesswidener",
   "icon": "assets/mcsreasymode/icon.png",
   "custom": {
     "speedrunapi": {

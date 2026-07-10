@@ -6,7 +6,6 @@
   "mixins": [
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
-    "ChunkGeneratorTypePresetMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
     "HoglinEntityMixin",

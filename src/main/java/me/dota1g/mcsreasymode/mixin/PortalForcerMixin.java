@@ -27,12 +27,8 @@ public abstract class PortalForcerMixin {
 
     @Inject(method = "createPortal", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$createBlindPortalOnSurface(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (this.world.getRegistryKey() == World.OVERWORLD) {
-            Integer surfaceY = RankedRngState.consumeBlindPortalForcedSurfaceY();
-            if (surfaceY == null) {
-                return;
-            }
-
+        Integer surfaceY = RankedRngState.getBlindPortalForcedSurfaceY();
+        if (surfaceY != null && this.world.getRegistryKey() == World.OVERWORLD) {
             int x = MathHelper.floor(entity.getX());
             int y = MathHelper.clamp(surfaceY, 2, this.world.getDimensionHeight() - 5) + 1;
             int z = MathHelper.floor(entity.getZ());

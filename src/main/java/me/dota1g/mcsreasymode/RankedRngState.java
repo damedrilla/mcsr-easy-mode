@@ -169,10 +169,4 @@ public final class RankedRngState {
     public static Integer getBlindPortalForcedSurfaceY() {
         return blindPortalForcedSurfaceY;
     }
-
-    public static Integer consumeBlindPortalForcedSurfaceY() {
-        Integer surfaceY = blindPortalForcedSurfaceY;
-        blindPortalForcedSurfaceY = null;
-        return surfaceY;
-    }
 }

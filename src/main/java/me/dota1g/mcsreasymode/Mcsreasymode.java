@@ -41,22 +41,6 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showHotbarHotkeys;
     }
 
-    public static boolean isOpenNetherTerrainEnabled() {
-        return CONFIG != null && CONFIG.openNetherTerrain;
-    }
-
-    public static double netherTerrainXzScale() {
-        return CONFIG == null ? 1.0D : Math.max(0.52D, Math.min(1.0D, CONFIG.netherTerrainXzScale));
-    }
-
-    public static double netherTerrainDensityFactor() {
-        return CONFIG == null ? 0.0D : Math.max(0.0D, Math.min(0.08215D, CONFIG.netherTerrainDensityFactor));
-    }
-
-    public static double netherTerrainDensityOffset() {
-        return CONFIG == null ? 0.019921875D : Math.max(0.01174D, Math.min(0.019921875D, CONFIG.netherTerrainDensityOffset));
-    }
-
     public static void debug(String message) {
         LOGGER.info("[MCSR Easy Mode] {}", message);
     }
