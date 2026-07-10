@@ -20,6 +20,33 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Text(getter = "getRngModeText")
     public RngMode rngMode = RngMode.VANILLA;
 
+    @Config.Hide
+    public boolean rankedIronGolemDrops = false;
+
+    @Config.Hide
+    public boolean rankedEyeBreaks = false;
+
+    @Config.Hide
+    public boolean rankedBlazeRods = false;
+
+    @Config.Hide
+    public boolean rankedPiglinBarters = false;
+
+    @Config.Hide
+    public boolean rankedFlint = false;
+
+    @Config.Hide
+    public boolean rankedBlindPortal = false;
+
+    @Config.Hide
+    public boolean rankedBastionChestLoot = false;
+
+    @Config.Hide
+    public boolean rankedChestLootTables = false;
+
+    @Config.Hide
+    public boolean rankedHoglinStableRamparts = false;
+
     @Config.Category("mobs")
     @Config.Name("speedrunapi.config.mcsreasymode.option.disablePiglinAggression")
     @Config.Description("speedrunapi.config.mcsreasymode.option.disablePiglinAggression.description")
@@ -110,6 +137,62 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         return new LiteralText(rngMode.displayName);
     }
 
+    public String rngModeDisplayName() {
+        this.updateRngModeFromFeatures();
+        return this.rngMode.displayName();
+    }
+
+    public void setAllRngFeatures(boolean ranked) {
+        this.rankedIronGolemDrops = ranked;
+        this.rankedEyeBreaks = ranked;
+        this.rankedBlazeRods = ranked;
+        this.rankedPiglinBarters = ranked;
+        this.rankedFlint = ranked;
+        this.rankedBlindPortal = ranked;
+        this.rankedBastionChestLoot = ranked;
+        this.rankedChestLootTables = ranked;
+        this.rankedHoglinStableRamparts = ranked;
+        this.updateRngModeFromFeatures();
+    }
+
+    public boolean areAllRngFeaturesRanked() {
+        return this.rankedIronGolemDrops
+                && this.rankedEyeBreaks
+                && this.rankedBlazeRods
+                && this.rankedPiglinBarters
+                && this.rankedFlint
+                && this.rankedBlindPortal
+                && this.rankedBastionChestLoot
+                && this.rankedChestLootTables
+                && this.rankedHoglinStableRamparts;
+    }
+
+    public boolean areAllRngFeaturesVanilla() {
+        return !this.rankedIronGolemDrops
+                && !this.rankedEyeBreaks
+                && !this.rankedBlazeRods
+                && !this.rankedPiglinBarters
+                && !this.rankedFlint
+                && !this.rankedBlindPortal
+                && !this.rankedBastionChestLoot
+                && !this.rankedChestLootTables
+                && !this.rankedHoglinStableRamparts;
+    }
+
+    public boolean hasAnyRankedRngFeature() {
+        return !this.areAllRngFeaturesVanilla();
+    }
+
+    public void updateRngModeFromFeatures() {
+        if (this.areAllRngFeaturesRanked()) {
+            this.rngMode = RngMode.RANKED;
+        } else if (this.areAllRngFeaturesVanilla()) {
+            this.rngMode = RngMode.VANILLA;
+        } else {
+            this.rngMode = RngMode.CUSTOM;
+        }
+    }
+
     public Text getHotbarHotkeyPositionText(HotbarHotkeyPosition position) {
         return new LiteralText(position.displayName);
     }
@@ -132,6 +215,24 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 jsonObject.addProperty("disableHoglinAggression", oldValue);
             }
         }
+        if (jsonObject.has("rngMode")) {
+            boolean oldRankedMode = "RANKED".equalsIgnoreCase(jsonObject.get("rngMode").getAsString());
+            this.migrateRngFeature(jsonObject, "rankedIronGolemDrops", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedEyeBreaks", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedBlazeRods", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedPiglinBarters", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedFlint", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedBlindPortal", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedBastionChestLoot", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedChestLootTables", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedHoglinStableRamparts", oldRankedMode);
+        }
+    }
+
+    private void migrateRngFeature(JsonObject jsonObject, String key, boolean oldRankedMode) {
+        if (!jsonObject.has(key)) {
+            jsonObject.addProperty(key, oldRankedMode);
+        }
     }
 
     @Override
@@ -141,7 +242,8 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     public enum RngMode {
         VANILLA("Vanilla"),
-        RANKED("Ranked");
+        RANKED("Ranked"),
+        CUSTOM("Custom");
 
         private final String displayName;
 

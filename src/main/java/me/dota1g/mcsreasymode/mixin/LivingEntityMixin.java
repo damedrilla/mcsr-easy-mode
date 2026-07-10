@@ -30,18 +30,14 @@ public abstract class LivingEntityMixin {
     @Inject(method = "dropLoot", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$rankedLootHead(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
         Object self = this;
-        if (!Mcsreasymode.isRankedRngEnabled()) {
-            return;
-        }
-
-        if (self instanceof IronGolemEntity) {
+        if (Mcsreasymode.isRankedIronGolemDropsEnabled() && self instanceof IronGolemEntity) {
             ((LivingEntity) self).dropStack(new ItemStack(Items.IRON_INGOT, 4));
             Mcsreasymode.debug("Iron golem loot standardized: dropped exactly 4 iron ingots.");
             ci.cancel();
             return;
         }
 
-        if (causedByPlayer && self instanceof BlazeEntity) {
+        if (Mcsreasymode.isRankedBlazeRodsEnabled() && causedByPlayer && self instanceof BlazeEntity) {
             this.mcsreasymode$trackingBlazeRodDrop = true;
             this.mcsreasymode$droppedBlazeRod = false;
         }
@@ -65,7 +61,7 @@ public abstract class LivingEntityMixin {
         }
 
         this.mcsreasymode$trackingBlazeRodDrop = false;
-        if (!Mcsreasymode.isRankedRngEnabled() || !causedByPlayer || !(self instanceof BlazeEntity)) {
+        if (!Mcsreasymode.isRankedBlazeRodsEnabled() || !causedByPlayer || !(self instanceof BlazeEntity)) {
             return;
         }
 

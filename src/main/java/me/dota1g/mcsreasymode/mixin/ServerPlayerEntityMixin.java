@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ServerPlayerEntityMixin {
     @Inject(method = "changeDimension", at = @At("HEAD"))
     private void mcsreasymode$armBlindPortalSurface(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
-        if (!Mcsreasymode.isRankedRngEnabled()) {
+        if (!Mcsreasymode.isRankedBlindPortalEnabled()) {
             return;
         }
 

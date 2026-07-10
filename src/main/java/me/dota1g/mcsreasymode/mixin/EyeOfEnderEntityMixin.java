@@ -17,7 +17,7 @@ public abstract class EyeOfEnderEntityMixin {
 
     @Inject(method = "moveTowards", at = @At("TAIL"))
     private void mcsreasymode$protectSecondEye(BlockPos pos, CallbackInfo ci) {
-        if (Mcsreasymode.isRankedRngEnabled() && RankedRngState.shouldProtectThrownEye()) {
+        if (Mcsreasymode.isRankedEyeBreaksEnabled() && RankedRngState.shouldProtectThrownEye()) {
             this.dropsItem = true;
         }
     }

@@ -15,7 +15,7 @@ public abstract class DebugHudMixin {
     @Inject(method = "getRightText", at = @At("RETURN"), cancellable = true)
     private void mcsreasymode$addEasyModeMarker(CallbackInfoReturnable<List<String>> cir) {
         List<String> lines = new ArrayList<>(cir.getReturnValue());
-        String rngMode = Mcsreasymode.isRankedRngEnabled() ? "Ranked RNG" : "Vanilla RNG";
+        String rngMode = Mcsreasymode.rngModeDisplayName() + " RNG";
         lines.add(Math.min(1, lines.size()), "MCSR Easy Mode: " + rngMode);
         cir.setReturnValue(lines);
     }

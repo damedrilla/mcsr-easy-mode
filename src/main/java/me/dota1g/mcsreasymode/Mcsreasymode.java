@@ -18,7 +18,47 @@ public class Mcsreasymode implements ModInitializer {
     }
 
     public static boolean isRankedRngEnabled() {
-        return CONFIG != null && CONFIG.rngMode == McsreasymodeConfig.RngMode.RANKED;
+        return CONFIG != null && CONFIG.hasAnyRankedRngFeature();
+    }
+
+    public static String rngModeDisplayName() {
+        return CONFIG == null ? "Vanilla" : CONFIG.rngModeDisplayName();
+    }
+
+    public static boolean isRankedIronGolemDropsEnabled() {
+        return CONFIG != null && CONFIG.rankedIronGolemDrops;
+    }
+
+    public static boolean isRankedEyeBreaksEnabled() {
+        return CONFIG != null && CONFIG.rankedEyeBreaks;
+    }
+
+    public static boolean isRankedBlazeRodsEnabled() {
+        return CONFIG != null && CONFIG.rankedBlazeRods;
+    }
+
+    public static boolean isRankedPiglinBartersEnabled() {
+        return CONFIG != null && CONFIG.rankedPiglinBarters;
+    }
+
+    public static boolean isRankedFlintEnabled() {
+        return CONFIG != null && CONFIG.rankedFlint;
+    }
+
+    public static boolean isRankedBlindPortalEnabled() {
+        return CONFIG != null && CONFIG.rankedBlindPortal;
+    }
+
+    public static boolean isRankedBastionChestLootEnabled() {
+        return CONFIG != null && CONFIG.rankedBastionChestLoot;
+    }
+
+    public static boolean isRankedChestLootTablesEnabled() {
+        return CONFIG != null && CONFIG.rankedChestLootTables;
+    }
+
+    public static boolean isRankedHoglinStableRampartsEnabled() {
+        return CONFIG != null && CONFIG.rankedHoglinStableRamparts;
     }
 
     public static boolean isPiglinAggressionDisabled() {

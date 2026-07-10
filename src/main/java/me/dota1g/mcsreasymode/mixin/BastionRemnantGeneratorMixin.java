@@ -29,7 +29,7 @@ public abstract class BastionRemnantGeneratorMixin {
 
     @Inject(method = "addPieces", at = @At("HEAD"), cancellable = true)
     private static void mcsreasymode$rerollHoglinStableRamparts(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, BastionRemnantFeatureConfig config, CallbackInfo ci) {
-        if (!Mcsreasymode.isRankedRngEnabled()) {
+        if (!Mcsreasymode.isRankedHoglinStableRampartsEnabled()) {
             return;
         }
 

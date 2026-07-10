@@ -73,7 +73,7 @@ public abstract class LootableContainerBlockEntityMixin {
     private void mcsreasymode$captureAndMaybeSwapLootTable(PlayerEntity player, CallbackInfo ci) {
         this.mcsreasymode$lootTableIdBeforeGeneration = this.lootTableId != null ? this.lootTableId : this.mcsreasymode$assignedLootTableId;
         this.mcsreasymode$usingRankedBastionLootTable = false;
-        if (!Mcsreasymode.isRankedRngEnabled() || this.mcsreasymode$lootTableIdBeforeGeneration == null) {
+        if (this.mcsreasymode$lootTableIdBeforeGeneration == null) {
             return;
         }
 
@@ -100,6 +100,9 @@ public abstract class LootableContainerBlockEntityMixin {
         if (rankedBastionLootTable != null) {
             return rankedBastionLootTable;
         }
+        if (!Mcsreasymode.isRankedChestLootTablesEnabled()) {
+            return null;
+        }
         if (MCSREASYMODE_RUINED_PORTAL_CHEST.equals(vanillaLootTableId)) {
             return new Identifier(Mcsreasymode.MOD_ID, "chests/ruined_portal");
         }
@@ -123,6 +126,9 @@ public abstract class LootableContainerBlockEntityMixin {
 
     @Unique
     private Identifier mcsreasymode$getRankedBastionLootTable(Identifier vanillaLootTableId) {
+        if (!Mcsreasymode.isRankedBastionChestLootEnabled()) {
+            return null;
+        }
         if (!MCSREASYMODE_BASTION_OTHER_CHEST.equals(vanillaLootTableId) && !MCSREASYMODE_BASTION_BRIDGE_CHEST.equals(vanillaLootTableId)) {
             return null;
         }

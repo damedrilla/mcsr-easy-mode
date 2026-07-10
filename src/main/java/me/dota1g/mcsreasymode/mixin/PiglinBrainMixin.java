@@ -67,7 +67,7 @@ public abstract class PiglinBrainMixin {
 
     @Inject(method = "getBarteredItem", at = @At("RETURN"), cancellable = true)
     private static void mcsreasymode$applyBarterPity(PiglinEntity piglin, CallbackInfoReturnable<List<ItemStack>> cir) {
-        if (Mcsreasymode.isRankedRngEnabled()) {
+        if (Mcsreasymode.isRankedPiglinBartersEnabled()) {
             cir.setReturnValue(RankedRngState.applyPiglinBarterPity(cir.getReturnValue(), piglin.getRandom()));
         }
     }

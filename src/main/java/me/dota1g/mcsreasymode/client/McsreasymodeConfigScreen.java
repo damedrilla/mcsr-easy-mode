@@ -6,9 +6,11 @@ import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.StringRenderable;
 import net.minecraft.text.Text;
 
 import java.io.IOException;
+import java.util.List;
 
 public class McsreasymodeConfigScreen extends Screen {
     private final McsreasymodeConfig config;
@@ -29,6 +31,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private int rngSectionY;
     private int aggressionSectionY;
     private int uiSectionY;
+    private Text hoveredTooltip;
 
     public McsreasymodeConfigScreen(McsreasymodeConfig config, Screen parent) {
         super(new LiteralText("MCSR Easy Mode"));
@@ -60,8 +63,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.uiSectionY = y + 106;
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, this.rngSectionY + 12, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
-            this.config.rngMode = this.config.rngMode == McsreasymodeConfig.RngMode.VANILLA ? McsreasymodeConfig.RngMode.RANKED : McsreasymodeConfig.RngMode.VANILLA;
-            button.setMessage(this.rngModeValueText());
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeRngScreen(this.config, this));
         }));
 
         this.addButton(new ButtonWidget(rngInfoButtonX, this.rngSectionY + 12, infoButtonWidth, 20, new LiteralText("i"), button -> {
@@ -106,7 +109,7 @@ public class McsreasymodeConfigScreen extends Screen {
     }
 
     private Text rngModeValueText() {
-        return new LiteralText(this.config.rngMode.displayName());
+        return new LiteralText(this.config.rngModeDisplayName());
     }
 
     private Text aggressionValueText(boolean enabled) {
@@ -120,21 +123,37 @@ public class McsreasymodeConfigScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
+        this.hoveredTooltip = null;
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 18, 0xFFFFFF);
         this.drawSectionDivider(matrices, "RNG", this.rngSectionY);
         this.drawSectionDivider(matrices, "Anti-Aggression", this.aggressionSectionY);
         this.drawSectionDivider(matrices, "UI", this.uiSectionY);
-        this.drawRowLabel(matrices, "RNG", this.rngSectionY + 12);
-        this.drawRowLabel(matrices, "Piglins", this.aggressionSectionY + 12);
-        this.drawRowLabel(matrices, "Ghasts", this.aggressionSectionY + 33);
-        this.drawRowLabel(matrices, "Hoglins", this.aggressionSectionY + 54);
-        this.drawRowLabel(matrices, "Move Save & Quit", this.uiSectionY + 12);
-        this.drawRowLabel(matrices, "Hotbar Hotkeys", this.uiSectionY + 33);
+        this.drawRowLabel(matrices, "RNG", this.rngSectionY + 12, mouseX, mouseY, "Opens per-feature Vanilla or Ranked standardization toggles.");
+        this.drawRowLabel(matrices, "Piglins", this.aggressionSectionY + 12, mouseX, mouseY, "Spoofs gold armor behavior so piglins stay neutral without taking an armor slot.");
+        this.drawRowLabel(matrices, "Ghasts", this.aggressionSectionY + 33, mouseX, mouseY, "Prevents ghasts from choosing the player as an attack target.");
+        this.drawRowLabel(matrices, "Hoglins", this.aggressionSectionY + 54, mouseX, mouseY, "Prevents hoglins from choosing the player as an attack target.");
+        this.drawRowLabel(matrices, "Move Save & Quit", this.uiSectionY + 12, mouseX, mouseY, "Moves the pause menu Save & Quit button away from the usual misclick path.");
+        this.drawRowLabel(matrices, "Hotbar Hotkeys", this.uiSectionY + 33, mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         super.render(matrices, mouseX, mouseY, delta);
+        this.renderHoveredTooltip(matrices, mouseX, mouseY);
     }
 
-    private void drawRowLabel(MatrixStack matrices, String label, int y) {
-        this.textRenderer.drawWithShadow(matrices, label, this.sectionLeftX, y + 6, 0xFFFFFF);
+    private void drawRowLabel(MatrixStack matrices, String label, int y, int mouseX, int mouseY, String tooltip) {
+        int labelY = y + 6;
+        this.textRenderer.drawWithShadow(matrices, label, this.sectionLeftX, labelY, 0xFFFFFF);
+        if (McsreasymodeTooltip.isHovered(this.textRenderer, label, this.sectionLeftX, labelY, mouseX, mouseY)) {
+            this.hoveredTooltip = new LiteralText(tooltip);
+        }
+    }
+
+    private void renderHoveredTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+        if (this.hoveredTooltip == null) {
+            return;
+        }
+
+        List<StringRenderable> lines = McsreasymodeTooltip.wrap(this.textRenderer, this.hoveredTooltip);
+        int y = McsreasymodeTooltip.clampedY(lines, mouseY, 24, this.height - 32);
+        this.renderTooltip(matrices, lines, mouseX, y);
     }
 
     private void drawSectionDivider(MatrixStack matrices, String label, int y) {
