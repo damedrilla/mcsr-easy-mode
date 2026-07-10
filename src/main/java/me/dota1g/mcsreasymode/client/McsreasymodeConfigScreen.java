@@ -23,6 +23,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget moveSaveAndQuitButton;
     private ButtonWidget hotbarHotkeysButton;
     private ButtonWidget hotbarHotkeysCustomizeButton;
+    private ButtonWidget netherTerrainButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -32,6 +33,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private int aggressionSectionY;
     private int uiSectionY;
     private Text hoveredTooltip;
+    private int worldgenSectionY;
 
     public McsreasymodeConfigScreen(McsreasymodeConfig config, Screen parent) {
         super(new LiteralText("MCSR Easy Mode"));
@@ -52,7 +54,7 @@ public class McsreasymodeConfigScreen extends Screen {
         int rngInfoButtonX = rightX - infoButtonWidth;
         int hotbarToggleWidth = Math.min(179, Math.max(132, contentWidth / 2) )/ 2;
         int hotbarCustomizeWidth = Math.min(179, Math.max(132, contentWidth / 2) )/ 2;
-        int y = Math.max(28, this.height / 2 - 116);
+        int y = Math.max(28, this.height / 2 - 134);
         if (this.height < 300) {
             y = 35;
         }
@@ -61,6 +63,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = y;
         this.aggressionSectionY = y + 34;
         this.uiSectionY = y + 106;
+        this.worldgenSectionY = y + 160;
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, this.rngSectionY + 12, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
             assert this.client != null;
@@ -104,6 +107,10 @@ public class McsreasymodeConfigScreen extends Screen {
         }));
         this.hotbarHotkeysCustomizeButton.active = this.config.showHotbarHotkeys;
 
+        this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, this.worldgenSectionY + 12, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
+        }));
 
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
     }
@@ -128,12 +135,14 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawSectionDivider(matrices, "RNG", this.rngSectionY);
         this.drawSectionDivider(matrices, "Anti-Aggression", this.aggressionSectionY);
         this.drawSectionDivider(matrices, "UI", this.uiSectionY);
+        this.drawSectionDivider(matrices, "Worldgen", this.worldgenSectionY);
         this.drawRowLabel(matrices, "RNG", this.rngSectionY + 12, mouseX, mouseY, "Opens per-feature Vanilla or Ranked standardization toggles.");
         this.drawRowLabel(matrices, "Piglins", this.aggressionSectionY + 12, mouseX, mouseY, "Spoofs gold armor behavior so piglins stay neutral without taking an armor slot.");
         this.drawRowLabel(matrices, "Ghasts", this.aggressionSectionY + 33, mouseX, mouseY, "Prevents ghasts from choosing the player as an attack target.");
         this.drawRowLabel(matrices, "Hoglins", this.aggressionSectionY + 54, mouseX, mouseY, "Prevents hoglins from choosing the player as an attack target.");
         this.drawRowLabel(matrices, "Move Save & Quit", this.uiSectionY + 12, mouseX, mouseY, "Moves the pause menu Save & Quit button away from the usual misclick path.");
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.uiSectionY + 33, mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
+        this.drawRowLabel(matrices, "Nether Terrain Alpha", this.worldgenSectionY + 12, mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
     }

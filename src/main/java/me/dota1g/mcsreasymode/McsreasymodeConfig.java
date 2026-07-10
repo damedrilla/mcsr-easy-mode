@@ -65,6 +65,29 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Hide
     public boolean disableAggression = true;
 
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.openNetherTerrain")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.openNetherTerrain.description")
+    public boolean openNetherTerrain = false;
+
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.netherTerrainXzScale")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.netherTerrainXzScale.description")
+    @Config.Numbers.Fractional.Bounds(min = 0.52F, max = 1.0F)
+    public double netherTerrainXzScale = 1.0D;
+
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.netherTerrainDensityFactor")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.netherTerrainDensityFactor.description")
+    @Config.Numbers.Fractional.Bounds(min = 0.0F, max = 0.08215F)
+    public double netherTerrainDensityFactor = 0.0D;
+
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.netherTerrainDensityOffset")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.netherTerrainDensityOffset.description")
+    @Config.Numbers.Fractional.Bounds(min = 0.01174F, max = 0.019921875F)
+    public double netherTerrainDensityOffset = 0.019921875D;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
     @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")
