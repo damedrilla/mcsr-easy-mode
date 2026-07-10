@@ -41,32 +41,32 @@ public final class RankedRngState {
         Mcsreasymode.debug("Ranked RNG state reset for new world.");
     }
 
-    public static List<ItemStack> applyPiglinBarterPity(List<ItemStack> original, Random random) {
+    public static List<ItemStack> applyPiglinBarterPity(List<ItemStack> original, Random random, boolean rankedBarterPity, boolean rankedStringPity) {
         List<ItemStack> result = new ArrayList<>(original);
 
         boolean hasPearls = result.stream().anyMatch(stack -> stack.getItem() == Items.ENDER_PEARL);
         boolean hasObsidian = result.stream().anyMatch(stack -> stack.getItem() == Items.OBSIDIAN);
         boolean hasString = result.stream().anyMatch(stack -> stack.getItem() == Items.STRING);
 
-        if (hasPearls) {
+        if (rankedBarterPity && hasPearls) {
             pearlDryBarters = 0;
-        } else {
+        } else if (rankedBarterPity) {
             pearlDryBarters++;
         }
 
-        if (hasObsidian) {
+        if (rankedBarterPity && hasObsidian) {
             obsidianDryBarters = 0;
-        } else {
+        } else if (rankedBarterPity) {
             obsidianDryBarters++;
         }
 
-        if (hasString) {
+        if (rankedStringPity && hasString) {
             stringDryBarters = 0;
-        } else {
+        } else if (rankedStringPity) {
             stringDryBarters++;
         }
 
-        if (!hasPearls && pearlDryBarters >= PEARL_PITY_BARTERS) {
+        if (rankedBarterPity && !hasPearls && pearlDryBarters >= PEARL_PITY_BARTERS) {
             int pearlCount = 4 + random.nextInt(5);
             result.add(new ItemStack(Items.ENDER_PEARL, pearlCount));
             Mcsreasymode.debug("Piglin barter pearl pity proc: added " + pearlCount + " ender pearls after " + PEARL_PITY_BARTERS + " dry barters.");
@@ -74,13 +74,13 @@ public final class RankedRngState {
             return result;
         }
 
-        if (!hasObsidian && obsidianDryBarters >= OBSIDIAN_PITY_BARTERS) {
+        if (rankedBarterPity && !hasObsidian && obsidianDryBarters >= OBSIDIAN_PITY_BARTERS) {
             result.add(new ItemStack(Items.OBSIDIAN));
             Mcsreasymode.debug("Piglin barter obsidian pity proc: added 1 obsidian after " + OBSIDIAN_PITY_BARTERS + " dry barters.");
             obsidianDryBarters = 0;
         }
         
-        if(!hasString && stringDryBarters >= STRING_PITY_BARTERS) {
+        if (rankedStringPity && !hasString && stringDryBarters >= STRING_PITY_BARTERS) {
             int stringCount = 8 + random.nextInt(15);
             result.add(new ItemStack(Items.STRING, stringCount));
             Mcsreasymode.debug("Piglin barter string pity proc: added " + stringCount + " strings after " + STRING_PITY_BARTERS + " dry barters.");

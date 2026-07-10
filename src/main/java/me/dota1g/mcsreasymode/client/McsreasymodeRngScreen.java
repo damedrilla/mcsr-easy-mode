@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.StringRenderable;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class McsreasymodeRngScreen extends Screen {
     private Text hoveredTooltip;
 
     public McsreasymodeRngScreen(McsreasymodeConfig config, Screen parent) {
-        super(new LiteralText("RNG Settings"));
+        super(new TranslatableText("mcsreasymode.screen.rng.title"));
         this.config = config;
         this.parent = parent;
     }
@@ -48,7 +49,7 @@ public class McsreasymodeRngScreen extends Screen {
             this.refreshMessages();
         }));
 
-        this.addRow("Iron Golem Drops", "Standardizes iron golem drops for village resources.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.iron_golem_drops", "mcsreasymode.screen.rng.iron_golem_drops.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedIronGolemDrops;
@@ -59,7 +60,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedIronGolemDrops = value;
             }
         });
-        this.addRow("Eye Breaks", "Keeps the second thrown eye from breaking while leaving other throws vanilla.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.eye_breaks", "mcsreasymode.screen.rng.eye_breaks.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedEyeBreaks;
@@ -70,7 +71,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedEyeBreaks = value;
             }
         });
-        this.addRow("Blaze Rods", "Adds blaze rod pity so dry streaks are capped without replacing normal lucky drops.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.blaze_rods", "mcsreasymode.screen.rng.blaze_rods.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedBlazeRods;
@@ -81,7 +82,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedBlazeRods = value;
             }
         });
-        this.addRow("Piglin Barters", "Applies ranked barter odds and pity for pearls and obsidian across all piglins.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.piglin_barters", "mcsreasymode.screen.rng.piglin_barters.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedPiglinBarters;
@@ -92,7 +93,18 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedPiglinBarters = value;
             }
         });
-        this.addRow("Flint", "Guarantees flint after nine failed gravel drops.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.piglin_string", "mcsreasymode.screen.rng.piglin_string.tooltip", new FeatureAccess() {
+            @Override
+            public boolean get() {
+                return McsreasymodeRngScreen.this.config.rankedPiglinString;
+            }
+
+            @Override
+            public void set(boolean value) {
+                McsreasymodeRngScreen.this.config.rankedPiglinString = value;
+            }
+        });
+        this.addRow("mcsreasymode.screen.rng.flint", "mcsreasymode.screen.rng.flint.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedFlint;
@@ -103,7 +115,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedFlint = value;
             }
         });
-        this.addRow("Blind Portal Anti-Cave", "Moves the first eligible Nether-to-Overworld blind portal to surface terrain once per world.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.blind_portal", "mcsreasymode.screen.rng.blind_portal.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedBlindPortal;
@@ -114,7 +126,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedBlindPortal = value;
             }
         });
-        this.addRow("Bastion Chest Loot", "Uses ranked bastion chest standardization for required iron and obsidian, then returns to vanilla.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.bastion_chest_loot", "mcsreasymode.screen.rng.bastion_chest_loot.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedBastionChestLoot;
@@ -125,7 +137,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedBastionChestLoot = value;
             }
         });
-        this.addRow("Other Chest Loot Tables", "Uses ranked custom loot tables for supported non-bastion chests.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.other_chest_loot_tables", "mcsreasymode.screen.rng.other_chest_loot_tables.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedChestLootTables;
@@ -136,7 +148,7 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedChestLootTables = value;
             }
         });
-        this.addRow("Hoglin Stable Ramparts", "Guarantees two adjacent full-height hoglin stable ramparts while leaving the third rampart vanilla.", new FeatureAccess() {
+        this.addRow("mcsreasymode.screen.rng.hoglin_stable_ramparts", "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
                 return McsreasymodeRngScreen.this.config.rankedHoglinStableRamparts;
@@ -152,13 +164,13 @@ public class McsreasymodeRngScreen extends Screen {
         this.updateRowPositions();
     }
 
-    private void addRow(String label, String tooltip, FeatureAccess access) {
+    private void addRow(String labelKey, String tooltipKey, FeatureAccess access) {
         ButtonWidget button = this.addButton(new ButtonWidget(this.contentRight - BUTTON_WIDTH, 0, BUTTON_WIDTH, 20, this.featureText(access.get()), pressed -> {
             access.set(!access.get());
             this.config.updateRngModeFromFeatures();
             this.refreshMessages();
         }));
-        this.rows.add(new FeatureRow(label, new LiteralText(tooltip), access, button));
+        this.rows.add(new FeatureRow(new TranslatableText(labelKey), new TranslatableText(tooltipKey), access, button));
     }
 
     private void refreshMessages() {
@@ -171,11 +183,19 @@ public class McsreasymodeRngScreen extends Screen {
     }
 
     private LiteralText toggleAllText() {
-        return new LiteralText("Toggle All: " + (this.config.areAllRngFeaturesRanked() ? "Ranked" : "Vanilla"));
+        return new LiteralText(new TranslatableText("mcsreasymode.screen.rng.toggle_all").getString() + ": " + (this.config.areAllRngFeaturesRanked() ? this.rankedText().getString() : this.vanillaText().getString()));
     }
 
-    private LiteralText featureText(boolean ranked) {
-        return new LiteralText(ranked ? "Ranked" : "Vanilla");
+    private Text featureText(boolean ranked) {
+        return ranked ? this.rankedText() : this.vanillaText();
+    }
+
+    private Text rankedText() {
+        return new TranslatableText("mcsreasymode.screen.rng.value.ranked");
+    }
+
+    private Text vanillaText() {
+        return new TranslatableText("mcsreasymode.screen.rng.value.vanilla");
     }
 
     @Override
@@ -209,19 +229,19 @@ public class McsreasymodeRngScreen extends Screen {
         this.renderBackground(matrices);
         this.hoveredTooltip = null;
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 18, 0xFFFFFF);
-        this.textRenderer.drawWithShadow(matrices, "Mode: " + this.config.rngModeDisplayName(), this.contentLeft, 40, 0xFFFFFF);
+        this.textRenderer.drawWithShadow(matrices, new TranslatableText("mcsreasymode.screen.rng.mode", this.config.rngModeDisplayName()), this.contentLeft, 40, 0xFFFFFF);
 
         for (FeatureRow row : this.rows) {
             if (row.y + 20 > this.listTop && row.y < this.listBottom) {
                 this.textRenderer.drawWithShadow(matrices, row.label, this.contentLeft, row.y + 6, 0xFFFFFF);
-                if (McsreasymodeTooltip.isHovered(this.textRenderer, row.label, this.contentLeft, row.y + 6, mouseX, mouseY)) {
+                if (McsreasymodeTooltip.isHovered(this.textRenderer, row.label.getString(), this.contentLeft, row.y + 6, mouseX, mouseY)) {
                     this.hoveredTooltip = row.tooltip;
                 }
             }
         }
 
         if (this.maxScroll() > 0) {
-            this.textRenderer.drawWithShadow(matrices, "Scroll", this.contentRight - 34, this.listBottom - 10, 0xA0A0A0);
+            this.textRenderer.drawWithShadow(matrices, new TranslatableText("mcsreasymode.screen.rng.scroll"), this.contentRight - 34, this.listBottom - 10, 0xA0A0A0);
         }
 
         super.render(matrices, mouseX, mouseY, delta);
@@ -262,13 +282,13 @@ public class McsreasymodeRngScreen extends Screen {
     }
 
     private static class FeatureRow {
-        private final String label;
+        private final Text label;
         private final Text tooltip;
         private final FeatureAccess access;
         private final ButtonWidget button;
         private int y;
 
-        private FeatureRow(String label, Text tooltip, FeatureAccess access, ButtonWidget button) {
+        private FeatureRow(Text label, Text tooltip, FeatureAccess access, ButtonWidget button) {
             this.label = label;
             this.tooltip = tooltip;
             this.access = access;
