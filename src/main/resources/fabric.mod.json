@@ -4,11 +4,16 @@
   "version": "${version}",
   "name": "MCSR Easy Mode",
   "description": "minecraft speedrunning if its all sunshine and rainbows",
-  "authors": [],
+  "authors": [
+    "dota1g"
+  ],
   "contact": {},
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
+    "preLaunch": [
+      "me.dota1g.mcsreasymode.McsreasymodePreLaunch"
+    ],
     "client": [
       "me.dota1g.mcsreasymode.client.McsreasymodeClient"
     ],
@@ -31,5 +36,9 @@
     "minecraft": "${minecraft_version}",
     "fabric-resource-loader-v0": ">=0.2.6",
     "speedrunapi": ">=1.2"
+  },
+  "breaks": {
+    "mcsrranked": "*",
+    "mcsr-fairplay-public": "*"
   }
 }

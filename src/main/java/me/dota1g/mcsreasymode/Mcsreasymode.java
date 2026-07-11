@@ -1,6 +1,8 @@
 package me.dota1g.mcsreasymode;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +17,8 @@ public class Mcsreasymode implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        McsreasymodePreLaunch.verify();
+        McsreasymodeStructurePieces.init();
     }
 
     public static boolean isRankedRngEnabled() {
@@ -85,8 +89,16 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showHotbarHotkeys;
     }
 
+    public static boolean shouldShowDebugChatLogs() {
+        return CONFIG != null && CONFIG.showDebugChatLogs;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
+    }
+
+    public static boolean isVillageStandardizationEnabled() {
+        return CONFIG != null && CONFIG.standardizeVillages;
     }
 
     public static double netherTerrainXzScale() {
@@ -103,6 +115,9 @@ public class Mcsreasymode implements ModInitializer {
 
     public static void debug(String message) {
         LOGGER.info("[MCSR Easy Mode] {}", message);
+        if (shouldShowDebugChatLogs()) {
+            sendDebugChat(message);
+        }
     }
 
     public static void debugRateLimited(String key, String message, long intervalMillis) {
@@ -112,5 +127,18 @@ public class Mcsreasymode implements ModInitializer {
             LAST_DEBUG_LOG.put(key, now);
             debug(message);
         }
+    }
+
+    private static void sendDebugChat(String message) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.player == null) {
+            return;
+        }
+
+        client.execute(() -> {
+            if (client.player != null) {
+                client.player.sendMessage(new LiteralText("[MCSR Easy Mode] " + message), false);
+            }
+        });
     }
 }

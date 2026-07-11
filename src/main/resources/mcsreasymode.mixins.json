@@ -16,7 +16,8 @@
     "MobEntityMixin",
     "PiglinBrainMixin",
     "PortalForcerMixin",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "VillageGeneratorMixin"
   ],
   "client": [
     "DebugHudMixin",

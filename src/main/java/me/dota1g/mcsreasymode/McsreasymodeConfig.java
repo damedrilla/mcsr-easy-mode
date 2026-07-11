@@ -91,6 +91,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Numbers.Fractional.Bounds(min = 0.01174F, max = 0.019921875F)
     public double netherTerrainDensityOffset = 0.019921875D;
 
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.standardizeVillages")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.standardizeVillages.description")
+    public boolean standardizeVillages = false;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
     @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")
@@ -100,6 +105,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.showHotbarHotkeys")
     @Config.Description("speedrunapi.config.mcsreasymode.option.showHotbarHotkeys.description")
     public boolean showHotbarHotkeys = true;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showDebugChatLogs")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showDebugChatLogs.description")
+    public boolean showDebugChatLogs = false;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
