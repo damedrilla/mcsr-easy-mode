@@ -92,6 +92,23 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public double netherTerrainDensityOffset = 0.019921875D;
 
     @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.oceanRavines")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.oceanRavines.description")
+    public boolean oceanRavines = false;
+
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.oceanRavineRarity")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.oceanRavineRarity.description")
+    @Config.Numbers.Fractional.Bounds(min = 0.0F, max = 0.1F)
+    public double oceanRavineRarity = 0.04D;
+
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.oceanRavineWidth")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.oceanRavineWidth.description")
+    @Config.Numbers.Fractional.Bounds(min = 1.0F, max = 8.0F)
+    public double oceanRavineWidth = 5.0D;
+
+    @Config.Category("worldgen")
     @Config.Name("speedrunapi.config.mcsreasymode.option.standardizeVillages")
     @Config.Description("speedrunapi.config.mcsreasymode.option.standardizeVillages.description")
     public boolean standardizeVillages = false;
