@@ -29,12 +29,13 @@ public final class StrongholdProtection {
             return;
         }
 
-        int minX = Math.max(pieceBox.minX, generationBox.minX);
+        // Iron-door entrance buttons sit one block outside the owning piece box.
+        int minX = Math.max(pieceBox.minX - 1, generationBox.minX);
         int minY = Math.max(pieceBox.minY, generationBox.minY);
-        int minZ = Math.max(pieceBox.minZ, generationBox.minZ);
-        int maxX = Math.min(pieceBox.maxX, generationBox.maxX);
+        int minZ = Math.max(pieceBox.minZ - 1, generationBox.minZ);
+        int maxX = Math.min(pieceBox.maxX + 1, generationBox.maxX);
         int maxY = Math.min(pieceBox.maxY, generationBox.maxY);
-        int maxZ = Math.min(pieceBox.maxZ, generationBox.maxZ);
+        int maxZ = Math.min(pieceBox.maxZ + 1, generationBox.maxZ);
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
         for (int y = minY; y <= maxY; y++) {
