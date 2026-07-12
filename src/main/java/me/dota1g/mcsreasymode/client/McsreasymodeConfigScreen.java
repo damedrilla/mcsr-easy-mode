@@ -25,6 +25,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget hotbarHotkeysButton;
     private ButtonWidget hotbarHotkeysCustomizeButton;
     private ButtonWidget debugChatLogsButton;
+    private ButtonWidget hideAdvancementToastsButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget oceanRavinesButton;
     private ButtonWidget villageStandardizationButton;
@@ -69,7 +70,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 248;
+        this.worldgenSectionY = 269;
         this.contentHeight = this.worldgenSectionY + 91;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -120,6 +121,11 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.showDebugChatLogs));
         }));
 
+        this.hideAdvancementToastsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.hideAdvancementToasts), button -> {
+            this.config.hideAdvancementToasts = !this.config.hideAdvancementToasts;
+            button.setMessage(this.toggleValueText(this.config.hideAdvancementToasts));
+        }));
+
         this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
             assert this.client != null;
             this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
@@ -168,6 +174,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Move Save & Quit", this.toScreenY(this.uiSectionY + 12), mouseX, mouseY, "Moves the pause menu Save & Quit button away from the usual misclick path.");
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 33), mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         this.drawRowLabel(matrices, "Debug Chat Logs", this.toScreenY(this.uiSectionY + 54), mouseX, mouseY, "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.");
+        this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
         this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Ocean Ravines Alpha", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Makes underwater ravines deeper, wider, and more common in newly generated chunks.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "If a vanilla village has no smith, adds an artificial smith-style building and a nearby lava pool.");
@@ -238,6 +245,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hotbarHotkeysButton, this.uiSectionY + 33);
         this.setButtonY(this.hotbarHotkeysCustomizeButton, this.uiSectionY + 33);
         this.setButtonY(this.debugChatLogsButton, this.uiSectionY + 54);
+        this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.oceanRavinesButton, this.worldgenSectionY + 33);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 54);

@@ -93,6 +93,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showDebugChatLogs;
     }
 
+    public static boolean shouldHideAdvancementToasts() {
+        return CONFIG != null && CONFIG.hideAdvancementToasts;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }

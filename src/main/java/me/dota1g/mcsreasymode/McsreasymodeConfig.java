@@ -129,6 +129,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean showDebugChatLogs = false;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.hideAdvancementToasts")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.hideAdvancementToasts.description")
+    public boolean hideAdvancementToasts = false;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
     @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description")
     @Config.Text(getter = "getHotbarHotkeyPositionText")
