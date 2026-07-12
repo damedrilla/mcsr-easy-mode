@@ -113,6 +113,18 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG == null ? 0.019921875D : Math.max(0.01174D, Math.min(0.019921875D, CONFIG.netherTerrainDensityOffset));
     }
 
+    public static boolean areOceanRavinesEnabled() {
+        return CONFIG != null && CONFIG.oceanRavines;
+    }
+
+    public static float oceanRavineRarity() {
+        return CONFIG == null ? 0.02F : (float) Math.max(0.0D, Math.min(0.1D, CONFIG.oceanRavineRarity));
+    }
+
+    public static float oceanRavineWidth() {
+        return CONFIG == null ? 5.0F : (float) Math.max(1.0D, Math.min(8.0D, CONFIG.oceanRavineWidth));
+    }
+
     public static void debug(String message) {
         LOGGER.info("[MCSR Easy Mode] {}", message);
         if (shouldShowDebugChatLogs()) {

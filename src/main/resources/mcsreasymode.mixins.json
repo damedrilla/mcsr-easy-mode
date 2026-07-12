@@ -14,6 +14,8 @@
     "LootableContainerBlockEntityMixin",
     "MinecraftServerMixin",
     "MobEntityMixin",
+    "OceanCarverMixin",
+    "OceanRavineCarverMixin",
     "PiglinBrainMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
