@@ -7,6 +7,7 @@
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
     "ChunkGeneratorTypePresetMixin",
+    "ChunkGeneratorFeatureMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
     "HoglinEntityMixin",
@@ -17,6 +18,8 @@
     "PiglinBrainMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
+    "StrongholdPieceMixin",
+    "StructurePieceMixin",
     "VillageGeneratorMixin"
   ],
   "client": [

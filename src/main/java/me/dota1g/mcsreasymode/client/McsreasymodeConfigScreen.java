@@ -28,6 +28,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget hideAdvancementToastsButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget villageStandardizationButton;
+    private ButtonWidget strongholdAntiCorruptionButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -70,7 +71,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
         this.worldgenSectionY = 269;
-        this.contentHeight = this.worldgenSectionY + 70;
+        this.contentHeight = this.worldgenSectionY + 91;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -135,6 +136,11 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.standardizeVillages));
         }));
 
+        this.strongholdAntiCorruptionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.strongholdAntiCorruption), button -> {
+            this.config.strongholdAntiCorruption = !this.config.strongholdAntiCorruption;
+            button.setMessage(this.toggleValueText(this.config.strongholdAntiCorruption));
+        }));
+
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateButtonPositions();
     }
@@ -171,6 +177,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
         this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "If a vanilla village has no smith, adds an artificial smith-style building and a nearby lava pool.");
+        this.drawRowLabel(matrices, "Stronghold Anti-Corruption Alpha", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -241,6 +248,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 33);
+        this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 54);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {

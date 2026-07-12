@@ -105,6 +105,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.standardizeVillages;
     }
 
+    public static boolean isStrongholdAntiCorruptionEnabled() {
+        return CONFIG != null && CONFIG.strongholdAntiCorruption;
+    }
+
     public static double netherTerrainXzScale() {
         return CONFIG == null ? 1.0D : Math.max(0.52D, Math.min(1.0D, CONFIG.netherTerrainXzScale));
     }
