@@ -24,7 +24,8 @@
     "GameMenuScreenMixin",
     "HandledScreenMixin",
     "InGameHudMixin",
-    "SlotAccessor"
+    "SlotAccessor",
+    "ToastManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
