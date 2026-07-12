@@ -177,7 +177,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
         this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "If a vanilla village has no smith, adds an artificial smith-style building and a nearby lava pool.");
-        this.drawRowLabel(matrices, "Stronghold Anti-Corruption Alpha", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
+        this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
