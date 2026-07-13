@@ -33,17 +33,20 @@ Highlights:
 | Bundled library | Fabric Resource Loader v0 |
 | Full Fabric API | Not required |
 
-## Mod Compatibility
+## Mod compatibility with other mods/practice kits
 
 | Mod | Status | Notes |
 | --- | --- | --- |
-| SpeedrunAPI | Required | Used for the config/mods menu. |
-| Fabric Resource Loader v0 | Bundled | Included inside this mod jar for mod-owned loot table resources. |
-| Sodium `1.16.1` forks | Compatible | No known direct conflict. |
-| SpeedRunIGT / timers | Compatible | This mod does not provide timing validation. |
-| MCSR Ranked | Blocked | `fabric.mod.json` marks `mcsrranked` as incompatible. |
-| MCSR FairPlay public | Blocked | `fabric.mod.json` marks `mcsr-fairplay-public` as incompatible. |
-| Full Fabric API | Not needed | Installing it should not be required for this mod. |
+| Mini Practice Kit (MPK) | Compatible | MPK's Nether Exit (Blind) minimum Y level is 41, so cave blinds are possible |
+| Speedrun Practice | Compatible | |
+| AreEssGee | Limited | Can interfere with loot tables and pity system (blaze, flint rarity). Stronghold anti-corruption is compatible with the Max Stronghold Room feature. |
+| LazyStronghold | Compatible | Does not interfere with the stronghold anti-corruption feature |
+| MCSR Ranked | Incompatible | Not legal (https://mcsrranked.com/guidelines) |
+| MCSR FairPlay | Incompatible | Not legal (https://mc.sr/mods/) |
+| PogLoot | Incompatible | Does not force crash the game |
+
+
+Attempting to run an instance with this mod and an incompatible mod will result in a force crash by the Fabric Loader (incompatible mods found warning).
 
 ## Install
 
