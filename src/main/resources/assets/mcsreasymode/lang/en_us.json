@@ -30,7 +30,7 @@
   "speedrunapi.config.mcsreasymode.option.handledHotbarHotkeyBackground.description": "Sets the hotkey label background color in inventory and container screens.",
   "speedrunapi.config.mcsreasymode.category.worldgen": "Worldgen",
   "speedrunapi.config.mcsreasymode.option.standardizeVillages": "Village standardization",
-  "speedrunapi.config.mcsreasymode.option.standardizeVillages.description": "Adds an artificial smith-style building and a nearby lava pool to villages that generated without a smith.",
+  "speedrunapi.config.mcsreasymode.option.standardizeVillages.description": "Adds a matching vanilla smith template and a nearby lava pool to villages that generated without a smith.",
   "mcsreasymode.screen.rng.title": "RNG Settings",
   "mcsreasymode.screen.rng.toggle_all": "Toggle All",
   "mcsreasymode.screen.rng.value.ranked": "Ranked",

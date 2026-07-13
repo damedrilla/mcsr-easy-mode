@@ -8,6 +8,7 @@ It focuses on:
 - preserving vanilla route knowledge where possible
 - keeping features toggleable through the SpeedrunAPI Mods menu
 - clearly marking runs as `MCSR Easy Mode` in the debug HUD
+- providing optional worldgen practice helpers without forcing structure spawns
 
 Pages:
 
