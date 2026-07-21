@@ -65,6 +65,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.rankedChestLootTables;
     }
 
+    public static boolean isRankedBuriedTreasureChanceEnabled() {
+        return CONFIG != null && CONFIG.rankedBuriedTreasureChance;
+    }
+
     public static boolean isRankedHoglinStableRampartsEnabled() {
         return CONFIG != null && CONFIG.rankedHoglinStableRamparts;
     }

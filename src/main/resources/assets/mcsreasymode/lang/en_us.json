@@ -60,6 +60,8 @@
   "mcsreasymode.screen.rng.bastion_chest_loot.tooltip": "Uses ranked bastion chest standardization for required iron and obsidian, then returns to vanilla.",
   "mcsreasymode.screen.rng.other_chest_loot_tables": "Other Chest Loot Tables",
   "mcsreasymode.screen.rng.other_chest_loot_tables.tooltip": "Uses ranked custom loot tables for supported non-bastion chests.",
+  "mcsreasymode.screen.rng.buried_treasure_chance": "Buried Treasure Chance",
+  "mcsreasymode.screen.rng.buried_treasure_chance.tooltip": "Raises buried treasure generation chance to AreEssGee's 7% per eligible chunk.",
   "mcsreasymode.screen.rng.hoglin_stable_ramparts": "Hoglin Stable Ramparts",
   "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip": "Guarantees two adjacent full-height hoglin stable ramparts while leaving the third rampart vanilla."
 }

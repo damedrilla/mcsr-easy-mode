@@ -6,6 +6,7 @@
   "mixins": [
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
+    "BuriedTreasureFeatureMixin",
     "CarverInvoker",
     "ChunkGeneratorTypePresetMixin",
     "ChunkGeneratorFeatureMixin",

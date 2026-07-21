@@ -48,6 +48,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean rankedChestLootTables = false;
 
     @Config.Hide
+    public boolean rankedBuriedTreasureChance = false;
+
+    @Config.Hide
     public boolean rankedHoglinStableRamparts = false;
 
     @Config.Category("mobs")
@@ -203,6 +206,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         this.rankedBlindPortal = ranked;
         this.rankedBastionChestLoot = ranked;
         this.rankedChestLootTables = ranked;
+        this.rankedBuriedTreasureChance = ranked;
         this.rankedHoglinStableRamparts = ranked;
         this.updateRngModeFromFeatures();
     }
@@ -217,6 +221,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && this.rankedBlindPortal
                 && this.rankedBastionChestLoot
                 && this.rankedChestLootTables
+                && this.rankedBuriedTreasureChance
                 && this.rankedHoglinStableRamparts;
     }
 
@@ -230,6 +235,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && !this.rankedBlindPortal
                 && !this.rankedBastionChestLoot
                 && !this.rankedChestLootTables
+                && !this.rankedBuriedTreasureChance
                 && !this.rankedHoglinStableRamparts;
     }
 
@@ -280,6 +286,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             this.migrateRngFeature(jsonObject, "rankedBlindPortal", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBastionChestLoot", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedChestLootTables", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedBuriedTreasureChance", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedHoglinStableRamparts", oldRankedMode);
         }
     }
