@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class OceanCarverMixin {
     @Redirect(method = "carveRegion", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(II)I", ordinal = 1))
     private int mcsreasymode$deepenOceanRavines(int first, int second) {
-        if ((Mcsreasymode.areOceanRavinesEnabled() || Mcsreasymode.isUnderwaterMagmaRavinesEnabled())
-                && (Object) this == Carver.UNDERWATER_CANYON) {
+        if (Mcsreasymode.isUnderwaterMagmaRavinesEnabled() && (Object) this == Carver.UNDERWATER_CANYON) {
             return 1;
         }
         return Math.max(first, second);

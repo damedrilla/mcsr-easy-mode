@@ -27,7 +27,6 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget debugChatLogsButton;
     private ButtonWidget hideAdvancementToastsButton;
     private ButtonWidget netherTerrainButton;
-    private ButtonWidget oceanRavinesButton;
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
     private ButtonWidget underwaterMagmaRavinesButton;
@@ -73,7 +72,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
         this.worldgenSectionY = 269;
-        this.contentHeight = this.worldgenSectionY + 70;
+        this.contentHeight = this.worldgenSectionY + 112;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -184,6 +183,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
         this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "If a vanilla village has no smith, adds an artificial smith-style building and a nearby lava pool.");
+        this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
+        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -254,6 +255,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 33);
+        this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 54);
+        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 75);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {
