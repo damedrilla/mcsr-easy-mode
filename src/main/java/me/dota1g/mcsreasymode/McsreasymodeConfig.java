@@ -101,6 +101,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.strongholdAntiCorruption.description")
     public boolean strongholdAntiCorruption = false;
 
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines.description")
+    public boolean underwaterMagmaRavines = false;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
     @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")

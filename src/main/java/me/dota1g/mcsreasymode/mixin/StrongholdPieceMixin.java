@@ -44,7 +44,11 @@ public abstract class StrongholdPieceMixin implements StrongholdPieceMarker {
             CallbackInfoReturnable<Boolean> cir
     ) {
         if (cir.getReturnValue()) {
-            StrongholdProtection.capturePiece(world, ((StructurePiece) (Object) this).getBoundingBox(), generationBox);
+            StructurePiece piece = (StructurePiece) (Object) this;
+            StrongholdProtection.capturePiece(world, piece.getBoundingBox(), generationBox);
+            if ((Object) this instanceof StrongholdGenerator.Start) {
+                StrongholdProtection.captureStarterStaircase(piece.getBoundingBox());
+            }
         }
     }
 }

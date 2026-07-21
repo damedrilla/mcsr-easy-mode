@@ -29,6 +29,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget netherTerrainButton;
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
+    private ButtonWidget underwaterMagmaRavinesButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -71,7 +72,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
         this.worldgenSectionY = 269;
-        this.contentHeight = this.worldgenSectionY + 91;
+        this.contentHeight = this.worldgenSectionY + 112;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -141,6 +142,11 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.strongholdAntiCorruption));
         }));
 
+        this.underwaterMagmaRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.underwaterMagmaRavines), button -> {
+            this.config.underwaterMagmaRavines = !this.config.underwaterMagmaRavines;
+            button.setMessage(this.toggleValueText(this.config.underwaterMagmaRavines));
+        }));
+
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateButtonPositions();
     }
@@ -178,6 +184,7 @@ public class McsreasymodeConfigScreen extends Screen {
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
+        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -249,6 +256,7 @@ public class McsreasymodeConfigScreen extends Screen {
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
+        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 54);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {
