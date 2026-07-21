@@ -24,7 +24,6 @@
     "ServerPlayerEntityMixin",
     "StrongholdPieceMixin",
     "StructurePieceMixin",
-    "UnderwaterCarverDepthMixin",
     "UnderwaterCaveCarverInvoker",
     "UnderwaterRavineCarverMixin",
     "VillageGeneratorMixin"
