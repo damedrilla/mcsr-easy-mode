@@ -25,6 +25,7 @@
     "StructurePieceMixin",
     "UnderwaterCaveCarverInvoker",
     "UnderwaterRavineCarverMixin",
+    "UnderwaterRavineShapeMixin",
     "VillageGeneratorMixin"
   ],
   "client": [
