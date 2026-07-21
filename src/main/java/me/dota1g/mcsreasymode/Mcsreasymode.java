@@ -65,6 +65,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.rankedChestLootTables;
     }
 
+    public static boolean isRankedBuriedTreasureChanceEnabled() {
+        return CONFIG != null && CONFIG.rankedBuriedTreasureChance;
+    }
+
     public static boolean isRankedHoglinStableRampartsEnabled() {
         return CONFIG != null && CONFIG.rankedHoglinStableRamparts;
     }
@@ -103,6 +107,14 @@ public class Mcsreasymode implements ModInitializer {
 
     public static boolean isVillageStandardizationEnabled() {
         return CONFIG != null && CONFIG.standardizeVillages;
+    }
+
+    public static boolean isStrongholdAntiCorruptionEnabled() {
+        return CONFIG != null && CONFIG.strongholdAntiCorruption;
+    }
+
+    public static boolean isUnderwaterMagmaRavinesEnabled() {
+        return CONFIG != null && CONFIG.underwaterMagmaRavines;
     }
 
     public static double netherTerrainXzScale() {

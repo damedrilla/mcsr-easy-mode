@@ -1,32 +1,52 @@
 # MCSR Easy Mode
 
-Minecraft speedrunning, but less RWDA.
+Minecraft speedrunning practice, but less RWDA.
 
 This mod is for practice only and is not legal for leaderboard submissions.
 
-Current release: `0.7`
+Current release: `1.0`
 
 ## What It Does
 
-MCSR Easy Mode is a Fabric `1.16.1` practice mod that adds toggleable quality-of-life changes, mob aggression softening, and Ranked-style RNG standardization.
+MCSR Easy Mode is a Fabric `1.16.1` practice mod that adds toggleable quality-of-life changes, mob aggression softening, Ranked-style RNG standardization, and optional worldgen practice helpers.
 
 Highlights:
 
 - Toggle piglin, ghast, and hoglin aggression.
-- Switch between vanilla RNG and Ranked-style RNG adjustments.
-- Standardize key speedrun resources such as rods, pearls, obsidian, flint, and selected bastion loot.
+- Configure RNG as `Vanilla`, `Ranked`, or per-feature `Custom`.
+- Standardize key speedrun resources such as rods, pearls, obsidian, string, flint, eyes, and selected chest loot.
 - Improve hoglin stable layouts while preserving vanilla bastion placement rules.
+- Add optional village and stronghold practice helpers.
 - Move the pause menu Save and Quit button away from common misclick paths.
 - Display keybind labels on the vanilla hotbar and hotbar slots inside inventory/container screens.
-- Customize hotkey label position, size, and background separately for HUD and handled screens.
+- Hide advancement toasts and optionally echo debug logs into chat.
+- Mark the F3 debug HUD with `MCSR Easy Mode` and the active RNG mode.
 
 ## Requirements
 
-- Minecraft `1.16.1`
-- Fabric Loader `0.16.3` or newer compatible loader
-- SpeedrunAPI for Minecraft `1.16.1`
+| Component | Requirement |
+| --- | --- |
+| Minecraft | `1.16.1` |
+| Mod loader | Fabric Loader `0.16.3` or newer compatible loader |
+| Java for playing | Java 8 compatible runtime |
+| Required mod | SpeedrunAPI for Minecraft `1.16.1` |
+| Bundled library | Fabric Resource Loader v0 |
+| Full Fabric API | Not required |
 
-This mod does not require the full Fabric API. It bundles Fabric Resource Loader v0 for included loot table resources.
+## Mod compatibility with other mods/practice kits
+
+| Mod | Status | Notes |
+| --- | --- | --- |
+| Mini Practice Kit (MPK) | Compatible | MPK's Nether Exit (Blind) minimum Y level is 41, so cave blinds are possible |
+| Speedrun Practice | Compatible | |
+| AreEssGee | Limited | Can interfere with loot tables and pity system (blaze, flint rarity). Stronghold anti-corruption is compatible with the Max Stronghold Room feature. |
+| LazyStronghold | Compatible | Does not interfere with the stronghold anti-corruption feature |
+| MCSR Ranked | Incompatible | Not legal (https://mcsrranked.com/guidelines) |
+| MCSR FairPlay | Incompatible | Not legal (https://mc.sr/mods/) |
+| PogLoot | Incompatible | Does not force crash the game |
+
+
+Attempting to run an instance with this mod and an incompatible mod will result in a force crash by the Fabric Loader (incompatible mods found warning).
 
 ## Install
 

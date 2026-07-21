@@ -6,7 +6,10 @@
   "mixins": [
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
+    "BuriedTreasureFeatureMixin",
+    "CarverInvoker",
     "ChunkGeneratorTypePresetMixin",
+    "ChunkGeneratorFeatureMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
     "HoglinEntityMixin",
@@ -19,6 +22,11 @@
     "PiglinBrainMixin",
     "PortalForcerMixin",
     "ServerPlayerEntityMixin",
+    "StrongholdPieceMixin",
+    "StructurePieceMixin",
+    "UnderwaterCarverDepthMixin",
+    "UnderwaterCaveCarverInvoker",
+    "UnderwaterRavineCarverMixin",
     "VillageGeneratorMixin"
   ],
   "client": [
