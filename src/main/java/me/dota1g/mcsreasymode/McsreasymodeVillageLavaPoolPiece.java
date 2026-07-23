@@ -2,7 +2,6 @@ package me.dota1g.mcsreasymode;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.util.math.BlockBox;
@@ -56,13 +55,14 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
         }
 
         boolean[] shape = this.createVanillaLakeShape();
-        if (!this.canGenerateLake(world, lakeBottomY, shape)) {
-            return false;
-        }
-
         this.carveLake(world, chunkBox, lakeBottomY, shape);
         this.restoreSurface(world, chunkBox, lakeBottomY, shape);
         this.addStoneRim(world, chunkBox, lakeBottomY, shape);
+        Mcsreasymode.debugRateLimited(
+                "village.lava_pool.generated." + this.originX + "." + this.originZ,
+                "Village lava pool generated near standardized smith at X " + this.originX + ", Y " + lakeBottomY + ", Z " + this.originZ + ".",
+                5000L
+        );
         return true;
     }
 
@@ -94,27 +94,6 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
         }
 
         return shape;
-    }
-
-    private boolean canGenerateLake(ServerWorldAccess world, int lakeBottomY, boolean[] shape) {
-        for (int x = 0; x < FOOTPRINT_X; x++) {
-            for (int z = 0; z < FOOTPRINT_Z; z++) {
-                for (int y = 0; y < FOOTPRINT_Y; y++) {
-                    if (!isBoundary(shape, x, z, y)) {
-                        continue;
-                    }
-
-                    Material material = world.getBlockState(this.pos(x, lakeBottomY + y, z)).getMaterial();
-                    if (y >= 4 && material.isLiquid()) {
-                        return false;
-                    }
-                    if (y < 4 && !material.isSolid() && material != Material.LAVA) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     private void carveLake(ServerWorldAccess world, BlockBox chunkBox, int lakeBottomY, boolean[] shape) {
@@ -162,7 +141,7 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
                         continue;
                     }
                     BlockPos pos = this.pos(x, lakeBottomY + y, z);
-                    if (world.getBlockState(pos).getMaterial().isSolid()) {
+                    if (world.getBlockState(pos).getMaterial().isSolid() || world.getBlockState(pos).getMaterial().isLiquid()) {
                         this.set(world, chunkBox, x, lakeBottomY + y, z, Blocks.STONE.getDefaultState());
                     }
                 }

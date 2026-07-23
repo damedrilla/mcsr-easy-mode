@@ -117,6 +117,14 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.underwaterMagmaRavines;
     }
 
+    public static boolean isFunMinecartVelocityGlitchEnabled() {
+        return CONFIG != null && CONFIG.funStackedMinecartVelocityGlitch;
+    }
+
+    public static boolean shouldShowMinecartVelocityDebugger() {
+        return CONFIG != null && CONFIG.showMinecartVelocityDebugger;
+    }
+
     public static double netherTerrainXzScale() {
         return CONFIG == null ? 1.0D : Math.max(0.52D, Math.min(1.0D, CONFIG.netherTerrainXzScale));
     }

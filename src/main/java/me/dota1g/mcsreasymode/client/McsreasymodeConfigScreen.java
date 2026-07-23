@@ -30,6 +30,8 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
     private ButtonWidget underwaterMagmaRavinesButton;
+    private ButtonWidget funMinecartVelocityGlitchButton;
+    private ButtonWidget minecartVelocityDebuggerButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -40,6 +42,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private int uiSectionY;
     private Text hoveredTooltip;
     private int worldgenSectionY;
+    private int funSectionY;
     private int listTop;
     private int listBottom;
     private int scrollOffset;
@@ -72,7 +75,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
         this.worldgenSectionY = 269;
-        this.contentHeight = this.worldgenSectionY + 112;
+        this.funSectionY = 359;
+        this.contentHeight = this.funSectionY + 75;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -147,6 +151,16 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.underwaterMagmaRavines));
         }));
 
+        this.funMinecartVelocityGlitchButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funStackedMinecartVelocityGlitch), button -> {
+            this.config.funStackedMinecartVelocityGlitch = !this.config.funStackedMinecartVelocityGlitch;
+            button.setMessage(this.toggleValueText(this.config.funStackedMinecartVelocityGlitch));
+        }));
+
+        this.minecartVelocityDebuggerButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showMinecartVelocityDebugger), button -> {
+            this.config.showMinecartVelocityDebugger = !this.config.showMinecartVelocityDebugger;
+            button.setMessage(this.toggleValueText(this.config.showMinecartVelocityDebugger));
+        }));
+
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateButtonPositions();
     }
@@ -173,6 +187,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawSectionDivider(matrices, "Anti-Aggression", this.toScreenY(this.aggressionSectionY));
         this.drawSectionDivider(matrices, "UI", this.toScreenY(this.uiSectionY));
         this.drawSectionDivider(matrices, "Worldgen", this.toScreenY(this.worldgenSectionY));
+        this.drawSectionDivider(matrices, "Fun Mode", this.toScreenY(this.funSectionY));
         this.drawRowLabel(matrices, "RNG", this.toScreenY(this.rngSectionY + 12), mouseX, mouseY, "Opens per-feature Vanilla or Ranked standardization toggles.");
         this.drawRowLabel(matrices, "Piglins", this.toScreenY(this.aggressionSectionY + 12), mouseX, mouseY, "Spoofs gold armor behavior so piglins stay neutral without taking an armor slot.");
         this.drawRowLabel(matrices, "Ghasts", this.toScreenY(this.aggressionSectionY + 33), mouseX, mouseY, "Prevents ghasts from choosing the player as an attack target.");
@@ -185,6 +200,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
+        this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
+        this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -257,6 +274,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
         this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 54);
+        this.setButtonY(this.funMinecartVelocityGlitchButton, this.funSectionY + 12);
+        this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BuriedTreasureFeature.class)
 public class BuriedTreasureFeatureMixin {
-    private static final float RANKED_BURIED_TREASURE_PROBABILITY = 0.07F;
+    private static final float RANKED_BURIED_TREASURE_PROBABILITY = 0.10F;
 
     @Redirect(
             method = "shouldStartAt(Lnet/minecraft/world/gen/chunk/ChunkGenerator;Lnet/minecraft/world/biome/source/BiomeSource;JLnet/minecraft/world/gen/ChunkRandom;IILnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/gen/feature/BuriedTreasureFeatureConfig;)Z",

@@ -2,6 +2,7 @@ package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.McsreasymodeVillageLavaPoolPiece;
+import me.dota1g.mcsreasymode.McsreasymodeVillageSmithTerrainPiece;
 import me.dota1g.mcsreasymode.worldgen.VillageVariant;
 import net.minecraft.structure.PoolStructurePiece;
 import net.minecraft.structure.StructureManager;
@@ -42,6 +43,7 @@ public abstract class VillageGeneratorMixin {
         VillageVariant variant = mcsreasymode$getVariant(config, pieces);
         VillageGenerator.Piece smith = mcsreasymode$createSmithPiece(structureManager, villageBox, pieces, variant);
         pieces.add(smith);
+        pieces.add(new McsreasymodeVillageSmithTerrainPiece(smith.getBoundingBox()));
         pieces.add(mcsreasymode$createLavaPoolPiece(villageBox, pieces, random));
         Mcsreasymode.debug("Village standardized: added vanilla " + variant.logName + " smith template and nearby lava pool because no smith generated.");
     }

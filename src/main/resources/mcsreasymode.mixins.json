@@ -4,6 +4,7 @@
   "package": "me.dota1g.mcsreasymode.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "AbstractMinecartEntityMixin",
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
     "BuriedTreasureFeatureMixin",
@@ -19,6 +20,7 @@
     "MobEntityMixin",
     "PiglinBrainMixin",
     "PortalForcerMixin",
+    "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",
     "StrongholdPieceMixin",
     "StructurePieceMixin",

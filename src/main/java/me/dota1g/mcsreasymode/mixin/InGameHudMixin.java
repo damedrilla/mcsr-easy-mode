@@ -3,6 +3,7 @@ package me.dota1g.mcsreasymode.mixin;
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyLabels;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyOverlayRenderer;
+import me.dota1g.mcsreasymode.client.MinecartVelocityDebugRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -26,5 +27,14 @@ public abstract class InGameHudMixin {
         }
 
         HotbarHotkeyOverlayRenderer.render(matrices, this.client, Mcsreasymode.CONFIG, this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight(), HotbarHotkeyLabels.get(this.client));
+    }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    private void mcsreasymode$renderMinecartVelocityDebugger(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        if (!Mcsreasymode.shouldShowMinecartVelocityDebugger() || this.client.options.hudHidden || this.client.currentScreen != null) {
+            return;
+        }
+
+        MinecartVelocityDebugRenderer.render(matrices, this.client, this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
     }
 }

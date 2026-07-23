@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.RankedRngState;
+import me.dota1g.mcsreasymode.StrongholdProtection;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,5 +13,6 @@ public abstract class MinecraftServerMixin {
     @Inject(method = "loadWorld", at = @At("HEAD"))
     private void mcsreasymode$resetRankedRngState(CallbackInfo ci) {
         RankedRngState.reset();
+        StrongholdProtection.reset();
     }
 }
