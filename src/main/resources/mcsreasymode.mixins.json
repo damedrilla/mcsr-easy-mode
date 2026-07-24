@@ -9,6 +9,7 @@
     "BlockMixin",
     "BuriedTreasureFeatureMixin",
     "CarverInvoker",
+    "ChestBlockMixin",
     "ChunkGeneratorTypePresetMixin",
     "ChunkGeneratorFeatureMixin",
     "EyeOfEnderEntityMixin",

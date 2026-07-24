@@ -119,6 +119,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.showMinecartVelocityDebugger.description")
     public boolean showMinecartVelocityDebugger = false;
 
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.ssgMode")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.ssgMode.description")
+    public boolean ssgMode = false;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
     @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")

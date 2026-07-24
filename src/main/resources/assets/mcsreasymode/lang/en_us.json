@@ -40,6 +40,8 @@
   "speedrunapi.config.mcsreasymode.option.funStackedMinecartVelocityGlitch.description": "Backports a silly beneficial minecart velocity bug for projectiles and passengers. Not part of Ranked standardization.",
   "speedrunapi.config.mcsreasymode.option.showMinecartVelocityDebugger": "Show minecart velocity debugger",
   "speedrunapi.config.mcsreasymode.option.showMinecartVelocityDebugger.description": "Shows current charged minecart b/t and active bow projectile boost while testing fun mode.",
+  "speedrunapi.config.mcsreasymode.option.ssgMode": "SSG Mode",
+  "speedrunapi.config.mcsreasymode.option.ssgMode.description": "Adds set-seed glitchless practice support: first 3 bastion chests get minecart resources and stronghold portals generate with 12 eyes.",
   "mcsreasymode.screen.rng.title": "RNG Settings",
   "mcsreasymode.screen.rng.toggle_all": "Toggle All",
   "mcsreasymode.screen.rng.value.ranked": "Ranked",

@@ -10,12 +10,14 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 public final class McsreasymodeMinecartVelocityState {
-    private static final double PROJECTILE_SPEED_CAP = 256.0D;
+    private static final double PROJECTILE_SPEED_CAP = 320.0D;
     private static final double PASSENGER_SPEED_CAP = 64.0D;
-    private static final double INTERNAL_SPEED_CAP = 512.0D;
+    private static final double INTERNAL_SPEED_CAP = 768.0D;
     private static final double STACK_CONTACT_EXPAND_XZ = 1.25D;
     private static final double STACK_CONTACT_EXPAND_Y = 0.35D;
     private static final double CHARGE_SEARCH_EXPAND_XZ = 2.5D;
+    private static final double STACK_MASS_SEARCH_EXPAND_XZ = 3.0D;
+    private static final double STACK_MASS_SEARCH_EXPAND_Y = 1.0D;
     private static final int CHARGE_EXPIRY_TICKS = 200;
     private static final Map<AbstractMinecartEntity, Charge> CHARGES = new WeakHashMap<>();
     private static final Map<UUID, Charge> CHARGE_SNAPSHOTS = new java.util.HashMap<>();
@@ -35,6 +37,7 @@ public final class McsreasymodeMinecartVelocityState {
         cleanExpired(cart.age);
         Charge ownCharge = CHARGES.get(cart);
         boolean stacked = false;
+        int nearbyMinecarts = 0;
         Vec3d inherited = Vec3d.ZERO;
 
         for (Entity entity : cart.world.getEntities(cart, cart.getBoundingBox().expand(STACK_CONTACT_EXPAND_XZ, STACK_CONTACT_EXPAND_Y, STACK_CONTACT_EXPAND_XZ))) {
@@ -43,12 +46,13 @@ public final class McsreasymodeMinecartVelocityState {
             }
 
             stacked = true;
+            nearbyMinecarts++;
             AbstractMinecartEntity otherCart = (AbstractMinecartEntity) entity;
             Charge otherCharge = chargeFor(otherCart);
             if (otherCharge != null) {
-                inherited = inherited.add(otherCharge.velocity.multiply(0.35D));
+                inherited = inherited.add(otherCharge.velocity.multiply(0.62D));
             }
-            inherited = inherited.add(horizontalVelocity(otherCart).multiply(0.5D));
+            inherited = inherited.add(horizontalVelocity(otherCart).multiply(0.75D));
         }
 
         if (!stacked) {
@@ -61,7 +65,11 @@ public final class McsreasymodeMinecartVelocityState {
         Vec3d actualVelocity = horizontalVelocity(cart);
         Vec3d base = ownCharge == null || horizontalLength(actualVelocity) > horizontalLength(ownCharge.velocity) ? actualVelocity : ownCharge.velocity;
         Vec3d direction = directionFor(cart);
-        Vec3d glitched = base.multiply(1.35D).add(inherited).add(direction.multiply(0.45D));
+        int stackMass = Math.max(nearbyMinecarts + 1, nearbyMinecartCount(cart, STACK_MASS_SEARCH_EXPAND_XZ, STACK_MASS_SEARCH_EXPAND_Y) + 1);
+        double stackFactor = Math.min(stackMass, 5);
+        double selfMultiplier = 1.35D + stackFactor * 0.18D;
+        Vec3d glitched = base.multiply(selfMultiplier).add(inherited).add(direction.multiply(0.9D * stackFactor));
+        glitched = ensureMinimumStackSpeed(glitched, direction, stackMass);
         glitched = capHorizontal(glitched, INTERNAL_SPEED_CAP);
         Charge charge = new Charge(glitched, cart.age);
         CHARGES.put(cart, charge);
@@ -215,6 +223,38 @@ public final class McsreasymodeMinecartVelocityState {
     private static Charge currentVelocityCharge(AbstractMinecartEntity cart) {
         Vec3d velocity = horizontalVelocity(cart);
         return horizontalLength(velocity) <= 0.01D ? null : new Charge(velocity, cart.age);
+    }
+
+    private static Vec3d ensureMinimumStackSpeed(Vec3d velocity, Vec3d direction, int stackMass) {
+        double minimumSpeed = minimumSpeedForStackMass(stackMass);
+        if (minimumSpeed <= 0.0D || horizontalLength(velocity) >= minimumSpeed) {
+            return velocity;
+        }
+
+        return direction.multiply(minimumSpeed);
+    }
+
+    private static double minimumSpeedForStackMass(int stackMass) {
+        switch (Math.min(stackMass, 5)) {
+            case 5:
+                return 360.0D;
+            case 4:
+                return 220.0D;
+            case 3:
+                return 96.0D;
+            default:
+                return 0.0D;
+        }
+    }
+
+    private static int nearbyMinecartCount(AbstractMinecartEntity cart, double horizontalExpand, double verticalExpand) {
+        int count = 0;
+        for (Entity entity : cart.world.getEntities(cart, cart.getBoundingBox().expand(horizontalExpand, verticalExpand, horizontalExpand))) {
+            if (entity instanceof AbstractMinecartEntity) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private static Charge chargeFor(AbstractMinecartEntity cart) {

@@ -2,6 +2,7 @@ package me.dota1g.mcsreasymode;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.EndPortalFrameBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.entity.EntityType;
@@ -121,6 +122,61 @@ public final class StrongholdProtection {
                 }
             }
         }
+    }
+
+    public static void completeSsgPortalRoom(ServerWorldAccess world, BlockBox pieceBox, BlockBox generationBox) {
+        if (!Mcsreasymode.isSsgModeEnabled()) {
+            return;
+        }
+
+        int minX = Math.max(pieceBox.minX, generationBox.minX);
+        int minY = Math.max(pieceBox.minY, generationBox.minY);
+        int minZ = Math.max(pieceBox.minZ, generationBox.minZ);
+        int maxX = Math.min(pieceBox.maxX, generationBox.maxX);
+        int maxY = Math.min(pieceBox.maxY, generationBox.maxY);
+        int maxZ = Math.min(pieceBox.maxZ, generationBox.maxZ);
+        List<BlockPos> frames = new ArrayList<>();
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    mutable.set(x, y, z);
+                    BlockState state = world.getBlockState(mutable);
+                    if (state.isOf(Blocks.END_PORTAL_FRAME)) {
+                        frames.add(new BlockPos(mutable));
+                        if (!state.get(EndPortalFrameBlock.EYE)) {
+                            world.setBlockState(mutable, state.with(EndPortalFrameBlock.EYE, true), 2);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (frames.size() < 12) {
+            return;
+        }
+
+        int frameMinX = frames.stream().mapToInt(BlockPos::getX).min().orElse(minX);
+        int frameMaxX = frames.stream().mapToInt(BlockPos::getX).max().orElse(maxX);
+        int frameMinZ = frames.stream().mapToInt(BlockPos::getZ).min().orElse(minZ);
+        int frameMaxZ = frames.stream().mapToInt(BlockPos::getZ).max().orElse(maxZ);
+        int frameY = frames.get(0).getY();
+
+        for (int x = frameMinX + 1; x <= frameMaxX - 1; x++) {
+            for (int z = frameMinZ + 1; z <= frameMaxZ - 1; z++) {
+                mutable.set(x, frameY, z);
+                if (!world.getBlockState(mutable).isOf(Blocks.END_PORTAL_FRAME)) {
+                    world.setBlockState(mutable, Blocks.END_PORTAL.getDefaultState(), 2);
+                }
+            }
+        }
+
+        Mcsreasymode.debugRateLimited(
+                "ssg-portal-room",
+                "SSG Mode completed stronghold portal room with 12 eyes.",
+                5000L
+        );
     }
 
     public static void restoreAndEnd(ChunkRegion region) {

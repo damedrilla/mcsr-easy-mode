@@ -51,6 +51,7 @@ public abstract class StrongholdPieceMixin implements StrongholdPieceMarker {
             }
             if ((Object) this instanceof StrongholdGenerator.PortalRoom) {
                 StrongholdProtection.capturePortalRoomSpawners(world, piece.getBoundingBox(), generationBox);
+                StrongholdProtection.completeSsgPortalRoom(world, piece.getBoundingBox(), generationBox);
             }
         }
     }

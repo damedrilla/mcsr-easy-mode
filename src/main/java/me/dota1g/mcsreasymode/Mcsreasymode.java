@@ -125,6 +125,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showMinecartVelocityDebugger;
     }
 
+    public static boolean isSsgModeEnabled() {
+        return CONFIG != null && CONFIG.ssgMode;
+    }
+
     public static double netherTerrainXzScale() {
         return CONFIG == null ? 1.0D : Math.max(0.52D, Math.min(1.0D, CONFIG.netherTerrainXzScale));
     }

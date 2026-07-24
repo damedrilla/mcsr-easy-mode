@@ -32,6 +32,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget underwaterMagmaRavinesButton;
     private ButtonWidget funMinecartVelocityGlitchButton;
     private ButtonWidget minecartVelocityDebuggerButton;
+    private ButtonWidget ssgModeButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -76,7 +77,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.uiSectionY = 154;
         this.worldgenSectionY = 269;
         this.funSectionY = 359;
-        this.contentHeight = this.funSectionY + 75;
+        this.contentHeight = this.funSectionY + 96;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -161,6 +162,11 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.showMinecartVelocityDebugger));
         }));
 
+        this.ssgModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.ssgMode), button -> {
+            this.config.ssgMode = !this.config.ssgMode;
+            button.setMessage(this.toggleValueText(this.config.ssgMode));
+        }));
+
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateButtonPositions();
     }
@@ -202,6 +208,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
         this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
         this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
+        this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -276,6 +283,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 54);
         this.setButtonY(this.funMinecartVelocityGlitchButton, this.funSectionY + 12);
         this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
+        this.setButtonY(this.ssgModeButton, this.funSectionY + 54);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {
