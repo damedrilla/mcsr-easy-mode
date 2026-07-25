@@ -14,10 +14,14 @@ public final class RankedRngState {
     private static final int BASTION_IRON_MINIMUM = 3;
     private static final int BASTION_OBSIDIAN_MINIMUM = 5;
     private static final int FLINT_PITY_BREAKS = 10;
+    private static final int ONE_SHOT_IRON_MINIMUM = 26;
+    private static final int ONE_SHOT_IRON_MAXIMUM = 36;
 
     private static int pearlDryBarters;
     private static int obsidianDryBarters;
     private static int stringDryBarters;
+    private static int oneShotIronBudget;
+    private static int oneShotIronGiven;
     private static int flintDryBreaks;
     private static int thrownEyeCount;
     private static boolean bastionChestAdjusted;
@@ -32,6 +36,8 @@ public final class RankedRngState {
         pearlDryBarters = 0;
         obsidianDryBarters = 0;
         stringDryBarters = 0;
+        oneShotIronBudget = 0;
+        oneShotIronGiven = 0;
         flintDryBreaks = 0;
         thrownEyeCount = 0;
         bastionChestAdjusted = false;
@@ -41,12 +47,34 @@ public final class RankedRngState {
         Mcsreasymode.debug("Ranked RNG state reset for new world.");
     }
 
-    public static List<ItemStack> applyPiglinBarterPity(List<ItemStack> original, Random random, boolean rankedBarterPity, boolean rankedStringPity) {
+    public static List<ItemStack> applyPiglinBarterPity(List<ItemStack> original, Random random, boolean rankedBarterPity, boolean rankedStringPity, boolean oneShotForRsg) {
         List<ItemStack> result = new ArrayList<>(original);
 
         boolean hasPearls = result.stream().anyMatch(stack -> stack.getItem() == Items.ENDER_PEARL);
         boolean hasObsidian = result.stream().anyMatch(stack -> stack.getItem() == Items.OBSIDIAN);
         boolean hasString = result.stream().anyMatch(stack -> stack.getItem() == Items.STRING);
+        if (rankedStringPity && oneShotForRsg && hasString) {
+            int ironCount = 0;
+            int stringLeftover = 0;
+            for (int i = 0; i < result.size(); i++) {
+                ItemStack stack = result.get(i);
+                if (stack.getItem() == Items.STRING) {
+                    int convertedCount = consumeOneShotIron(stack.getCount(), random);
+                    ironCount += convertedCount;
+                    if (convertedCount > 0) {
+                        result.set(i, new ItemStack(Items.IRON_INGOT, convertedCount));
+                        stringLeftover += stack.getCount() - convertedCount;
+                    }
+                }
+            }
+            if (stringLeftover > 0) {
+                result.add(new ItemStack(Items.STRING, stringLeftover));
+            }
+            if (ironCount > 0) {
+                Mcsreasymode.debug("Piglin barter one shot for RSG: converted natural string trade into " + ironCount
+                        + " iron ingots (" + oneShotIronGiven + "/" + oneShotIronBudget + " budget used).");
+            }
+        }
 
         if (rankedBarterPity && hasPearls) {
             pearlDryBarters = 0;
@@ -81,12 +109,40 @@ public final class RankedRngState {
         }
         
         if (rankedStringPity && !hasString && stringDryBarters >= STRING_PITY_BARTERS) {
-            int stringCount = 8 + random.nextInt(15);
-            result.add(new ItemStack(Items.STRING, stringCount));
-            Mcsreasymode.debug("Piglin barter string pity proc: added " + stringCount + " strings after " + STRING_PITY_BARTERS + " dry barters.");
+            int count = 8 + random.nextInt(15);
+            if (oneShotForRsg) {
+                int ironCount = consumeOneShotIron(count, random);
+                if (ironCount > 0) {
+                    result.add(new ItemStack(Items.IRON_INGOT, ironCount));
+                    Mcsreasymode.debug("Piglin barter one shot for RSG proc: added " + ironCount
+                            + " iron ingots instead of string after " + STRING_PITY_BARTERS + " dry barters ("
+                            + oneShotIronGiven + "/" + oneShotIronBudget + " budget used).");
+                }
+            } else {
+                result.add(new ItemStack(Items.STRING, count));
+                Mcsreasymode.debug("Piglin barter string pity proc: added " + count + " strings after " + STRING_PITY_BARTERS + " dry barters.");
+            }
             stringDryBarters = 0;
         }
         return result;
+    }
+
+    private static int consumeOneShotIron(int requested, Random random) {
+        if (requested <= 0) {
+            return 0;
+        }
+        if (oneShotIronBudget <= 0) {
+            oneShotIronBudget = ONE_SHOT_IRON_MINIMUM + random.nextInt(ONE_SHOT_IRON_MAXIMUM - ONE_SHOT_IRON_MINIMUM + 1);
+        }
+
+        int remaining = oneShotIronBudget - oneShotIronGiven;
+        if (remaining <= 0) {
+            return 0;
+        }
+
+        int granted = Math.min(requested, remaining);
+        oneShotIronGiven += granted;
+        return granted;
     }
 
     public static boolean shouldAdjustBastionChest() {

@@ -126,7 +126,11 @@ public class Mcsreasymode implements ModInitializer {
     }
 
     public static boolean isSsgModeEnabled() {
-        return CONFIG != null && CONFIG.ssgMode;
+        return CONFIG != null && CONFIG.ssgMode && !CONFIG.funOneShotForRsg;
+    }
+
+    public static boolean isFunOneShotForRsgEnabled() {
+        return CONFIG != null && CONFIG.funOneShotForRsg;
     }
 
     public static double netherTerrainXzScale() {
