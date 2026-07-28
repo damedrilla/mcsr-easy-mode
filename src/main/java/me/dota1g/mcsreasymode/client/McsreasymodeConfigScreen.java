@@ -34,6 +34,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget minecartVelocityDebuggerButton;
     private ButtonWidget ssgModeButton;
     private ButtonWidget oneShotForRsgButton;
+    private ButtonWidget reducedPearlDamageButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -78,7 +79,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.uiSectionY = 154;
         this.worldgenSectionY = 269;
         this.funSectionY = 359;
-        this.contentHeight = this.funSectionY + 117;
+        this.contentHeight = this.funSectionY + 138;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -183,6 +184,11 @@ public class McsreasymodeConfigScreen extends Screen {
         }));
         this.ssgModeButton.active = !this.config.funOneShotForRsg;
 
+        this.reducedPearlDamageButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funReducedPearlDamage), button -> {
+            this.config.funReducedPearlDamage = !this.config.funReducedPearlDamage;
+            button.setMessage(this.toggleValueText(this.config.funReducedPearlDamage));
+        }));
+
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateButtonPositions();
     }
@@ -226,6 +232,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
         this.drawRowLabel(matrices, "One Shot for RSG", this.toScreenY(this.funSectionY + 75), mouseX, mouseY, "When Ranked Piglin String is enabled, turns string trades and pity into a capped 26-36 iron budget for one-shot practice.");
+        this.drawRowLabel(matrices, "Reduced Pearl Damage", this.toScreenY(this.funSectionY + 96), mouseX, mouseY, "Removes ender pearl teleport damage for longer throws while preserving short hunger-reset pearls.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -302,6 +309,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
         this.setButtonY(this.ssgModeButton, this.funSectionY + 54);
         this.setButtonY(this.oneShotForRsgButton, this.funSectionY + 75);
+        this.setButtonY(this.reducedPearlDamageButton, this.funSectionY + 96);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {

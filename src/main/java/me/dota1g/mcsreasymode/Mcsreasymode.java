@@ -133,6 +133,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.funOneShotForRsg;
     }
 
+    public static boolean isFunReducedPearlDamageEnabled() {
+        return CONFIG != null && CONFIG.funReducedPearlDamage;
+    }
+
     public static double netherTerrainXzScale() {
         return CONFIG == null ? 1.0D : Math.max(0.52D, Math.min(1.0D, CONFIG.netherTerrainXzScale));
     }

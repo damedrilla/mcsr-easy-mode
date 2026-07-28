@@ -44,6 +44,8 @@
   "speedrunapi.config.mcsreasymode.option.ssgMode.description": "Adds set-seed glitchless practice support: first 3 bastion chests get minecart resources and stronghold portals generate with 12 eyes.",
   "speedrunapi.config.mcsreasymode.option.funOneShotForRsg": "One Shot for RSG",
   "speedrunapi.config.mcsreasymode.option.funOneShotForRsg.description": "Turns Ranked Piglin String trades and pity into a capped 26-36 iron budget for one-shot RSG practice. Not part of Ranked standardization.",
+  "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage": "Reduced pearl damage",
+  "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage.description": "Removes ender pearl teleport damage for throws at least 2 blocks away while preserving short hunger-reset pearls.",
   "mcsreasymode.screen.rng.title": "RNG Settings",
   "mcsreasymode.screen.rng.toggle_all": "Toggle All",
   "mcsreasymode.screen.rng.value.ranked": "Ranked",

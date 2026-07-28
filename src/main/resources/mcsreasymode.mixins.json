@@ -12,6 +12,7 @@
     "ChestBlockMixin",
     "ChunkGeneratorTypePresetMixin",
     "ChunkGeneratorFeatureMixin",
+    "EnderPearlEntityMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
     "HoglinEntityMixin",

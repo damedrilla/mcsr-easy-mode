@@ -129,6 +129,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.funOneShotForRsg.description")
     public boolean funOneShotForRsg = false;
 
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.funReducedPearlDamage")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.funReducedPearlDamage.description")
+    public boolean funReducedPearlDamage = false;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
     @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")
