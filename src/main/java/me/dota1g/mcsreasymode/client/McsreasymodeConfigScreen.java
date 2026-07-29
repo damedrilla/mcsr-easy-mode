@@ -26,6 +26,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget hotbarHotkeysCustomizeButton;
     private ButtonWidget debugChatLogsButton;
     private ButtonWidget hideAdvancementToastsButton;
+    private ButtonWidget blockPlacementOutlineButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
@@ -77,8 +78,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 269;
-        this.funSectionY = 359;
+        this.worldgenSectionY = 290;
+        this.funSectionY = 380;
         this.contentHeight = this.funSectionY + 138;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -132,6 +133,11 @@ public class McsreasymodeConfigScreen extends Screen {
         this.hideAdvancementToastsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.hideAdvancementToasts), button -> {
             this.config.hideAdvancementToasts = !this.config.hideAdvancementToasts;
             button.setMessage(this.toggleValueText(this.config.hideAdvancementToasts));
+        }));
+
+        this.blockPlacementOutlineButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showBlockPlacementOutline), button -> {
+            this.config.showBlockPlacementOutline = !this.config.showBlockPlacementOutline;
+            button.setMessage(this.toggleValueText(this.config.showBlockPlacementOutline));
         }));
 
         // this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
@@ -224,6 +230,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 33), mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         this.drawRowLabel(matrices, "Debug Chat Logs", this.toScreenY(this.uiSectionY + 54), mouseX, mouseY, "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.");
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
+        this.drawRowLabel(matrices, "Placement Outline", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Draws a cyan outline around the exact block cell your held block would place into.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
@@ -301,6 +308,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hotbarHotkeysCustomizeButton, this.uiSectionY + 33);
         this.setButtonY(this.debugChatLogsButton, this.uiSectionY + 54);
         this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
+        this.setButtonY(this.blockPlacementOutlineButton, this.uiSectionY + 96);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);

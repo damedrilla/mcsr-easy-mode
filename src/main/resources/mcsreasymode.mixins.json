@@ -37,7 +37,8 @@
     "HandledScreenMixin",
     "InGameHudMixin",
     "SlotAccessor",
-    "ToastManagerMixin"
+    "ToastManagerMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

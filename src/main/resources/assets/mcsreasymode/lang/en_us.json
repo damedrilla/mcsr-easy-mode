@@ -46,6 +46,8 @@
   "speedrunapi.config.mcsreasymode.option.funOneShotForRsg.description": "Turns Ranked Piglin String trades and pity into a capped 26-36 iron budget for one-shot RSG practice. Not part of Ranked standardization.",
   "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage": "Reduced pearl damage",
   "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage.description": "Removes ender pearl teleport damage for throws at least 2 blocks away while preserving short hunger-reset pearls.",
+  "speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline": "Placement outline",
+  "speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline.description": "Draws a cyan outline around the exact block position the held block would place into.",
   "mcsreasymode.screen.rng.title": "RNG Settings",
   "mcsreasymode.screen.rng.toggle_all": "Toggle All",
   "mcsreasymode.screen.rng.value.ranked": "Ranked",

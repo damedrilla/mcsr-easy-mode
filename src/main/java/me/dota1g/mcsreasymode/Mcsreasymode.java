@@ -101,6 +101,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.hideAdvancementToasts;
     }
 
+    public static boolean shouldShowBlockPlacementOutline() {
+        return CONFIG != null && CONFIG.showBlockPlacementOutline;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }
