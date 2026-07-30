@@ -48,6 +48,8 @@
   "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage.description": "Removes ender pearl teleport damage for throws at least 2 blocks away while preserving short hunger-reset pearls.",
   "speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline": "Placement outline",
   "speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline.description": "Draws a cyan outline around the exact block position the held block would place into.",
+  "speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist": "Buried treasure chunk assist",
+  "speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist.description": "Highlights the surface block at local chunk coordinates 9, 9 for buried treasure routes.",
   "mcsreasymode.screen.rng.title": "RNG Settings",
   "mcsreasymode.screen.rng.toggle_all": "Toggle All",
   "mcsreasymode.screen.rng.value.ranked": "Ranked",

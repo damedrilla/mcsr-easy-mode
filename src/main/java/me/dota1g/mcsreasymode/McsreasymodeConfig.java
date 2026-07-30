@@ -160,6 +160,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean showBlockPlacementOutline = false;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist.description")
+    public boolean showBuriedTreasureChunkAssist = false;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
     @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description")
     @Config.Text(getter = "getHotbarHotkeyPositionText")

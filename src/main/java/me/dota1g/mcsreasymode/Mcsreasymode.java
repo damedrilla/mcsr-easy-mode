@@ -105,6 +105,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showBlockPlacementOutline;
     }
 
+    public static boolean shouldShowBuriedTreasureChunkAssist() {
+        return CONFIG != null && CONFIG.showBuriedTreasureChunkAssist;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }
