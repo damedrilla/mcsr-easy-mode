@@ -28,6 +28,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget hideAdvancementToastsButton;
     private ButtonWidget blockPlacementOutlineButton;
     private ButtonWidget buriedTreasureChunkAssistButton;
+    private ButtonWidget asyncWorldListLoadingButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
@@ -79,8 +80,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 311;
-        this.funSectionY = 401;
+        this.worldgenSectionY = 332;
+        this.funSectionY = 422;
         this.contentHeight = this.funSectionY + 138;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -144,6 +145,11 @@ public class McsreasymodeConfigScreen extends Screen {
         this.buriedTreasureChunkAssistButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showBuriedTreasureChunkAssist), button -> {
             this.config.showBuriedTreasureChunkAssist = !this.config.showBuriedTreasureChunkAssist;
             button.setMessage(this.toggleValueText(this.config.showBuriedTreasureChunkAssist));
+        }));
+
+        this.asyncWorldListLoadingButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.asyncWorldListLoading), button -> {
+            this.config.asyncWorldListLoading = !this.config.asyncWorldListLoading;
+            button.setMessage(this.toggleValueText(this.config.asyncWorldListLoading));
         }));
 
         // this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
@@ -238,6 +244,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
         this.drawRowLabel(matrices, "Placement Outline", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Draws a cyan outline around the exact block cell your held block would place into.");
         this.drawRowLabel(matrices, "Buried Treasure Chunk Assist", this.toScreenY(this.uiSectionY + 117), mouseX, mouseY, "Highlights the surface block at local chunk coordinates 9, 9 for buried treasure routes.");
+        this.drawRowLabel(matrices, "Async World List", this.toScreenY(this.uiSectionY + 138), mouseX, mouseY, "Loads single-player world metadata in the background. This convenience feature is not intended for verified speedruns.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
@@ -317,6 +324,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
         this.setButtonY(this.blockPlacementOutlineButton, this.uiSectionY + 96);
         this.setButtonY(this.buriedTreasureChunkAssistButton, this.uiSectionY + 117);
+        this.setButtonY(this.asyncWorldListLoadingButton, this.uiSectionY + 138);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);

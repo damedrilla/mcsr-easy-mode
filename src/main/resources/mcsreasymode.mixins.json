@@ -36,8 +36,10 @@
     "GameMenuScreenMixin",
     "HandledScreenMixin",
     "InGameHudMixin",
+    "SelectWorldScreenMixin",
     "SlotAccessor",
     "ToastManagerMixin",
+    "WorldListWidgetMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

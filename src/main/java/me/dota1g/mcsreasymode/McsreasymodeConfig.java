@@ -165,6 +165,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean showBuriedTreasureChunkAssist = false;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.asyncWorldListLoading")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.asyncWorldListLoading.description")
+    public boolean asyncWorldListLoading = true;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
     @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description")
     @Config.Text(getter = "getHotbarHotkeyPositionText")

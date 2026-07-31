@@ -109,6 +109,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showBuriedTreasureChunkAssist;
     }
 
+    public static boolean shouldLoadWorldListAsync() {
+        return CONFIG != null && CONFIG.asyncWorldListLoading;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }
