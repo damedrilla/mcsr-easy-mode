@@ -48,6 +48,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean rankedChestLootTables = false;
 
     @Config.Hide
+    public boolean rankedBuriedTreasureChance = false;
+
+    @Config.Hide
     public boolean rankedHoglinStableRamparts = false;
 
     @Config.Category("mobs")
@@ -101,6 +104,36 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.strongholdAntiCorruption.description")
     public boolean strongholdAntiCorruption = false;
 
+    @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines.description")
+    public boolean underwaterMagmaRavines = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.funStackedMinecartVelocityGlitch")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.funStackedMinecartVelocityGlitch.description")
+    public boolean funStackedMinecartVelocityGlitch = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showMinecartVelocityDebugger")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showMinecartVelocityDebugger.description")
+    public boolean showMinecartVelocityDebugger = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.ssgMode")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.ssgMode.description")
+    public boolean ssgMode = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.funOneShotForRsg")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.funOneShotForRsg.description")
+    public boolean funOneShotForRsg = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.funReducedPearlDamage")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.funReducedPearlDamage.description")
+    public boolean funReducedPearlDamage = false;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
     @Config.Description("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description")
@@ -120,6 +153,21 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.hideAdvancementToasts")
     @Config.Description("speedrunapi.config.mcsreasymode.option.hideAdvancementToasts.description")
     public boolean hideAdvancementToasts = false;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline.description")
+    public boolean showBlockPlacementOutline = false;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist.description")
+    public boolean showBuriedTreasureChunkAssist = false;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.asyncWorldListLoading")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.asyncWorldListLoading.description")
+    public boolean asyncWorldListLoading = true;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
@@ -198,6 +246,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         this.rankedBlindPortal = ranked;
         this.rankedBastionChestLoot = ranked;
         this.rankedChestLootTables = ranked;
+        this.rankedBuriedTreasureChance = ranked;
         this.rankedHoglinStableRamparts = ranked;
         this.updateRngModeFromFeatures();
     }
@@ -212,6 +261,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && this.rankedBlindPortal
                 && this.rankedBastionChestLoot
                 && this.rankedChestLootTables
+                && this.rankedBuriedTreasureChance
                 && this.rankedHoglinStableRamparts;
     }
 
@@ -225,6 +275,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && !this.rankedBlindPortal
                 && !this.rankedBastionChestLoot
                 && !this.rankedChestLootTables
+                && !this.rankedBuriedTreasureChance
                 && !this.rankedHoglinStableRamparts;
     }
 
@@ -275,6 +326,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             this.migrateRngFeature(jsonObject, "rankedBlindPortal", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBastionChestLoot", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedChestLootTables", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedBuriedTreasureChance", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedHoglinStableRamparts", oldRankedMode);
         }
     }

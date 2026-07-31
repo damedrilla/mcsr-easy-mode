@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public final class McsreasymodeStructurePieces {
     public static final StructurePieceType VILLAGE_LAVA_POOL = StructurePieceType.register(McsreasymodeStructurePieces::loadVillageLavaPool, "mcsreasymode_village_lava_pool");
+    public static final StructurePieceType VILLAGE_SMITH_TERRAIN = StructurePieceType.register(McsreasymodeVillageSmithTerrainPiece::new, "mcsreasymode_village_smith_terrain");
 
     private McsreasymodeStructurePieces() {
     }

@@ -4,10 +4,15 @@
   "package": "me.dota1g.mcsreasymode.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "AbstractMinecartEntityMixin",
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
+    "BuriedTreasureFeatureMixin",
+    "CarverInvoker",
+    "ChestBlockMixin",
     "ChunkGeneratorTypePresetMixin",
     "ChunkGeneratorFeatureMixin",
+    "EnderPearlEntityMixin",
     "EyeOfEnderEntityMixin",
     "GhastShootFireballGoalMixin",
     "HoglinEntityMixin",
@@ -17,9 +22,13 @@
     "MobEntityMixin",
     "PiglinBrainMixin",
     "PortalForcerMixin",
+    "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",
     "StrongholdPieceMixin",
     "StructurePieceMixin",
+    "UnderwaterCarverDepthMixin",
+    "UnderwaterCaveCarverInvoker",
+    "UnderwaterRavineCarverMixin",
     "VillageGeneratorMixin"
   ],
   "client": [
@@ -27,8 +36,11 @@
     "GameMenuScreenMixin",
     "HandledScreenMixin",
     "InGameHudMixin",
+    "SelectWorldScreenMixin",
     "SlotAccessor",
-    "ToastManagerMixin"
+    "ToastManagerMixin",
+    "WorldListWidgetMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

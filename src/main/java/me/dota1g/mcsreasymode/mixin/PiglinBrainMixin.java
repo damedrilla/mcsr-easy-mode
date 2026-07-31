@@ -70,7 +70,7 @@ public abstract class PiglinBrainMixin {
         boolean rankedBarterPity = Mcsreasymode.isRankedPiglinBartersEnabled();
         boolean rankedStringPity = Mcsreasymode.isRankedPiglinStringEnabled();
         if (rankedBarterPity || rankedStringPity) {
-            cir.setReturnValue(RankedRngState.applyPiglinBarterPity(cir.getReturnValue(), piglin.getRandom(), rankedBarterPity, rankedStringPity));
+            cir.setReturnValue(RankedRngState.applyPiglinBarterPity(cir.getReturnValue(), piglin.getRandom(), rankedBarterPity, rankedStringPity, Mcsreasymode.isFunOneShotForRsgEnabled()));
         }
     }
 }

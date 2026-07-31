@@ -26,9 +26,18 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget hotbarHotkeysCustomizeButton;
     private ButtonWidget debugChatLogsButton;
     private ButtonWidget hideAdvancementToastsButton;
+    private ButtonWidget blockPlacementOutlineButton;
+    private ButtonWidget buriedTreasureChunkAssistButton;
+    private ButtonWidget asyncWorldListLoadingButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
+    private ButtonWidget underwaterMagmaRavinesButton;
+    private ButtonWidget funMinecartVelocityGlitchButton;
+    private ButtonWidget minecartVelocityDebuggerButton;
+    private ButtonWidget ssgModeButton;
+    private ButtonWidget oneShotForRsgButton;
+    private ButtonWidget reducedPearlDamageButton;
     private ButtonWidget handledHotkeysCustomizeButton;
     private int sectionLeftX;
     private int sectionRightX;
@@ -39,6 +48,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private int uiSectionY;
     private Text hoveredTooltip;
     private int worldgenSectionY;
+    private int funSectionY;
     private int listTop;
     private int listBottom;
     private int scrollOffset;
@@ -70,8 +80,9 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 269;
-        this.contentHeight = this.worldgenSectionY + 91;
+        this.worldgenSectionY = 332;
+        this.funSectionY = 422;
+        this.contentHeight = this.funSectionY + 138;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -126,6 +137,21 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.hideAdvancementToasts));
         }));
 
+        this.blockPlacementOutlineButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showBlockPlacementOutline), button -> {
+            this.config.showBlockPlacementOutline = !this.config.showBlockPlacementOutline;
+            button.setMessage(this.toggleValueText(this.config.showBlockPlacementOutline));
+        }));
+
+        this.buriedTreasureChunkAssistButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showBuriedTreasureChunkAssist), button -> {
+            this.config.showBuriedTreasureChunkAssist = !this.config.showBuriedTreasureChunkAssist;
+            button.setMessage(this.toggleValueText(this.config.showBuriedTreasureChunkAssist));
+        }));
+
+        this.asyncWorldListLoadingButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.asyncWorldListLoading), button -> {
+            this.config.asyncWorldListLoading = !this.config.asyncWorldListLoading;
+            button.setMessage(this.toggleValueText(this.config.asyncWorldListLoading));
+        }));
+
         // this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
         //     assert this.client != null;
         //     this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
@@ -139,6 +165,46 @@ public class McsreasymodeConfigScreen extends Screen {
         this.strongholdAntiCorruptionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.strongholdAntiCorruption), button -> {
             this.config.strongholdAntiCorruption = !this.config.strongholdAntiCorruption;
             button.setMessage(this.toggleValueText(this.config.strongholdAntiCorruption));
+        }));
+
+        this.underwaterMagmaRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.underwaterMagmaRavines), button -> {
+            this.config.underwaterMagmaRavines = !this.config.underwaterMagmaRavines;
+            button.setMessage(this.toggleValueText(this.config.underwaterMagmaRavines));
+        }));
+
+        this.funMinecartVelocityGlitchButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funStackedMinecartVelocityGlitch), button -> {
+            this.config.funStackedMinecartVelocityGlitch = !this.config.funStackedMinecartVelocityGlitch;
+            button.setMessage(this.toggleValueText(this.config.funStackedMinecartVelocityGlitch));
+        }));
+
+        this.minecartVelocityDebuggerButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showMinecartVelocityDebugger), button -> {
+            this.config.showMinecartVelocityDebugger = !this.config.showMinecartVelocityDebugger;
+            button.setMessage(this.toggleValueText(this.config.showMinecartVelocityDebugger));
+        }));
+
+        if (this.config.funOneShotForRsg) {
+            this.config.ssgMode = false;
+        }
+
+        this.ssgModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.ssgMode), button -> {
+            this.config.ssgMode = !this.config.ssgMode;
+            button.setMessage(this.toggleValueText(this.config.ssgMode));
+        }));
+
+        this.oneShotForRsgButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funOneShotForRsg), button -> {
+            this.config.funOneShotForRsg = !this.config.funOneShotForRsg;
+            if (this.config.funOneShotForRsg) {
+                this.config.ssgMode = false;
+                this.ssgModeButton.setMessage(this.toggleValueText(false));
+            }
+            button.setMessage(this.toggleValueText(this.config.funOneShotForRsg));
+            this.ssgModeButton.active = !this.config.funOneShotForRsg;
+        }));
+        this.ssgModeButton.active = !this.config.funOneShotForRsg;
+
+        this.reducedPearlDamageButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funReducedPearlDamage), button -> {
+            this.config.funReducedPearlDamage = !this.config.funReducedPearlDamage;
+            button.setMessage(this.toggleValueText(this.config.funReducedPearlDamage));
         }));
 
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
@@ -167,6 +233,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawSectionDivider(matrices, "Anti-Aggression", this.toScreenY(this.aggressionSectionY));
         this.drawSectionDivider(matrices, "UI", this.toScreenY(this.uiSectionY));
         this.drawSectionDivider(matrices, "Worldgen", this.toScreenY(this.worldgenSectionY));
+        this.drawSectionDivider(matrices, "Fun Mode", this.toScreenY(this.funSectionY));
         this.drawRowLabel(matrices, "RNG", this.toScreenY(this.rngSectionY + 12), mouseX, mouseY, "Opens per-feature Vanilla or Ranked standardization toggles.");
         this.drawRowLabel(matrices, "Piglins", this.toScreenY(this.aggressionSectionY + 12), mouseX, mouseY, "Spoofs gold armor behavior so piglins stay neutral without taking an armor slot.");
         this.drawRowLabel(matrices, "Ghasts", this.toScreenY(this.aggressionSectionY + 33), mouseX, mouseY, "Prevents ghasts from choosing the player as an attack target.");
@@ -175,9 +242,18 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 33), mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         this.drawRowLabel(matrices, "Debug Chat Logs", this.toScreenY(this.uiSectionY + 54), mouseX, mouseY, "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.");
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
+        this.drawRowLabel(matrices, "Placement Outline", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Draws a cyan outline around the exact block cell your held block would place into.");
+        this.drawRowLabel(matrices, "Buried Treasure Chunk Assist", this.toScreenY(this.uiSectionY + 117), mouseX, mouseY, "Highlights the surface block at local chunk coordinates 9, 9 for buried treasure routes.");
+        this.drawRowLabel(matrices, "Async World List", this.toScreenY(this.uiSectionY + 138), mouseX, mouseY, "Loads single-player world metadata in the background. This convenience feature is not intended for verified speedruns.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
+        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
+        this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
+        this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
+        this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
+        this.drawRowLabel(matrices, "One Shot for RSG", this.toScreenY(this.funSectionY + 75), mouseX, mouseY, "When Ranked Piglin String is enabled, turns string trades and pity into a capped 26-36 iron budget for one-shot practice.");
+        this.drawRowLabel(matrices, "Reduced Pearl Damage", this.toScreenY(this.funSectionY + 96), mouseX, mouseY, "Removes ender pearl teleport damage for longer throws while preserving short hunger-reset pearls.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -246,9 +322,18 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hotbarHotkeysCustomizeButton, this.uiSectionY + 33);
         this.setButtonY(this.debugChatLogsButton, this.uiSectionY + 54);
         this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
+        this.setButtonY(this.blockPlacementOutlineButton, this.uiSectionY + 96);
+        this.setButtonY(this.buriedTreasureChunkAssistButton, this.uiSectionY + 117);
+        this.setButtonY(this.asyncWorldListLoadingButton, this.uiSectionY + 138);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
+        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 54);
+        this.setButtonY(this.funMinecartVelocityGlitchButton, this.funSectionY + 12);
+        this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
+        this.setButtonY(this.ssgModeButton, this.funSectionY + 54);
+        this.setButtonY(this.oneShotForRsgButton, this.funSectionY + 75);
+        this.setButtonY(this.reducedPearlDamageButton, this.funSectionY + 96);
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {
