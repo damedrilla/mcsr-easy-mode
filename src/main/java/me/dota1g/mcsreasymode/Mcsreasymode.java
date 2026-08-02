@@ -65,6 +65,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.rankedChestLootTables;
     }
 
+    public static boolean isRankedBuriedTreasureChanceEnabled() {
+        return CONFIG != null && CONFIG.rankedBuriedTreasureChance;
+    }
+
     public static boolean isRankedHoglinStableRampartsEnabled() {
         return CONFIG != null && CONFIG.rankedHoglinStableRamparts;
     }
@@ -97,6 +101,18 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.hideAdvancementToasts;
     }
 
+    public static boolean shouldShowBlockPlacementOutline() {
+        return CONFIG != null && CONFIG.showBlockPlacementOutline;
+    }
+
+    public static boolean shouldShowBuriedTreasureChunkAssist() {
+        return CONFIG != null && CONFIG.showBuriedTreasureChunkAssist;
+    }
+
+    public static boolean shouldLoadWorldListAsync() {
+        return CONFIG != null && CONFIG.asyncWorldListLoading;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }
@@ -107,6 +123,34 @@ public class Mcsreasymode implements ModInitializer {
 
     public static boolean isStrongholdAntiCorruptionEnabled() {
         return CONFIG != null && CONFIG.strongholdAntiCorruption;
+    }
+
+    public static boolean isUnderwaterMagmaRavinesEnabled() {
+        return CONFIG != null && CONFIG.underwaterMagmaRavines;
+    }
+
+    public static boolean isFunMinecartVelocityGlitchEnabled() {
+        return CONFIG != null && CONFIG.funStackedMinecartVelocityGlitch;
+    }
+
+    public static boolean shouldShowMinecartVelocityDebugger() {
+        return CONFIG != null && CONFIG.showMinecartVelocityDebugger;
+    }
+
+    public static boolean isSsgModeEnabled() {
+        return CONFIG != null && CONFIG.ssgMode && !CONFIG.funOneShotForRsg;
+    }
+
+    public static boolean isFunOneShotForRsgEnabled() {
+        return CONFIG != null && CONFIG.funOneShotForRsg;
+    }
+
+    public static boolean isFunReducedPearlDamageEnabled() {
+        return CONFIG != null && CONFIG.funReducedPearlDamage;
+    }
+
+    public static int heldPlaceDelayTicks() {
+        return CONFIG == null ? 4 : Math.max(1, Math.min(4, CONFIG.heldPlaceDelayTicks));
     }
 
     public static double netherTerrainXzScale() {

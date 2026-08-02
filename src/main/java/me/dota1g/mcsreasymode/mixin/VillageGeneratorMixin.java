@@ -2,6 +2,8 @@ package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.McsreasymodeVillageLavaPoolPiece;
+import me.dota1g.mcsreasymode.McsreasymodeVillageSmithTerrainPiece;
+import me.dota1g.mcsreasymode.worldgen.VillageVariant;
 import net.minecraft.structure.PoolStructurePiece;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructurePiece;
@@ -41,7 +43,8 @@ public abstract class VillageGeneratorMixin {
         VillageVariant variant = mcsreasymode$getVariant(config, pieces);
         VillageGenerator.Piece smith = mcsreasymode$createSmithPiece(structureManager, villageBox, pieces, variant);
         pieces.add(smith);
-        pieces.add(mcsreasymode$createLavaPoolPiece(smith, pieces));
+        pieces.add(new McsreasymodeVillageSmithTerrainPiece(smith.getBoundingBox()));
+        pieces.add(mcsreasymode$createLavaPoolPiece(villageBox, pieces, random));
         Mcsreasymode.debug("Village standardized: added vanilla " + variant.logName + " smith template and nearby lava pool because no smith generated.");
     }
 
@@ -104,22 +107,37 @@ public abstract class VillageGeneratorMixin {
         return new VillageGenerator.Piece(structureManager, element, pos, element.getGroundLevelDelta(), rotation, box);
     }
 
-    private static McsreasymodeVillageLavaPoolPiece mcsreasymode$createLavaPoolPiece(StructurePiece smith, List<StructurePiece> pieces) {
-        BlockBox box = smith.getBoundingBox();
-        int[][] candidates = new int[][]{
-                {box.maxX + 3, box.minZ},
-                {box.minX - McsreasymodeVillageLavaPoolPiece.FOOTPRINT_X - 3, box.minZ},
-                {box.minX, box.maxZ + 3},
-                {box.minX, box.minZ - McsreasymodeVillageLavaPoolPiece.FOOTPRINT_Z - 3}
-        };
+    private static McsreasymodeVillageLavaPoolPiece mcsreasymode$createLavaPoolPiece(BlockBox villageBox, List<StructurePiece> pieces, ChunkRandom random) {
+        long lakeSeed = random.nextLong();
+        List<int[]> candidates = new ArrayList<>();
+        int gap = 4;
+
+        for (int i = 0; i < 8; i++) {
+            int x = mcsreasymode$randomCoordinate(random, villageBox.minX, villageBox.maxX - McsreasymodeVillageLavaPoolPiece.FOOTPRINT_X + 1);
+            int z = mcsreasymode$randomCoordinate(random, villageBox.minZ, villageBox.maxZ - McsreasymodeVillageLavaPoolPiece.FOOTPRINT_Z + 1);
+            int extraGap = random.nextInt(12);
+
+            candidates.add(new int[]{x, villageBox.minZ - McsreasymodeVillageLavaPoolPiece.FOOTPRINT_Z - gap - extraGap});
+            candidates.add(new int[]{x, villageBox.maxZ + gap + extraGap});
+            candidates.add(new int[]{villageBox.minX - McsreasymodeVillageLavaPoolPiece.FOOTPRINT_X - gap - extraGap, z});
+            candidates.add(new int[]{villageBox.maxX + gap + extraGap, z});
+        }
+        Collections.shuffle(candidates, random);
 
         for (int[] candidate : candidates) {
-            McsreasymodeVillageLavaPoolPiece pool = new McsreasymodeVillageLavaPoolPiece(candidate[0], candidate[1]);
+            McsreasymodeVillageLavaPoolPiece pool = new McsreasymodeVillageLavaPoolPiece(candidate[0], candidate[1], lakeSeed);
             if (StructurePiece.getOverlappingPiece(pieces, pool.getBoundingBox()) == null) {
                 return pool;
             }
         }
-        return new McsreasymodeVillageLavaPoolPiece(box.maxX + 3, box.minZ);
+        return new McsreasymodeVillageLavaPoolPiece(villageBox.maxX + gap, villageBox.minZ, lakeSeed);
+    }
+
+    private static int mcsreasymode$randomCoordinate(ChunkRandom random, int min, int max) {
+        if (max <= min) {
+            return min;
+        }
+        return min + random.nextInt(max - min + 1);
     }
 
     private static int mcsreasymode$distanceTo(BlockBox box, int x, int z) {
@@ -143,37 +161,5 @@ public abstract class VillageGeneratorMixin {
             }
         }
         return variant;
-    }
-
-    private enum VillageVariant {
-        DESERT("desert", "village/desert/houses/desert_weaponsmith_1"),
-        PLAINS("plains", "village/plains/houses/plains_weaponsmith_1"),
-        SAVANNA("savanna", "village/savanna/houses/savanna_weaponsmith_1"),
-        SNOWY("snowy", "village/snowy/houses/snowy_weapon_smith_1"),
-        TAIGA("taiga", "village/taiga/houses/taiga_weaponsmith_1");
-
-        private final String logName;
-        private final String template;
-
-        VillageVariant(String logName, String template) {
-            this.logName = logName;
-            this.template = template;
-        }
-
-        private static VillageVariant fromPath(String path) {
-            if (path.contains("desert")) {
-                return DESERT;
-            }
-            if (path.contains("savanna")) {
-                return SAVANNA;
-            }
-            if (path.contains("snowy")) {
-                return SNOWY;
-            }
-            if (path.contains("taiga")) {
-                return TAIGA;
-            }
-            return PLAINS;
-        }
     }
 }

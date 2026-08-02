@@ -158,6 +158,17 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedChestLootTables = value;
             }
         });
+        this.addRow("mcsreasymode.screen.rng.buried_treasure_chance", "mcsreasymode.screen.rng.buried_treasure_chance.tooltip", new FeatureAccess() {
+            @Override
+            public boolean get() {
+                return McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance;
+            }
+
+            @Override
+            public void set(boolean value) {
+                McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance = value;
+            }
+        });
         this.addRow("mcsreasymode.screen.rng.hoglin_stable_ramparts", "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
