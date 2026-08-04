@@ -18,6 +18,7 @@
     "GhastShootFireballGoalMixin",
     "HoglinEntityMixin",
     "LivingEntityMixin",
+    "ItemInvoker",
     "LootableContainerBlockEntityMixin",
     "MinecraftServerMixin",
     "MobEntityMixin",
@@ -26,6 +27,7 @@
     "PiglinBrainMixin",
     "PortalForcerMixin",
     "ProjectileEntityMixin",
+    "ServerPlayerInteractionManagerMixin",
     "ServerPlayerEntityMixin",
     "StrongholdPieceMixin",
     "StructurePieceMixin",
@@ -34,6 +36,9 @@
     "VillageGeneratorMixin"
   ],
   "client": [
+    "BoatEntityClientMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
     "DebugHudMixin",
     "GameMenuScreenMixin",
     "HandledScreenMixin",

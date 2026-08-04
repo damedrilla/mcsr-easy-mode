@@ -193,6 +193,16 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean asyncWorldListLoading = true;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.bucketDesyncGuard")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.bucketDesyncGuard.description")
+    public boolean bucketDesyncGuard = false;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus.description")
+    public boolean showGodsensBoatStatus = false;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
     @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description")
     @Config.Text(getter = "getHotbarHotkeyPositionText")

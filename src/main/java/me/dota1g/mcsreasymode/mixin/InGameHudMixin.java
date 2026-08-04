@@ -3,6 +3,7 @@ package me.dota1g.mcsreasymode.mixin;
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyLabels;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyOverlayRenderer;
+import me.dota1g.mcsreasymode.client.GodsensBoatStatusRenderer;
 import me.dota1g.mcsreasymode.client.MinecartVelocityDebugRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -36,5 +37,14 @@ public abstract class InGameHudMixin {
         }
 
         MinecartVelocityDebugRenderer.render(matrices, this.client, this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+    }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    private void mcsreasymode$renderGodsensBoatStatus(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        if (!Mcsreasymode.shouldShowGodsensBoatStatus() || this.client.options.hudHidden || this.client.currentScreen != null) {
+            return;
+        }
+
+        GodsensBoatStatusRenderer.render(matrices, this.client);
     }
 }

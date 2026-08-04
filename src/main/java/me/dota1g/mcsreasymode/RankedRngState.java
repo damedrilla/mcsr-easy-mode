@@ -56,6 +56,13 @@ public final class RankedRngState {
         bastionChestAdjusted = false;
     }
 
+    public static void resetOneShotIronForPracticeRun() {
+        stringDryBarters = 0;
+        oneShotIronBudget = 0;
+        oneShotIronGiven = 0;
+        Mcsreasymode.debug("One Shot for RSG iron budget reset for new bastion practice run.");
+    }
+
     public static List<ItemStack> applyPiglinBarterPity(List<ItemStack> original, Random random, boolean rankedBarterPity, boolean rankedStringPity, boolean oneShotForRsg) {
         List<ItemStack> result = new ArrayList<>(original);
 
