@@ -113,6 +113,14 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.asyncWorldListLoading;
     }
 
+    public static boolean shouldGuardBucketDesync() {
+        return CONFIG != null && CONFIG.bucketDesyncGuard;
+    }
+
+    public static boolean shouldShowGodsensBoatStatus() {
+        return CONFIG != null && CONFIG.showGodsensBoatStatus;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }
