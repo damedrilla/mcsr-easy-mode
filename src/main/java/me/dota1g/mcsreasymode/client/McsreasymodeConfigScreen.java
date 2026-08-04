@@ -273,7 +273,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
         this.drawRowLabel(matrices, "One Shot for RSG", this.toScreenY(this.funSectionY + 75), mouseX, mouseY, "When Ranked Piglin String is enabled, turns string trades and pity into a capped 26-36 iron budget for one-shot practice.");
         this.drawRowLabel(matrices, "Reduced Pearl Damage", this.toScreenY(this.funSectionY + 96), mouseX, mouseY, "Removes ender pearl teleport damage for longer throws while preserving short hunger-reset pearls.");
-        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats, excluding beds. This practice feature is not intended for verified speedruns.");
+        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats. Beds or buckets in either hand force vanilla timing.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);

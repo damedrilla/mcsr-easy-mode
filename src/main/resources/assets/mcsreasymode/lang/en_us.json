@@ -47,7 +47,7 @@
   "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage": "Reduced pearl damage",
   "speedrunapi.config.mcsreasymode.option.funReducedPearlDamage.description": "Removes ender pearl teleport damage for throws at least 2 blocks away while preserving short hunger-reset pearls.",
   "speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks": "Hold place speed",
-  "speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks.description": "Changes held-use repeat speed for blocks and boats, excluding beds. Not intended for verified speedruns.",
+  "speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks.description": "Changes held-use repeat speed for blocks and boats. Beds or buckets in either hand force vanilla timing.",
   "speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline": "Placement outline",
   "speedrunapi.config.mcsreasymode.option.showBlockPlacementOutline.description": "Draws a cyan outline around the exact block position the held block would place into.",
   "speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist": "Buried treasure chunk assist",

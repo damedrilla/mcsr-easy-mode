@@ -37,6 +37,7 @@
   ],
   "client": [
     "BoatEntityClientMixin",
+    "ClientPlayNetworkHandlerMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
     "DebugHudMixin",

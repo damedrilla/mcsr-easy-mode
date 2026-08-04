@@ -6,6 +6,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.BedItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BoatItem;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.HitResult;
@@ -36,12 +37,19 @@ public abstract class MinecraftClientMixin {
             return;
         }
 
+        boolean hasFastRepeatItem = false;
         for (Hand hand : Hand.values()) {
             Item item = this.player.getStackInHand(hand).getItem();
-            if ((item instanceof BlockItem && !(item instanceof BedItem)) || item instanceof BoatItem) {
-                this.itemUseCooldown = Mcsreasymode.heldPlaceDelayTicks();
+            if (item instanceof BucketItem || item instanceof BedItem) {
                 return;
             }
+            if (item instanceof BlockItem || item instanceof BoatItem) {
+                hasFastRepeatItem = true;
+            }
+        }
+
+        if (hasFastRepeatItem) {
+            this.itemUseCooldown = Mcsreasymode.heldPlaceDelayTicks();
         }
     }
 

@@ -20,10 +20,8 @@ public final class GodsensBoatStatusState {
         if (player != trackedPlayer) {
             trackedPlayer = player;
             trackedBoat = null;
-            status = Status.CLEAN;
             mountedTicks = 0;
             steeredDuringRide = false;
-            cleanFadeStartedAt = -1L;
         }
 
         Entity vehicle = player.getVehicle();
@@ -42,6 +40,15 @@ public final class GodsensBoatStatusState {
         if (trackedBoat != null) {
             mountedTicks++;
         }
+    }
+
+    public static void reset() {
+        trackedPlayer = null;
+        trackedBoat = null;
+        status = Status.CLEAN;
+        mountedTicks = 0;
+        steeredDuringRide = false;
+        cleanFadeStartedAt = -1L;
     }
 
     public static void onBoatInput(BoatEntity boat, boolean left, boolean right) {
