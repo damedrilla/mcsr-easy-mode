@@ -16,7 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
-    @Inject(method = "changeDimension", at = @At("HEAD"))
+    @Inject(method = "changeDimension", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/PortalForcer;createPortal(Lnet/minecraft/entity/Entity;)Z",
+            shift = At.Shift.BEFORE))
     private void mcsreasymode$armBlindPortalSurface(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
         if (!Mcsreasymode.isRankedBlindPortalEnabled()) {
             return;
@@ -29,8 +32,11 @@ public abstract class ServerPlayerEntityMixin {
                 && destination.getRegistryKey() == World.OVERWORLD
                 && player.getY() >= 48.0D
                 && RankedRngState.canUseBlindPortalSurface()) {
-            int overworldX = (int) Math.floor(player.getX() * 8.0D);
-            int overworldZ = (int) Math.floor(player.getZ() * 8.0D);
+            // At this point vanilla and compatibility mixins have already moved the
+            // player to the final destination X/Z. Sampling here keeps the forced
+            // surface Y aligned with coordinate-remapping mods such as Artificial ZSG.
+            int overworldX = (int) Math.floor(player.getX());
+            int overworldZ = (int) Math.floor(player.getZ());
             int surfaceY = this.mcsreasymode$getGeneratedSurfaceY(destination, overworldX, overworldZ);
 
             RankedRngState.setBlindPortalForcedSurfaceY(surfaceY);
