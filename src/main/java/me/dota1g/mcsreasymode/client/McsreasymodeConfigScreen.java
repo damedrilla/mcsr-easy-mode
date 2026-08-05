@@ -32,6 +32,8 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget asyncWorldListLoadingButton;
     private ButtonWidget bucketDesyncGuardButton;
     private ButtonWidget godsensBoatStatusButton;
+    private ButtonWidget blazeSpawnerOverlayButton;
+    private ButtonWidget blazeSpawnerOverlayCustomizeButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget oceanRavinesButton;
     private ButtonWidget villageStandardizationButton;
@@ -85,8 +87,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 374;
-        this.funSectionY = 464;
+        this.worldgenSectionY = 395;
+        this.funSectionY = 485;
         this.contentHeight = this.funSectionY + 159;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -166,6 +168,18 @@ public class McsreasymodeConfigScreen extends Screen {
             this.config.showGodsensBoatStatus = !this.config.showGodsensBoatStatus;
             button.setMessage(this.toggleValueText(this.config.showGodsensBoatStatus));
         }));
+
+        this.blazeSpawnerOverlayButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, hotbarToggleWidth, 20, this.toggleValueText(this.config.showBlazeSpawnerOverlay), button -> {
+            this.config.showBlazeSpawnerOverlay = !this.config.showBlazeSpawnerOverlay;
+            button.setMessage(this.toggleValueText(this.config.showBlazeSpawnerOverlay));
+            this.blazeSpawnerOverlayCustomizeButton.active = this.config.showBlazeSpawnerOverlay;
+        }));
+
+        this.blazeSpawnerOverlayCustomizeButton = this.addButton(new ButtonWidget(this.valueButtonX + hotbarToggleWidth + gap, 0, hotbarCustomizeWidth, 20, new LiteralText("Customize"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeBlazeSpawnerOverlayScreen(this.config, this));
+        }));
+        this.blazeSpawnerOverlayCustomizeButton.active = this.config.showBlazeSpawnerOverlay;
 
         // this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
         //     assert this.client != null;
@@ -264,6 +278,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Async World List", this.toScreenY(this.uiSectionY + 138), mouseX, mouseY, "Loads single-player world metadata in the background. This convenience feature is not intended for verified speedruns.");
         this.drawRowLabel(matrices, "Bucket Desync Guard", this.toScreenY(this.uiSectionY + 159), mouseX, mouseY, "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions. Not intended for verified speedruns.");
         this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 180), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
+        this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 201), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
@@ -273,7 +288,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
         this.drawRowLabel(matrices, "One Shot for RSG", this.toScreenY(this.funSectionY + 75), mouseX, mouseY, "When Ranked Piglin String is enabled, turns string trades and pity into a capped 26-36 iron budget for one-shot practice.");
         this.drawRowLabel(matrices, "Reduced Pearl Damage", this.toScreenY(this.funSectionY + 96), mouseX, mouseY, "Removes ender pearl teleport damage for longer throws while preserving short hunger-reset pearls.");
-        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats. Beds or buckets in either hand force vanilla timing.");
+        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats from 5 to 20 attempts per second. Beds or buckets in either hand force vanilla timing.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -347,6 +362,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.asyncWorldListLoadingButton, this.uiSectionY + 138);
         this.setButtonY(this.bucketDesyncGuardButton, this.uiSectionY + 159);
         this.setButtonY(this.godsensBoatStatusButton, this.uiSectionY + 180);
+        this.setButtonY(this.blazeSpawnerOverlayButton, this.uiSectionY + 201);
+        this.setButtonY(this.blazeSpawnerOverlayCustomizeButton, this.uiSectionY + 201);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
@@ -400,43 +417,32 @@ public class McsreasymodeConfigScreen extends Screen {
         private final McsreasymodeConfig config;
 
         HeldPlaceSpeedSlider(int x, int y, int width, McsreasymodeConfig config) {
-            super(x, y, width, 20, new LiteralText(""), (4 - clampDelay(config.heldPlaceDelayTicks)) / 3.0D);
+            super(x, y, width, 20, new LiteralText(""), (configuredRate(config) - 5) / 15.0D);
             this.config = config;
             this.updateMessage();
         }
 
         @Override
         protected void updateMessage() {
-            int delay = this.delayTicks();
-            String speed;
-            switch (delay) {
-                case 1:
-                    speed = "Fastest (20/s)";
-                    break;
-                case 2:
-                    speed = "Faster (10/s)";
-                    break;
-                case 3:
-                    speed = "Fast (~6.7/s)";
-                    break;
-                default:
-                    speed = "Vanilla (5/s)";
-                    break;
-            }
-            this.setMessage(new LiteralText(speed));
+            int rate = this.ratePerSecond();
+            this.setMessage(new LiteralText(rate == 5 ? "Vanilla (5/s)" : rate + "/s"));
         }
 
         @Override
         protected void applyValue() {
-            this.config.heldPlaceDelayTicks = this.delayTicks();
+            this.config.heldPlaceRatePerSecond = this.ratePerSecond();
         }
 
-        private int delayTicks() {
-            return 4 - (int) Math.round(this.value * 3.0D);
+        private int ratePerSecond() {
+            return 5 + (int) Math.round(this.value * 15.0D);
         }
 
-        private static int clampDelay(int delay) {
-            return Math.max(1, Math.min(4, delay));
+        private static int configuredRate(McsreasymodeConfig config) {
+            if (config.heldPlaceRatePerSecond >= 5) {
+                return Math.min(20, config.heldPlaceRatePerSecond);
+            }
+            int legacyDelay = Math.max(1, Math.min(4, config.heldPlaceDelayTicks));
+            return Math.max(5, Math.min(20, Math.round(20.0F / legacyDelay)));
         }
     }
 

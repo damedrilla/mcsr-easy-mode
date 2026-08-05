@@ -14,6 +14,8 @@ public class Mcsreasymode implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static McsreasymodeConfig CONFIG;
     private static final Map<String, Long> LAST_DEBUG_LOG = new HashMap<>();
+    private static int heldPlaceRateForCadence = -1;
+    private static int heldPlaceCadenceRemainder;
 
     @Override
     public void onInitialize() {
@@ -121,6 +123,22 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showGodsensBoatStatus;
     }
 
+    public static boolean shouldShowBlazeSpawnerOverlay() {
+        return CONFIG != null && CONFIG.showBlazeSpawnerOverlay;
+    }
+
+    public static boolean shouldShowBlazeSpawnerTimer() {
+        return shouldShowBlazeSpawnerOverlay() && CONFIG.blazeSpawnerOverlayTimer;
+    }
+
+    public static boolean shouldShowBlazeSpawnerProblemMarkers() {
+        return shouldShowBlazeSpawnerOverlay() && CONFIG.blazeSpawnerOverlayProblemMarkers;
+    }
+
+    public static boolean shouldShowBlazeSpawnerDetailedText() {
+        return shouldShowBlazeSpawnerOverlay() && CONFIG.blazeSpawnerOverlayDetailedText;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }
@@ -157,8 +175,29 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.funReducedPearlDamage;
     }
 
-    public static int heldPlaceDelayTicks() {
-        return CONFIG == null ? 4 : Math.max(1, Math.min(4, CONFIG.heldPlaceDelayTicks));
+    public static int heldPlaceRatePerSecond() {
+        if (CONFIG == null) {
+            return 5;
+        }
+        if (CONFIG.heldPlaceRatePerSecond >= 5) {
+            return Math.min(20, CONFIG.heldPlaceRatePerSecond);
+        }
+
+        int legacyDelay = Math.max(1, Math.min(4, CONFIG.heldPlaceDelayTicks));
+        return Math.max(5, Math.min(20, Math.round(20.0F / legacyDelay)));
+    }
+
+    public static int nextHeldPlaceDelayTicks() {
+        int rate = heldPlaceRatePerSecond();
+        if (heldPlaceRateForCadence != rate) {
+            heldPlaceRateForCadence = rate;
+            heldPlaceCadenceRemainder = 0;
+        }
+
+        heldPlaceCadenceRemainder += 20;
+        int delay = heldPlaceCadenceRemainder / rate;
+        heldPlaceCadenceRemainder %= rate;
+        return Math.max(1, delay);
     }
 
     public static double netherTerrainXzScale() {

@@ -4,6 +4,7 @@ import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyLabels;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyOverlayRenderer;
 import me.dota1g.mcsreasymode.client.GodsensBoatStatusRenderer;
+import me.dota1g.mcsreasymode.client.BlazeSpawnerOverlayHudRenderer;
 import me.dota1g.mcsreasymode.client.MinecartVelocityDebugRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -46,5 +47,14 @@ public abstract class InGameHudMixin {
         }
 
         GodsensBoatStatusRenderer.render(matrices, this.client);
+    }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    private void mcsreasymode$renderBlazeSpawnerDetails(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        if (!Mcsreasymode.shouldShowBlazeSpawnerDetailedText() || this.client.options.hudHidden || this.client.currentScreen != null) {
+            return;
+        }
+
+        BlazeSpawnerOverlayHudRenderer.render(matrices, this.client, this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
     }
 }

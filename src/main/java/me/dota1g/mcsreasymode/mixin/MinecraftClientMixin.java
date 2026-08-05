@@ -49,7 +49,7 @@ public abstract class MinecraftClientMixin {
         }
 
         if (hasFastRepeatItem) {
-            this.itemUseCooldown = Mcsreasymode.heldPlaceDelayTicks();
+            this.itemUseCooldown = Mcsreasymode.nextHeldPlaceDelayTicks();
         }
     }
 

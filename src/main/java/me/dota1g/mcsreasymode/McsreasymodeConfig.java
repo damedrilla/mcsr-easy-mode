@@ -154,8 +154,14 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Category("fun")
     @Config.Name("speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks")
     @Config.Description("speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks.description")
+    @Config.Hide
     @Config.Numbers.Whole.Bounds(min = 1, max = 4)
     public int heldPlaceDelayTicks = 4;
+
+    @Config.Category("fun")
+    @Config.Hide
+    @Config.Numbers.Whole.Bounds(min = 0, max = 20)
+    public int heldPlaceRatePerSecond = 0;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton")
@@ -201,6 +207,20 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus")
     @Config.Description("speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus.description")
     public boolean showGodsensBoatStatus = false;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay.description")
+    public boolean showBlazeSpawnerOverlay = false;
+
+    @Config.Hide
+    public boolean blazeSpawnerOverlayTimer = true;
+
+    @Config.Hide
+    public boolean blazeSpawnerOverlayProblemMarkers = true;
+
+    @Config.Hide
+    public boolean blazeSpawnerOverlayDetailedText = true;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
