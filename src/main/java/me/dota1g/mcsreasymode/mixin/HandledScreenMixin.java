@@ -3,19 +3,24 @@ package me.dota1g.mcsreasymode.mixin;
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyLabels;
 import me.dota1g.mcsreasymode.client.HotbarHotkeyOverlayRenderer;
+import me.dota1g.mcsreasymode.client.ItemHighlightHelper;
+import me.dota1g.mcsreasymode.client.ItemHighlightState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin {
     @Shadow
@@ -57,4 +62,20 @@ public abstract class HandledScreenMixin {
             HotbarHotkeyOverlayRenderer.renderScreenSlotLabel(matrices, client, Mcsreasymode.CONFIG, labels[9], this.x + slot.x, this.y + slot.y);
         }
     }
+
+    @Redirect(
+            method = "drawSlot",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/render/item/ItemRenderer;renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V"
+            )
+    )
+    private void mcsreasymode$renderOverlayWithHighlight(
+            ItemRenderer itemRenderer, TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride) {
+        ItemHighlightState.highlight = ItemHighlightHelper.shouldHighlight(this.handler.slots, stack);
+        itemRenderer.renderGuiItemOverlay(textRenderer, stack, x, y, countOverride);
+        ItemHighlightState.highlight = false;
+    }
+
+
 }

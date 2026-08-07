@@ -35,7 +35,8 @@
     "StructurePieceMixin",
     "UnderwaterCaveCarverInvoker",
     "UnderwaterRavineCarverMixin",
-    "VillageGeneratorMixin"
+    "VillageGeneratorMixin",
+    "ItemRendererMixin"
   ],
   "client": [
     "BoatEntityClientMixin",

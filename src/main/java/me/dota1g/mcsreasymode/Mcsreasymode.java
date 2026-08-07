@@ -139,6 +139,10 @@ public class Mcsreasymode implements ModInitializer {
         return shouldShowBlazeSpawnerOverlay() && CONFIG.blazeSpawnerOverlayDetailedText;
     }
 
+    public static boolean shouldShowPersistentCoordinates() {
+        return CONFIG != null && CONFIG.showPersistentCoordinates;
+    }
+
     public static boolean isOpenNetherTerrainEnabled() {
         return CONFIG != null && CONFIG.openNetherTerrain;
     }

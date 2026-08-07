@@ -223,6 +223,20 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean blazeSpawnerOverlayDetailedText = true;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showPersistentCoordinates")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showPersistentCoordinates.description")
+    public boolean showPersistentCoordinates = false;
+
+    @Config.Hide
+    public boolean persistentCoordinatesPrecise = true;
+
+    @Config.Hide
+    public boolean persistentCoordinatesBlock = false;
+
+    @Config.Hide
+    public boolean persistentCoordinatesLocalChunk = false;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
     @Config.Description("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition.description")
     @Config.Text(getter = "getHotbarHotkeyPositionText")

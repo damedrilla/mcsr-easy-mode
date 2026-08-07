@@ -1,10 +1,12 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -12,6 +14,13 @@ import java.util.List;
 
 @Mixin(DebugHud.class)
 public abstract class DebugHudMixin {
+    //no shift pie chart because why not
+    //march 7th > evernight
+    @Inject(method = "render", at = @At("HEAD"))
+    private void mcsreasymode$forcePieChart(net.minecraft.client.util.math.MatrixStack matrixStack, CallbackInfo ci) {
+        MinecraftClient.getInstance().options.debugProfilerEnabled = true;
+    }
+
     @Inject(method = "getRightText", at = @At("RETURN"), cancellable = true)
     private void mcsreasymode$addEasyModeMarker(CallbackInfoReturnable<List<String>> cir) {
         List<String> lines = new ArrayList<>(cir.getReturnValue());

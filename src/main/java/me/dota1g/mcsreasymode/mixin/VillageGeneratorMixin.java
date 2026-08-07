@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Mixin(VillageGenerator.class)
-public abstract class VillageGeneratorMixin {
+public abstract class   VillageGeneratorMixin {
     @Inject(method = "addPieces", at = @At("TAIL"))
     private static void mcsreasymode$addBlacksmithIfMissing(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, StructurePoolFeatureConfig config, CallbackInfo ci) {
         if (!Mcsreasymode.isVillageStandardizationEnabled() || pieces.isEmpty() || mcsreasymode$hasSmith(pieces)) {

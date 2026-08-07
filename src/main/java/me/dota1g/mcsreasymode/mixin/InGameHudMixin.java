@@ -6,6 +6,7 @@ import me.dota1g.mcsreasymode.client.HotbarHotkeyOverlayRenderer;
 import me.dota1g.mcsreasymode.client.GodsensBoatStatusRenderer;
 import me.dota1g.mcsreasymode.client.BlazeSpawnerOverlayHudRenderer;
 import me.dota1g.mcsreasymode.client.MinecartVelocityDebugRenderer;
+import me.dota1g.mcsreasymode.client.PersistentCoordinatesRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -56,5 +57,17 @@ public abstract class InGameHudMixin {
         }
 
         BlazeSpawnerOverlayHudRenderer.render(matrices, this.client, this.client.getWindow().getScaledWidth(), this.client.getWindow().getScaledHeight());
+    }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    private void mcsreasymode$renderPersistentCoordinates(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        if (!Mcsreasymode.shouldShowPersistentCoordinates()
+                || this.client.options.hudHidden
+                || this.client.options.debugEnabled
+                || this.client.currentScreen != null) {
+            return;
+        }
+
+        PersistentCoordinatesRenderer.render(matrices, this.client, Mcsreasymode.CONFIG);
     }
 }

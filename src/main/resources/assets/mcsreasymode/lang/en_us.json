@@ -60,6 +60,8 @@
   "speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus.description": "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.",
   "speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay": "Blaze spawner overlay",
   "speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay.description": "Shows configurable practice information around visible blaze spawners. Not intended for verified speedruns.",
+  "speedrunapi.config.mcsreasymode.option.showPersistentCoordinates": "Persistent coordinates",
+  "speedrunapi.config.mcsreasymode.option.showPersistentCoordinates.description": "Shows configurable player, block, and local chunk coordinates without opening the debug screen.",
   "mcsreasymode.world_list.loading": "Loading worlds...",
   "mcsreasymode.screen.rng.title": "RNG Settings",
   "mcsreasymode.screen.rng.toggle_all": "Toggle All",

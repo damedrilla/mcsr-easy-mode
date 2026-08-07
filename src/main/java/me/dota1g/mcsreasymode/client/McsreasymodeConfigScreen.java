@@ -34,6 +34,8 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget godsensBoatStatusButton;
     private ButtonWidget blazeSpawnerOverlayButton;
     private ButtonWidget blazeSpawnerOverlayCustomizeButton;
+    private ButtonWidget persistentCoordinatesButton;
+    private ButtonWidget persistentCoordinatesCustomizeButton;
     private ButtonWidget netherTerrainButton;
     private ButtonWidget oceanRavinesButton;
     private ButtonWidget villageStandardizationButton;
@@ -87,8 +89,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 395;
-        this.funSectionY = 485;
+        this.worldgenSectionY = 416;
+        this.funSectionY = 506;
         this.contentHeight = this.funSectionY + 159;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -180,6 +182,18 @@ public class McsreasymodeConfigScreen extends Screen {
             this.client.openScreen(new McsreasymodeBlazeSpawnerOverlayScreen(this.config, this));
         }));
         this.blazeSpawnerOverlayCustomizeButton.active = this.config.showBlazeSpawnerOverlay;
+
+        this.persistentCoordinatesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, hotbarToggleWidth, 20, this.toggleValueText(this.config.showPersistentCoordinates), button -> {
+            this.config.showPersistentCoordinates = !this.config.showPersistentCoordinates;
+            button.setMessage(this.toggleValueText(this.config.showPersistentCoordinates));
+            this.persistentCoordinatesCustomizeButton.active = this.config.showPersistentCoordinates;
+        }));
+
+        this.persistentCoordinatesCustomizeButton = this.addButton(new ButtonWidget(this.valueButtonX + hotbarToggleWidth + gap, 0, hotbarCustomizeWidth, 20, new LiteralText("Customize"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodePersistentCoordinatesScreen(this.config, this));
+        }));
+        this.persistentCoordinatesCustomizeButton.active = this.config.showPersistentCoordinates;
 
         // this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
         //     assert this.client != null;
@@ -279,6 +293,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Bucket Desync Guard", this.toScreenY(this.uiSectionY + 159), mouseX, mouseY, "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions. Not intended for verified speedruns.");
         this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 180), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
         this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 201), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
+        this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 222), mouseX, mouseY, "Shows configurable precise, block, and local chunk coordinates without opening the debug screen.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
@@ -364,6 +379,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.godsensBoatStatusButton, this.uiSectionY + 180);
         this.setButtonY(this.blazeSpawnerOverlayButton, this.uiSectionY + 201);
         this.setButtonY(this.blazeSpawnerOverlayCustomizeButton, this.uiSectionY + 201);
+        this.setButtonY(this.persistentCoordinatesButton, this.uiSectionY + 222);
+        this.setButtonY(this.persistentCoordinatesCustomizeButton, this.uiSectionY + 222);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
