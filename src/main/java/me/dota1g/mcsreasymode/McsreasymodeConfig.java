@@ -51,7 +51,13 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean rankedBuriedTreasureChance = false;
 
     @Config.Hide
+    public boolean rankedBastionSpawnProtection = false;
+
+    @Config.Hide
     public boolean rankedHoglinStableRamparts = false;
+
+    @Config.Hide
+    public boolean rankedHoglinBridgeRamparts = false;
 
     @Config.Category("mobs")
     @Config.Name("speedrunapi.config.mcsreasymode.option.disablePiglinAggression")

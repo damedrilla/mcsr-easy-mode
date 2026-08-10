@@ -169,6 +169,18 @@ public class McsreasymodeRngScreen extends Screen {
                 McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance = value;
             }
         });
+        this.addRow("mcsreasymode.screen.rng.bastion_spawn_protection", "mcsreasymode.screen.rng.bastion_spawn_protection.tooltip", new FeatureAccess() {
+            @Override
+            public boolean get() {
+                return McsreasymodeRngScreen.this.config.rankedBastionSpawnProtection;
+            }
+
+            @Override
+            public void set(boolean value) {
+                McsreasymodeRngScreen.this.config.rankedBastionSpawnProtection = value;
+            }
+        });
+
         this.addRow("mcsreasymode.screen.rng.hoglin_stable_ramparts", "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip", new FeatureAccess() {
             @Override
             public boolean get() {
@@ -178,6 +190,18 @@ public class McsreasymodeRngScreen extends Screen {
             @Override
             public void set(boolean value) {
                 McsreasymodeRngScreen.this.config.rankedHoglinStableRamparts = value;
+            }
+        });
+
+        this.addRow("mcsreasymode.screen.rng.bridge_ramparts", "mcsreasymode.screen.rng.bridge_ramparts.tooltip", new FeatureAccess() {
+            @Override
+            public boolean get() {
+                return McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts;
+            }
+
+            @Override
+            public void set(boolean value) {
+                McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts = value;
             }
         });
 

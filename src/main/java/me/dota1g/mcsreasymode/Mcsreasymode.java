@@ -70,9 +70,14 @@ public class Mcsreasymode implements ModInitializer {
     public static boolean isRankedBuriedTreasureChanceEnabled() {
         return CONFIG != null && CONFIG.rankedBuriedTreasureChance;
     }
-
+    public static boolean isRankedBastionSpawnRestrictionEnabled() {
+        return CONFIG != null && CONFIG.rankedBastionSpawnProtection;
+    }
     public static boolean isRankedHoglinStableRampartsEnabled() {
         return CONFIG != null && CONFIG.rankedHoglinStableRamparts;
+    }
+    public static boolean isRankedBridgeRampartsEnabled() {
+        return CONFIG != null && CONFIG.rankedHoglinBridgeRamparts;
     }
 
     public static boolean isPiglinAggressionDisabled() {

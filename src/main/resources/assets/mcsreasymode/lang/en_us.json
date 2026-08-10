@@ -53,13 +53,13 @@
   "speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist": "Buried treasure chunk assist",
   "speedrunapi.config.mcsreasymode.option.showBuriedTreasureChunkAssist.description": "Highlights the solid terrain block at local chunk coordinates 9, 9, including below water.",
   "speedrunapi.config.mcsreasymode.option.asyncWorldListLoading": "Async world list",
-  "speedrunapi.config.mcsreasymode.option.asyncWorldListLoading.description": "Loads single-player world metadata in the background to prevent large save lists from freezing the menu. Not intended for verified speedruns.",
+  "speedrunapi.config.mcsreasymode.option.asyncWorldListLoading.description": "Loads single-player world metadata in the background to prevent large save lists from freezing the menu.",
   "speedrunapi.config.mcsreasymode.option.bucketDesyncGuard": "Bucket desync guard",
-  "speedrunapi.config.mcsreasymode.option.bucketDesyncGuard.description": "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions. Not intended for verified speedruns.",
+  "speedrunapi.config.mcsreasymode.option.bucketDesyncGuard.description": "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions.",
   "speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus": "Godsens boat status",
   "speedrunapi.config.mcsreasymode.option.showGodsensBoatStatus.description": "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.",
   "speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay": "Blaze spawner overlay",
-  "speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay.description": "Shows configurable practice information around visible blaze spawners. Not intended for verified speedruns.",
+  "speedrunapi.config.mcsreasymode.option.showBlazeSpawnerOverlay.description": "Shows configurable practice information around visible blaze spawners.",
   "speedrunapi.config.mcsreasymode.option.showPersistentCoordinates": "Persistent coordinates",
   "speedrunapi.config.mcsreasymode.option.showPersistentCoordinates.description": "Shows configurable player, block, and local chunk coordinates without opening the debug screen.",
   "mcsreasymode.world_list.loading": "Loading worlds...",
@@ -91,5 +91,9 @@
   "mcsreasymode.screen.rng.buried_treasure_chance": "Buried Treasure Chance",
   "mcsreasymode.screen.rng.buried_treasure_chance.tooltip": "Raises buried treasure generation chance to AreEssGee's 7% per eligible chunk.",
   "mcsreasymode.screen.rng.hoglin_stable_ramparts": "Hoglin Stable Ramparts",
-  "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip": "Guarantees two adjacent full-height hoglin stable ramparts while leaving the third rampart vanilla."
+  "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip": "Guarantees two adjacent triple chest hoglin stable ramparts OR one triple and one good gap while leaving the rest rampart and gap vanilla.",
+  "mcsreasymode.screen.rng.bridge_ramparts": "Bridge Ramparts",
+  "mcsreasymode.screen.rng.bridge_ramparts.tooltip": "Guarantees one triple chest bridge rampart.",
+  "mcsreasymode.screen.rng.bastion_spawn_protection": "Bastion Mob Spawning",
+  "mcsreasymode.screen.rng.bastion_spawn_protection.tooltip": "Restricts mob spawning to only built-in mobs within bastions"
 }

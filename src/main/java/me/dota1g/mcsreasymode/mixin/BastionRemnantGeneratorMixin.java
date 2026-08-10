@@ -24,39 +24,52 @@ import java.util.Random;
 @Mixin(BastionRemnantGenerator.class)
 public abstract class BastionRemnantGeneratorMixin {
     private static final Identifier MCSREASYMODE_HOGLIN_STABLE_ORIGIN = new Identifier("bastion/hoglin_stable/origin");
+    private static final Identifier MCSREASYMODE_BRIDGE_ORIGIN = new Identifier("bastion/bridge/start");
     private static final int MCSREASYMODE_TARGET_ADJACENT_FULL_STABLE_RAMPARTS = 2;
-    private static final int MCSREASYMODE_STABLE_RAMPART_ATTEMPTS = 64;
+    private static final int MCSREASYMODE_TARGET_BRIDGE_FULL_RAMPARTS = 1;
+    private static final int MCSREASYMODE_RAMPART_ATTEMPTS = 64;
 
     @Inject(method = "addPieces", at = @At("HEAD"), cancellable = true)
-    private static void mcsreasymode$rerollHoglinStableRamparts(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, BastionRemnantFeatureConfig config, CallbackInfo ci) {
-        if (!Mcsreasymode.isRankedHoglinStableRampartsEnabled()) {
-            return;
-        }
-
+    private static void mcsreasymode$rerollBastionRamparts(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, BastionRemnantFeatureConfig config, CallbackInfo ci) {
         BastionRemnantGenerator.init();
         StructurePoolFeatureConfig selectedConfig = config.getRandom(random);
-        if (!MCSREASYMODE_HOGLIN_STABLE_ORIGIN.equals(selectedConfig.startPool)) {
-            StructurePoolBasedGenerator.addPieces(
-                    selectedConfig.startPool,
-                    selectedConfig.size,
-                    BastionRemnantGenerator.Piece::new,
-                    chunkGenerator,
-                    structureManager,
-                    pos,
-                    pieces,
-                    random,
-                    false,
-                    false
-            );
-            ci.cancel();
+
+        boolean isHoglinStable = MCSREASYMODE_HOGLIN_STABLE_ORIGIN.equals(selectedConfig.startPool);
+        boolean isBridge = MCSREASYMODE_BRIDGE_ORIGIN.equals(selectedConfig.startPool);
+
+        if (isHoglinStable && Mcsreasymode.isRankedHoglinStableRampartsEnabled()) {
+            mcsreasymode$rerollHoglinStable(chunkGenerator, structureManager, pos, pieces, random, selectedConfig, ci);
             return;
         }
 
+        if (isBridge && Mcsreasymode.isRankedBridgeRampartsEnabled()) {
+            mcsreasymode$rerollBridge(chunkGenerator, structureManager, pos, pieces, random, selectedConfig, ci);
+            return;
+        }
+
+        StructurePoolBasedGenerator.addPieces(
+                selectedConfig.startPool,
+                selectedConfig.size,
+                BastionRemnantGenerator.Piece::new,
+                chunkGenerator,
+                structureManager,
+                pos,
+                pieces,
+                random,
+                false,
+                false
+        );
+        ci.cancel();
+    }
+
+    private static void mcsreasymode$rerollHoglinStable(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, StructurePoolFeatureConfig selectedConfig, CallbackInfo ci) {
         List<StructurePiece> bestPieces = null;
         int bestScore = -1;
         int bestRampartCount = 0;
         boolean bestHasAdjacentPair = false;
-        for (int attempt = 1; attempt <= MCSREASYMODE_STABLE_RAMPART_ATTEMPTS; attempt++) {
+        int bestSideWallCount = 0;
+
+        for (int attempt = 1; attempt <= MCSREASYMODE_RAMPART_ATTEMPTS; attempt++) {
             List<StructurePiece> attemptPieces = new ArrayList<>();
             Random attemptRandom = new Random(random.nextLong());
             StructurePoolBasedGenerator.addPieces(
@@ -72,19 +85,27 @@ public abstract class BastionRemnantGeneratorMixin {
                     false
             );
 
-            List<PoolStructurePiece> fullRamparts = mcsreasymode$getFullHeightStableRamparts(attemptPieces);
+            List<PoolStructurePiece> fullRamparts = mcsreasymode$getRampartsByName(attemptPieces, "bastion/hoglin_stable/ramparts/ramparts_1");
             int rampartCount = fullRamparts.size();
             boolean hasAdjacentPair = mcsreasymode$hasAdjacentFullHeightPair(fullRamparts);
-            int score = (hasAdjacentPair ? 100 : 0) + rampartCount;
+            int sideWallCount = mcsreasymode$getRampartsByName(attemptPieces, "bastion/hoglin_stable/walls/side_wall_1").size();
+
+            boolean winAdjacentPair = rampartCount >= MCSREASYMODE_TARGET_ADJACENT_FULL_STABLE_RAMPARTS && hasAdjacentPair;
+            boolean winRampartPlusGoodGap = rampartCount >= 1 && sideWallCount >= 1;
+
+            int score = (hasAdjacentPair ? 100 : 0) + rampartCount + (sideWallCount > 0 ? 50 : 0);
             if (score > bestScore) {
                 bestScore = score;
                 bestRampartCount = rampartCount;
                 bestHasAdjacentPair = hasAdjacentPair;
+                bestSideWallCount = sideWallCount;
                 bestPieces = attemptPieces;
             }
-            if (rampartCount >= MCSREASYMODE_TARGET_ADJACENT_FULL_STABLE_RAMPARTS && hasAdjacentPair) {
+
+            if (winAdjacentPair || winRampartPlusGoodGap) {
                 pieces.addAll(attemptPieces);
-                Mcsreasymode.debug("Hoglin stable standardized: selected assembly with adjacent full-height ramparts after " + attempt + " attempt(s); full-height ramparts present: " + rampartCount + ".");
+                Mcsreasymode.debug("Hoglin stable standardized: " + (winAdjacentPair ? "adjacent full-height ramparts" : "full-height rampart + good gap")
+                        + " after " + attempt + " attempt(s); ramparts: " + rampartCount + ", adjacent pair: " + hasAdjacentPair + ", side walls: " + sideWallCount + ".");
                 ci.cancel();
                 return;
             }
@@ -92,18 +113,56 @@ public abstract class BastionRemnantGeneratorMixin {
 
         if (bestPieces != null) {
             pieces.addAll(bestPieces);
-            Mcsreasymode.debug("Hoglin stable standardization fallback: best assembly had " + bestRampartCount + " full-height rampart(s), adjacent pair: " + bestHasAdjacentPair + ", after " + MCSREASYMODE_STABLE_RAMPART_ATTEMPTS + " attempts.");
+            Mcsreasymode.debug("Hoglin stable standardization fallback: best assembly had " + bestRampartCount + " rampart(s), adjacent pair: " + bestHasAdjacentPair + ", side walls: " + bestSideWallCount + ", after " + MCSREASYMODE_RAMPART_ATTEMPTS + " attempts.");
+        }
+        ci.cancel();
+    }
+    private static void mcsreasymode$rerollBridge(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, StructurePoolFeatureConfig selectedConfig, CallbackInfo ci) {
+        List<StructurePiece> bestPieces = null;
+        int bestRampartCount = -1;
+        for (int attempt = 1; attempt <= MCSREASYMODE_RAMPART_ATTEMPTS; attempt++) {
+            List<StructurePiece> attemptPieces = new ArrayList<>();
+            Random attemptRandom = new Random(random.nextLong());
+            StructurePoolBasedGenerator.addPieces(
+                    selectedConfig.startPool,
+                    selectedConfig.size,
+                    BastionRemnantGenerator.Piece::new,
+                    chunkGenerator,
+                    structureManager,
+                    pos,
+                    attemptPieces,
+                    attemptRandom,
+                    false,
+                    false
+            );
+
+            int rampartCount = mcsreasymode$getRampartsByName(attemptPieces, "bastion/bridge/ramparts/rampart_1").size();
+            if (rampartCount > bestRampartCount) {
+                bestRampartCount = rampartCount;
+                bestPieces = attemptPieces;
+            }
+            if (rampartCount >= MCSREASYMODE_TARGET_BRIDGE_FULL_RAMPARTS) {
+                pieces.addAll(attemptPieces);
+                Mcsreasymode.debug("Bridge standardized: selected assembly with full-height rampart after " + attempt + " attempt(s); full-height ramparts present: " + rampartCount + ".");
+                ci.cancel();
+                return;
+            }
+        }
+
+        if (bestPieces != null) {
+            pieces.addAll(bestPieces);
+            Mcsreasymode.debug("Bridge standardization fallback: best assembly had " + bestRampartCount + " full-height rampart(s) after " + MCSREASYMODE_RAMPART_ATTEMPTS + " attempts.");
         }
         ci.cancel();
     }
 
-    private static List<PoolStructurePiece> mcsreasymode$getFullHeightStableRamparts(List<StructurePiece> pieces) {
+    private static List<PoolStructurePiece> mcsreasymode$getRampartsByName(List<StructurePiece> pieces, String nameFragment) {
         List<PoolStructurePiece> ramparts = new ArrayList<>();
         for (StructurePiece piece : pieces) {
             if (piece instanceof PoolStructurePiece) {
                 PoolStructurePiece poolPiece = (PoolStructurePiece) piece;
                 String elementName = poolPiece.getPoolElement().toString();
-                if (elementName.contains("bastion/hoglin_stable/ramparts/ramparts_1")) {
+                if (elementName.contains(nameFragment)) {
                     ramparts.add(poolPiece);
                 }
             }
