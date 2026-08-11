@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
+import me.dota1g.mcsreasymode.McsreasymodeConfig;
 import net.minecraft.structure.BastionRemnantGenerator;
 import net.minecraft.structure.PoolStructurePiece;
 import net.minecraft.structure.StructureManager;
@@ -63,6 +64,8 @@ public abstract class BastionRemnantGeneratorMixin {
     }
 
     private static void mcsreasymode$rerollHoglinStable(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, StructurePoolFeatureConfig selectedConfig, CallbackInfo ci) {
+        McsreasymodeConfig.HoglinStableRampartMode mode = Mcsreasymode.CONFIG.hoglinStableRampartMode;
+
         List<StructurePiece> bestPieces = null;
         int bestScore = -1;
         int bestRampartCount = 0;
@@ -93,7 +96,23 @@ public abstract class BastionRemnantGeneratorMixin {
             boolean winAdjacentPair = rampartCount >= MCSREASYMODE_TARGET_ADJACENT_FULL_STABLE_RAMPARTS && hasAdjacentPair;
             boolean winRampartPlusGoodGap = rampartCount >= 1 && sideWallCount >= 1;
 
-            int score = (hasAdjacentPair ? 100 : 0) + rampartCount + (sideWallCount > 0 ? 50 : 0);
+            boolean accept;
+            int score;
+            switch (mode) {
+                case DOUBLE_TRIPLE:
+                    accept = winAdjacentPair;
+                    score = (hasAdjacentPair ? 100 : 0) + rampartCount;
+                    break;
+                case TRIPLE_TO_GAP:
+                    accept = winRampartPlusGoodGap;
+                    score = (sideWallCount > 0 ? 100 : 0) + rampartCount;
+                    break;
+                default: // EITHER
+                    accept = winAdjacentPair || winRampartPlusGoodGap;
+                    score = (hasAdjacentPair ? 100 : 0) + rampartCount + (sideWallCount > 0 ? 50 : 0);
+                    break;
+            }
+
             if (score > bestScore) {
                 bestScore = score;
                 bestRampartCount = rampartCount;
@@ -102,9 +121,9 @@ public abstract class BastionRemnantGeneratorMixin {
                 bestPieces = attemptPieces;
             }
 
-            if (winAdjacentPair || winRampartPlusGoodGap) {
+            if (accept) {
                 pieces.addAll(attemptPieces);
-                Mcsreasymode.debug("Hoglin stable standardized: " + (winAdjacentPair ? "adjacent full-height ramparts" : "full-height rampart + good gap")
+                Mcsreasymode.debug("Hoglin stable standardized (" + mode + "): " + (winAdjacentPair ? "adjacent full-height ramparts" : "full-height rampart + good gap")
                         + " after " + attempt + " attempt(s); ramparts: " + rampartCount + ", adjacent pair: " + hasAdjacentPair + ", side walls: " + sideWallCount + ".");
                 ci.cancel();
                 return;
@@ -113,7 +132,7 @@ public abstract class BastionRemnantGeneratorMixin {
 
         if (bestPieces != null) {
             pieces.addAll(bestPieces);
-            Mcsreasymode.debug("Hoglin stable standardization fallback: best assembly had " + bestRampartCount + " rampart(s), adjacent pair: " + bestHasAdjacentPair + ", side walls: " + bestSideWallCount + ", after " + MCSREASYMODE_RAMPART_ATTEMPTS + " attempts.");
+            Mcsreasymode.debug("Hoglin stable standardization fallback (" + mode + "): best assembly had " + bestRampartCount + " rampart(s), adjacent pair: " + bestHasAdjacentPair + ", side walls: " + bestSideWallCount + ", after " + MCSREASYMODE_RAMPART_ATTEMPTS + " attempts.");
         }
         ci.cancel();
     }

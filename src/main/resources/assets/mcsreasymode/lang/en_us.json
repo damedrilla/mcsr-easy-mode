@@ -95,5 +95,13 @@
   "mcsreasymode.screen.rng.bridge_ramparts": "Bridge Ramparts",
   "mcsreasymode.screen.rng.bridge_ramparts.tooltip": "Guarantees one triple chest bridge rampart.",
   "mcsreasymode.screen.rng.bastion_spawn_protection": "Bastion Mob Spawning",
-  "mcsreasymode.screen.rng.bastion_spawn_protection.tooltip": "Restricts mob spawning to only built-in mobs within bastions"
+  "mcsreasymode.screen.rng.bastion_spawn_protection.tooltip": "Restricts mob spawning to only built-in mobs within bastions",
+  "mcsreasymode.screen.rng.hoglin_stable_ramparts_mode" : "Stables Mode",
+  "mcsreasymode.screen.rng.hoglin_stable_ramparts_mode.tooltip" : "\"Either\" mode lets the mod choose what type of stables to generate",
+  "mcsreasymode.screen.rng.value.double_triple" : "Double Triple",
+  "mcsreasymode.screen.rng.value.triple_to_gap" : "Triple to Gap",
+  "mcsreasymode.screen.rng.value.either" : "Either",
+  "mcsreasymode.screen.rng.group.loot": "Loot and Drop Rates",
+  "mcsreasymode.screen.rng.group.world_interaction": "World Interactions",
+  "mcsreasymode.screen.rng.group.bastion_standardization" : "Bastions"
 }

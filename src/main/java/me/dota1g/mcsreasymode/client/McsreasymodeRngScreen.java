@@ -16,11 +16,17 @@ import java.util.List;
 
 public class McsreasymodeRngScreen extends Screen {
     private static final int ROW_HEIGHT = 24;
+    private static final int GROUP_HEADER_GAP = 16;
+    private static final int GROUP_SPACING = 14;
+
+    private final List<FeatureRow> rows = new ArrayList<>();
+    private final List<RowGroup> groups = new ArrayList<>();
+    private RowGroup currentGroup;
+    private ButtonWidget toggleAllButton;
+    private ButtonWidget stableRampartModeButton;
 
     private final McsreasymodeConfig config;
     private final Screen parent;
-    private final List<FeatureRow> rows = new ArrayList<>();
-    private ButtonWidget toggleAllButton;
     private int contentLeft;
     private int contentRight;
     private int valueButtonX;
@@ -39,9 +45,11 @@ public class McsreasymodeRngScreen extends Screen {
         this.parent = parent;
     }
 
+
     @Override
     protected void init() {
         this.rows.clear();
+        this.groups.clear();
         int contentWidth = Math.min(640, this.width - 72);
         this.contentLeft = this.width / 2 - contentWidth / 2;
         this.contentRight = this.contentLeft + contentWidth;
@@ -50,8 +58,7 @@ public class McsreasymodeRngScreen extends Screen {
         this.listTop = 42;
         this.listBottom = this.height - 34;
         this.toggleAllY = 30;
-        this.featuresSectionY = 64;
-        this.contentHeight = this.featuresSectionY + 16;
+        this.featuresSectionY = 60;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.toggleAllButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleAllText(), button -> {
@@ -59,172 +66,109 @@ public class McsreasymodeRngScreen extends Screen {
             this.refreshMessages();
         }));
 
+        this.addGroup("mcsreasymode.screen.rng.group.loot");
         this.addRow("mcsreasymode.screen.rng.iron_golem_drops", "mcsreasymode.screen.rng.iron_golem_drops.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedIronGolemDrops;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedIronGolemDrops = value;
-            }
-        });
-        this.addRow("mcsreasymode.screen.rng.eye_breaks", "mcsreasymode.screen.rng.eye_breaks.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedEyeBreaks;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedEyeBreaks = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedIronGolemDrops; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedIronGolemDrops = value; }
         });
         this.addRow("mcsreasymode.screen.rng.blaze_rods", "mcsreasymode.screen.rng.blaze_rods.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedBlazeRods;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedBlazeRods = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedBlazeRods; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedBlazeRods = value; }
         });
         this.addRow("mcsreasymode.screen.rng.piglin_barters", "mcsreasymode.screen.rng.piglin_barters.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedPiglinBarters;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedPiglinBarters = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedPiglinBarters; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedPiglinBarters = value; }
         });
         this.addRow("mcsreasymode.screen.rng.piglin_string", "mcsreasymode.screen.rng.piglin_string.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedPiglinString;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedPiglinString = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedPiglinString; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedPiglinString = value; }
         });
         this.addRow("mcsreasymode.screen.rng.flint", "mcsreasymode.screen.rng.flint.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedFlint;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedFlint = value;
-            }
-        });
-        this.addRow("mcsreasymode.screen.rng.blind_portal", "mcsreasymode.screen.rng.blind_portal.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedBlindPortal;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedBlindPortal = value;
-            }
-        });
-        this.addRow("mcsreasymode.screen.rng.bastion_chest_loot", "mcsreasymode.screen.rng.bastion_chest_loot.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedBastionChestLoot;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedBastionChestLoot = value;
-            }
-        });
-        this.addRow("mcsreasymode.screen.rng.other_chest_loot_tables", "mcsreasymode.screen.rng.other_chest_loot_tables.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedChestLootTables;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedChestLootTables = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedFlint; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedFlint = value; }
         });
         this.addRow("mcsreasymode.screen.rng.buried_treasure_chance", "mcsreasymode.screen.rng.buried_treasure_chance.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedBuriedTreasureChance = value; }
         });
+        this.addRow("mcsreasymode.screen.rng.bastion_chest_loot", "mcsreasymode.screen.rng.bastion_chest_loot.tooltip", new FeatureAccess() {
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedBastionChestLoot; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedBastionChestLoot = value; }
+        });
+        this.addRow("mcsreasymode.screen.rng.other_chest_loot_tables", "mcsreasymode.screen.rng.other_chest_loot_tables.tooltip", new FeatureAccess() {
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedChestLootTables; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedChestLootTables = value; }
+        });
+
+        this.addGroup("mcsreasymode.screen.rng.group.world_interaction");
+        this.addRow("mcsreasymode.screen.rng.eye_breaks", "mcsreasymode.screen.rng.eye_breaks.tooltip", new FeatureAccess() {
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedEyeBreaks; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedEyeBreaks = value; }
+        });
+        this.addRow("mcsreasymode.screen.rng.blind_portal", "mcsreasymode.screen.rng.blind_portal.tooltip", new FeatureAccess() {
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedBlindPortal; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedBlindPortal = value; }
+        });
+
+        this.addGroup("mcsreasymode.screen.rng.group.bastion_standardization");
         this.addRow("mcsreasymode.screen.rng.bastion_spawn_protection", "mcsreasymode.screen.rng.bastion_spawn_protection.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedBastionSpawnProtection;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedBastionSpawnProtection = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedBastionSpawnProtection; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedBastionSpawnProtection = value; }
         });
-
         this.addRow("mcsreasymode.screen.rng.hoglin_stable_ramparts", "mcsreasymode.screen.rng.hoglin_stable_ramparts.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedHoglinStableRamparts;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedHoglinStableRamparts = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedHoglinStableRamparts; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedHoglinStableRamparts = value; }
         });
-
+        this.stableRampartModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.stableRampartModeText(), button -> {
+            this.config.hoglinStableRampartMode = this.config.hoglinStableRampartMode.next();
+            this.refreshMessages();
+        }));
+        FeatureRow modeRow = new FeatureRow(
+                new TranslatableText("mcsreasymode.screen.rng.hoglin_stable_ramparts_mode"),
+                new TranslatableText("mcsreasymode.screen.rng.hoglin_stable_ramparts_mode.tooltip"),
+                null,
+                this.stableRampartModeButton,
+                true
+        );
+        this.rows.add(modeRow);
+        this.currentGroup.rows.add(modeRow);
         this.addRow("mcsreasymode.screen.rng.bridge_ramparts", "mcsreasymode.screen.rng.bridge_ramparts.tooltip", new FeatureAccess() {
-            @Override
-            public boolean get() {
-                return McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts;
-            }
-
-            @Override
-            public void set(boolean value) {
-                McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts = value;
-            }
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts = value; }
         });
 
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateContentHeight();
         this.updateRowPositions();
     }
-
     private void addRow(String labelKey, String tooltipKey, FeatureAccess access) {
+        this.addRow(labelKey, tooltipKey, access, false);
+    }
+
+    private void addRow(String labelKey, String tooltipKey, FeatureAccess access, boolean indent) {
         ButtonWidget button = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.featureText(access.get()), pressed -> {
             access.set(!access.get());
             this.config.updateRngModeFromFeatures();
             this.refreshMessages();
         }));
-        this.rows.add(new FeatureRow(new TranslatableText(labelKey), new TranslatableText(tooltipKey), access, button));
+        FeatureRow row = new FeatureRow(new TranslatableText(labelKey), new TranslatableText(tooltipKey), access, button, indent);
+        this.rows.add(row);
+        this.currentGroup.rows.add(row);
     }
-
+    private void addGroup(String labelKey) {
+        this.currentGroup = new RowGroup(new TranslatableText(labelKey));
+        this.groups.add(this.currentGroup);
+    }
     private void refreshMessages() {
         this.config.updateRngModeFromFeatures();
         this.toggleAllButton.setMessage(this.toggleAllText());
         for (FeatureRow row : this.rows) {
-            row.button.setMessage(this.featureText(row.access.get()));
+            if (row.access != null) {
+                row.button.setMessage(this.featureText(row.access.get()));
+            }
         }
+        this.stableRampartModeButton.setMessage(this.stableRampartModeText());
+        this.stableRampartModeButton.active = this.config.rankedHoglinStableRamparts;
         this.updateRowPositions();
     }
 
@@ -262,13 +206,19 @@ public class McsreasymodeRngScreen extends Screen {
 
     private void updateRowPositions() {
         this.setButtonY(this.toggleAllButton, this.toggleAllY);
-        int contentY = this.featuresSectionY + 16;
-        for (FeatureRow row : this.rows) {
-            row.contentY = contentY;
-            row.y = this.toScreenY(contentY);
-            row.button.y = row.y;
-            row.button.visible = row.y + 20 > this.listTop && row.y < this.listBottom;
-            contentY += ROW_HEIGHT;
+        int contentY = this.featuresSectionY;
+        for (RowGroup group : this.groups) {
+            group.headerContentY = contentY;
+            group.headerY = this.toScreenY(contentY);
+            contentY += GROUP_HEADER_GAP;
+            for (FeatureRow row : group.rows) {
+                row.contentY = contentY;
+                row.y = this.toScreenY(contentY);
+                row.button.y = row.y;
+                row.button.visible = row.y + 20 > this.listTop && row.y < this.listBottom;
+                contentY += ROW_HEIGHT;
+            }
+            contentY += GROUP_SPACING;
         }
     }
 
@@ -278,15 +228,20 @@ public class McsreasymodeRngScreen extends Screen {
         this.hoveredTooltip = null;
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 18, 0xFFFFFF);
         fill(matrices, this.contentLeft - 14, this.listTop - 6, this.contentRight + 18, this.listBottom + 6, 0x66000000);
-        this.drawRowLabel(matrices, new TranslatableText("mcsreasymode.screen.rng.mode", this.config.rngModeDisplayName()), this.toScreenY(6), mouseX, mouseY, null);
-        this.drawRowLabel(matrices, new TranslatableText("mcsreasymode.screen.rng.toggle_all"), this.toScreenY(this.toggleAllY), mouseX, mouseY, null);
-        this.drawSectionDivider(matrices, new TranslatableText("mcsreasymode.screen.rng.features"), this.toScreenY(this.featuresSectionY));
+        this.drawRowLabel(matrices, new TranslatableText("mcsreasymode.screen.rng.mode", this.config.rngModeDisplayName()), this.toScreenY(6), mouseX, mouseY, null, false);
+        this.drawRowLabel(matrices, new TranslatableText("mcsreasymode.screen.rng.toggle_all"), this.toScreenY(this.toggleAllY), mouseX, mouseY, null, false);
 
-        for (FeatureRow row : this.rows) {
-            if (row.y + 20 > this.listTop && row.y < this.listBottom) {
-                this.drawRowLabel(matrices, row.label, row.y, mouseX, mouseY, row.tooltip);
-                if (McsreasymodeTooltip.isHovered(this.textRenderer, row.label.getString(), this.contentLeft, row.y + 6, mouseX, mouseY)) {
-                    this.hoveredTooltip = row.tooltip;
+        for (RowGroup group : this.groups) {
+            if (group.headerY + 12 > this.listTop && group.headerY < this.listBottom) {
+                this.drawSectionDivider(matrices, group.label, group.headerY);
+            }
+            for (FeatureRow row : group.rows) {
+                if (row.y + 20 > this.listTop && row.y < this.listBottom) {
+                    this.drawRowLabel(matrices, row.label, row.y, mouseX, mouseY, row.tooltip, row.indent);
+                    int labelIndent = row.indent ? 12 : 0;
+                    if (McsreasymodeTooltip.isHovered(this.textRenderer, row.label.getString(), this.contentLeft + labelIndent, row.y + 6, mouseX, mouseY)) {
+                        this.hoveredTooltip = row.tooltip;
+                    }
                 }
             }
         }
@@ -295,19 +250,18 @@ public class McsreasymodeRngScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
     }
-
-    private void drawRowLabel(MatrixStack matrices, Text label, int y, int mouseX, int mouseY, Text tooltip) {
+    private void drawRowLabel(MatrixStack matrices, Text label, int y, int mouseX, int mouseY, Text tooltip, boolean indent) {
         if (y + 20 <= this.listTop || y >= this.listBottom) {
             return;
         }
 
         int labelY = y + 6;
-        this.textRenderer.drawWithShadow(matrices, label, this.contentLeft, labelY, 0xFFFFFF);
-        if (tooltip != null && McsreasymodeTooltip.isHovered(this.textRenderer, label.getString(), this.contentLeft, labelY, mouseX, mouseY)) {
+        int labelX = this.contentLeft + (indent ? 12 : 0);
+        this.textRenderer.drawWithShadow(matrices, label, labelX, labelY, 0xFFFFFF);
+        if (tooltip != null && McsreasymodeTooltip.isHovered(this.textRenderer, label.getString(), labelX, labelY, mouseX, mouseY)) {
             this.hoveredTooltip = tooltip;
         }
     }
-
     private void drawSectionDivider(MatrixStack matrices, Text label, int y) {
         if (y + 12 <= this.listTop || y >= this.listBottom) {
             return;
@@ -337,9 +291,14 @@ public class McsreasymodeRngScreen extends Screen {
     private int toScreenY(int contentY) {
         return this.listTop + contentY - this.scrollOffset;
     }
-
     private void updateContentHeight() {
-        this.contentHeight = this.featuresSectionY + 16 + this.rows.size() * ROW_HEIGHT + 8;
+        int contentY = this.featuresSectionY;
+        for (RowGroup group : this.groups) {
+            contentY += GROUP_HEADER_GAP;
+            contentY += group.rows.size() * ROW_HEIGHT;
+            contentY += GROUP_SPACING;
+        }
+        this.contentHeight = contentY + 8;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
     }
 
@@ -398,14 +357,37 @@ public class McsreasymodeRngScreen extends Screen {
         private final Text tooltip;
         private final FeatureAccess access;
         private final ButtonWidget button;
+        private final boolean indent;
         private int contentY;
         private int y;
 
-        private FeatureRow(Text label, Text tooltip, FeatureAccess access, ButtonWidget button) {
+        private FeatureRow(Text label, Text tooltip, FeatureAccess access, ButtonWidget button, boolean indent) {
             this.label = label;
             this.tooltip = tooltip;
             this.access = access;
             this.button = button;
+            this.indent = indent;
         }
     }
+
+
+    private Text stableRampartModeText() {
+        switch (this.config.hoglinStableRampartMode) {
+            case DOUBLE_TRIPLE: return new TranslatableText("mcsreasymode.screen.rng.value.double_triple");
+            case TRIPLE_TO_GAP: return new TranslatableText("mcsreasymode.screen.rng.value.triple_to_gap");
+            default: return new TranslatableText("mcsreasymode.screen.rng.value.either");
+        }
+    }
+    private static class RowGroup {
+        private final Text label;
+        private final List<FeatureRow> rows = new ArrayList<>();
+        private int headerContentY;
+        private int headerY;
+
+        private RowGroup(Text label) {
+            this.label = label;
+        }
+    }
+
+
 }

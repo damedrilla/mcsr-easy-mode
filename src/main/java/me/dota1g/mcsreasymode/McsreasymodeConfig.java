@@ -18,7 +18,29 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.rngMode")
     @Config.Description("speedrunapi.config.mcsreasymode.option.rngMode.description")
     @Config.Text(getter = "getRngModeText")
+
     public RngMode rngMode = RngMode.VANILLA;
+
+    public enum HoglinStableRampartMode {
+        DOUBLE_TRIPLE("Double Triple"),
+        TRIPLE_TO_GAP("Triple to Gap"),
+        EITHER("Either");
+
+        private final String displayName;
+
+        HoglinStableRampartMode(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String displayName() {
+            return this.displayName;
+        }
+
+        public HoglinStableRampartMode next() {
+            HoglinStableRampartMode[] values = values();
+            return values[(this.ordinal() + 1) % values.length];
+        }
+    }
 
     @Config.Hide
     public boolean rankedIronGolemDrops = false;
@@ -55,6 +77,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     @Config.Hide
     public boolean rankedHoglinStableRamparts = false;
+
+    @Config.Hide
+    public HoglinStableRampartMode hoglinStableRampartMode = HoglinStableRampartMode.EITHER;
 
     @Config.Hide
     public boolean rankedHoglinBridgeRamparts = false;
@@ -401,6 +426,10 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             this.migrateRngFeature(jsonObject, "rankedChestLootTables", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBuriedTreasureChance", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedHoglinStableRamparts", oldRankedMode);
+
+        }
+        if (!jsonObject.has("hoglinStableRampartMode")) {
+            jsonObject.addProperty("hoglinStableRampartMode", HoglinStableRampartMode.EITHER.name());
         }
     }
 
