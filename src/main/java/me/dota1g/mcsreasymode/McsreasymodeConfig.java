@@ -99,8 +99,10 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.disableHoglinAggression.description")
     public boolean disableHoglinAggression = true;
 
-    @Config.Hide
-    public boolean disableAggression = true;
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.filterExplosionClutterDrops")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.filterExplosionClutterDrops.description")
+    public boolean filterExplosionClutterDrops = false;
 
     @Config.Category("worldgen")
     @Config.Name("speedrunapi.config.mcsreasymode.option.openNetherTerrain")

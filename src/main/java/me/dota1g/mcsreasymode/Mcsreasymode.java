@@ -108,6 +108,7 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.hideAdvancementToasts;
     }
 
+    public static boolean isFilterExplosionClutterDropsEnabled() {return CONFIG != null && CONFIG.filterExplosionClutterDrops;}
     public static boolean shouldShowBlockPlacementOutline() {
         return CONFIG != null && CONFIG.showBlockPlacementOutline;
     }

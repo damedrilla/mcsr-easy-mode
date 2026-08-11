@@ -101,5 +101,26 @@ public abstract class PortalForcerMixin {
                 this.world.setBlockState(mutable, portal, 18);
             }
         }
+
+        this.mcsreasymode$clearOverheadFoliage(x, y, z);
+    }
+
+    private void mcsreasymode$clearOverheadFoliage(int x, int y, int z) {
+        BlockState air = Blocks.AIR.getDefaultState();
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        int clearFromY = y + 4;
+        int clearToY = y + 10;
+
+        for (int width = -1; width <= 2; width++) {
+            for (int depth = -1; depth <= 1; depth++) {
+                for (int height = clearFromY; height <= clearToY; height++) {
+                    mutable.set(x + width, height, z + depth);
+                    BlockState state = this.world.getBlockState(mutable);
+                    if (state.isIn(net.minecraft.tag.BlockTags.LEAVES) || state.isIn(net.minecraft.tag.BlockTags.LOGS)) {
+                        this.world.setBlockState(mutable, air, 3);
+                    }
+                }
+            }
+        }
     }
 }

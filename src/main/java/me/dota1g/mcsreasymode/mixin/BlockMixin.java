@@ -19,6 +19,7 @@ import java.util.List;
 
 @Mixin(Block.class)
 public abstract class BlockMixin {
+
     @Inject(method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)Ljava/util/List;", at = @At("RETURN"), cancellable = true)
     private static void mcsreasymode$applyFlintPity(BlockState state, ServerWorld world, BlockPos pos, BlockEntity blockEntity, Entity entity, ItemStack tool, CallbackInfoReturnable<List<ItemStack>> cir) {
         if (Mcsreasymode.isRankedFlintEnabled() && state.isOf(Blocks.GRAVEL)) {

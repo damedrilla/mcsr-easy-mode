@@ -48,6 +48,8 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget reducedPearlDamageButton;
     private SliderWidget heldPlaceSpeedSlider;
     private ButtonWidget handledHotkeysCustomizeButton;
+    private ButtonWidget filterExplosionClutterDropsButton;
+    private int qolSectionY;
     private int sectionLeftX;
     private int sectionRightX;
     private int valueButtonX;
@@ -89,8 +91,9 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.worldgenSectionY = 416;
-        this.funSectionY = 506;
+        this.qolSectionY = 416;
+        this.worldgenSectionY = 457;
+        this.funSectionY = 547;
         this.contentHeight = this.funSectionY + 159;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -199,7 +202,10 @@ public class McsreasymodeConfigScreen extends Screen {
         //     assert this.client != null;
         //     this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
         // }));
-
+        this.filterExplosionClutterDropsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.filterExplosionClutterDrops), button -> {
+            this.config.filterExplosionClutterDrops = !this.config.filterExplosionClutterDrops;
+            button.setMessage(this.toggleValueText(this.config.filterExplosionClutterDrops));
+        }));
         this.villageStandardizationButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.standardizeVillages), button -> {
             this.config.standardizeVillages = !this.config.standardizeVillages;
             button.setMessage(this.toggleValueText(this.config.standardizeVillages));
@@ -294,6 +300,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 180), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
         this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 201), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
         this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 222), mouseX, mouseY, "Shows configurable precise, block, and local chunk coordinates without opening the debug screen.");
+        this.drawSectionDivider(matrices, "QoL", this.toScreenY(this.qolSectionY));
+        this.drawRowLabel(matrices, "Filter Explosion Clutter Drops", this.toScreenY(this.qolSectionY + 12), mouseX, mouseY, "Removes saplings, seeds, grass, ferns, and flowers dropped from TNT and other explosions.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
@@ -381,6 +389,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.blazeSpawnerOverlayCustomizeButton, this.uiSectionY + 201);
         this.setButtonY(this.persistentCoordinatesButton, this.uiSectionY + 222);
         this.setButtonY(this.persistentCoordinatesCustomizeButton, this.uiSectionY + 222);
+        this.setButtonY(this.filterExplosionClutterDropsButton, this.qolSectionY + 12);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);

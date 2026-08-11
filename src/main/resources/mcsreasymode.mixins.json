@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractMinecartEntityMixin",
+    "AbstractBlockMixin",
+    "ExplosionMixin",
     "BastionRemnantGeneratorMixin",
     "BlockMixin",
     "BuriedTreasureFeatureMixin",
