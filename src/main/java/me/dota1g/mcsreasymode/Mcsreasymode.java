@@ -3,6 +3,7 @@ package me.dota1g.mcsreasymode;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -233,7 +234,9 @@ public class Mcsreasymode implements ModInitializer {
     public static float oceanRavineWidth() {
         return CONFIG == null ? 5.0F : (float) Math.max(1.0D, Math.min(8.0D, CONFIG.oceanRavineWidth));
     }
-
+    public static boolean isRankedRuinedPortalAnimalsEnabled() {
+        return CONFIG != null && CONFIG.rankedRuinedPortalAnimals;
+    }
     public static void debug(String message) {
         LOGGER.info("[MCSR Easy Mode] {}", message);
         if (shouldShowDebugChatLogs()) {

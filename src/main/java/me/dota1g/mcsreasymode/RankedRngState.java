@@ -1,11 +1,20 @@
 package me.dota1g.mcsreasymode;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.entity.EntityType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.Heightmap;
+import net.minecraft.block.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Iterator;
 
 public final class RankedRngState {
     private static final int PEARL_PITY_BARTERS = 24;
@@ -39,6 +48,7 @@ public final class RankedRngState {
         blindPortalSurfacePending = false;
         blindPortalSurfaceUsed = false;
         blindPortalForcedSurfaceY = null;
+        pendingRuinedPortalAnimalSpawns.clear();
         Mcsreasymode.debug("Ranked RNG state reset for new world.");
     }
 
@@ -246,5 +256,120 @@ public final class RankedRngState {
         Integer surfaceY = blindPortalForcedSurfaceY;
         blindPortalForcedSurfaceY = null;
         return surfaceY;
+    }
+
+    private static final List<BlockPos> pendingRuinedPortalAnimalSpawns = new ArrayList<>();
+    private static final EntityType<?>[] RUINED_PORTAL_ANIMAL_TYPES = new EntityType<?>[] {
+            EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.CHICKEN
+    };
+    private static final int RUINED_PORTAL_ANIMAL_HERD_SIZE = 4;
+    private static final int RUINED_PORTAL_ANIMAL_RADIUS_CHUNKS = 3;
+
+    public static void registerPendingRuinedPortalAnimalSpawn(BlockPos pos) {
+        pendingRuinedPortalAnimalSpawns.add(pos.toImmutable());
+        Mcsreasymode.debug("Ruined portal animal guarantee armed near " + pos.toShortString() + ".");
+    }
+
+    public static void processPendingRuinedPortalAnimalSpawns(ServerWorld world) {
+        if (pendingRuinedPortalAnimalSpawns.isEmpty()) {
+            return;
+        }
+
+        List<BlockPos> readyPositions = new ArrayList<>();
+        Iterator<BlockPos> iterator = pendingRuinedPortalAnimalSpawns.iterator();
+        while (iterator.hasNext()) {
+            BlockPos pos = iterator.next();
+            if (world.isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)) {
+                readyPositions.add(pos);
+                iterator.remove();
+            }
+        }
+
+        for (BlockPos pos : readyPositions) {
+            spawnRuinedPortalAnimalHerd(world, pos);
+        }
+    }
+
+    private static void spawnRuinedPortalAnimalHerd(ServerWorld world, BlockPos center) {
+        Random random = world.random;
+        EntityType<?> species = RUINED_PORTAL_ANIMAL_TYPES[random.nextInt(RUINED_PORTAL_ANIMAL_TYPES.length)];
+        int radiusBlocks = RUINED_PORTAL_ANIMAL_RADIUS_CHUNKS * 16;
+        int spawned = 0;
+        int attempts = 0;
+
+        while (spawned < RUINED_PORTAL_ANIMAL_HERD_SIZE && attempts < RUINED_PORTAL_ANIMAL_HERD_SIZE * 20) {
+            attempts++;
+            int x = center.getX() + random.nextInt(radiusBlocks * 2 + 1) - radiusBlocks;
+            int z = center.getZ() + random.nextInt(radiusBlocks * 2 + 1) - radiusBlocks;
+            if (!world.isChunkLoaded(x >> 4, z >> 4)) {
+                continue;
+            }
+
+            int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
+            if (trySpawnAnimalAt(world, species, x, y, z, random)) {
+                spawned++;
+            }
+        }
+
+        if (spawned == 0) {
+            spawned = forceSpawnAtPortalColumn(world, center, species, random);
+            if (spawned > 0) {
+                Mcsreasymode.debug("Ruined portal animal guarantee fallback: forced spawn at portal column near "
+                        + center.toShortString() + " after radius search found no valid ground.");
+            }
+        }
+
+        Mcsreasymode.debug("Ruined portal animal guarantee spawned " + spawned + " " + species
+                + "(s) within " + RUINED_PORTAL_ANIMAL_RADIUS_CHUNKS + " chunks of " + center.toShortString() + ".");
+    }
+
+    private static boolean trySpawnAnimalAt(ServerWorld world, EntityType<?> species, int x, int y, int z, Random random) {
+        BlockPos ground = new BlockPos(x, y - 1, z);
+        BlockPos feet = new BlockPos(x, y, z);
+        BlockState groundState = world.getBlockState(ground);
+        if (!groundState.getMaterial().isSolid() || groundState.getMaterial().isLiquid()) {
+            return false;
+        }
+        if (!world.getFluidState(feet).isEmpty()) {
+            return false;
+        }
+
+        Entity entity = species.create(world);
+        if (!(entity instanceof MobEntity)) {
+            return false;
+        }
+
+        MobEntity mob = (MobEntity) entity;
+        mob.refreshPositionAndAngles(x + 0.5, y, z + 0.5, random.nextFloat() * 360.0F, 0.0F);
+        mob.initialize(world, world.getLocalDifficulty(feet), SpawnReason.STRUCTURE, null, null);
+        world.spawnEntity(mob);
+        return true;
+    }
+
+    private static int forceSpawnAtPortalColumn(ServerWorld world, BlockPos center, EntityType<?> species, Random random) {
+        int forcedSpawned = 0;
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+
+        for (int attempt = 0; attempt < RUINED_PORTAL_ANIMAL_HERD_SIZE; attempt++) {
+            int offsetX = attempt % 2 == 0 ? attempt : -attempt;
+            int offsetZ = attempt / 2;
+            int x = center.getX() + offsetX;
+            int z = center.getZ() + offsetZ;
+
+            int chunkX = x >> 4;
+            int chunkZ = z >> 4;
+            world.getChunk(chunkX, chunkZ);
+
+            int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
+            if (y <= 0) {
+                continue;
+            }
+
+            if (trySpawnAnimalAt(world, species, x, y, z, random)) {
+                forcedSpawned++;
+            }
+        }
+
+        return forcedSpawned;
     }
 }

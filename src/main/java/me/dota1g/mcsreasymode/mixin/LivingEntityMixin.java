@@ -67,7 +67,7 @@ public abstract class LivingEntityMixin {
 
         LivingEntity entity = (LivingEntity) self;
         if (this.mcsreasymode$droppedBlazeRod) {
-            Mcsreasymode.debug("Blaze rod standardized: vanilla dropped rod after " + mcsreasymode$blazeRodlessKills + " dry blaze kills.");
+            Mcsreasymode.debug("Blaze rod pity reset: vanilla dropped rod after " + mcsreasymode$blazeRodlessKills + " dry blaze kills.");
             mcsreasymode$blazeRodlessKills = 0;
         } else if (mcsreasymode$blazeRodlessKills >= 2) {
             entity.dropStack(new ItemStack(Items.BLAZE_ROD));

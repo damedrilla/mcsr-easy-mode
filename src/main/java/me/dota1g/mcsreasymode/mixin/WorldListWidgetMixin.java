@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 @Mixin(WorldListWidget.class)
-public abstract class WorldListWidgetMixin extends AlwaysSelectedEntryListWidget<WorldListWidget.Entry>
+public abstract class   WorldListWidgetMixin extends AlwaysSelectedEntryListWidget<WorldListWidget.Entry>
         implements AsyncWorldListStatus {
     @Unique
     private static final ExecutorService MCSR_WORLD_LIST_EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {

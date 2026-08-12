@@ -7,6 +7,8 @@ import me.dota1g.mcsreasymode.StrongholdProtection;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,5 +39,15 @@ public abstract class MinecraftServerMixin {
             RankedRngState.resetOneShotIronForPracticeRun();
         }
         this.mcsreasymode$bastionPracticeRunning = running;
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void mcsreasymode$processRuinedPortalAnimalGuarantee(CallbackInfo ci) {
+        MinecraftServer server = (MinecraftServer) (Object) this;
+        for (ServerWorld world : server.getWorlds()) {
+            if (world.getRegistryKey() == World.OVERWORLD) {
+                RankedRngState.processPendingRuinedPortalAnimalSpawns(world);
+            }
+        }
     }
 }

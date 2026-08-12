@@ -105,5 +105,7 @@
   "mcsreasymode.screen.rng.value.either" : "Either",
   "mcsreasymode.screen.rng.group.loot": "Loot and Drop Rates",
   "mcsreasymode.screen.rng.group.world_interaction": "World Interactions",
-  "mcsreasymode.screen.rng.group.bastion_standardization" : "Bastions"
+  "mcsreasymode.screen.rng.group.bastion_standardization" : "Bastions",
+  "mcsreasymode.screen.rng.rp_herd": "RP Animals",
+  "mcsreasymode.screen.rng.rp_herd.tooltip" : "Guarantees animals around Ruined Portal for food"
 }

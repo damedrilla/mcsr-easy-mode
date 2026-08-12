@@ -84,6 +84,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Hide
     public boolean rankedHoglinBridgeRamparts = false;
 
+    @Config.Hide
+    public boolean rankedRuinedPortalAnimals = false;
+
     @Config.Category("mobs")
     @Config.Name("speedrunapi.config.mcsreasymode.option.disablePiglinAggression")
     @Config.Description("speedrunapi.config.mcsreasymode.option.disablePiglinAggression.description")

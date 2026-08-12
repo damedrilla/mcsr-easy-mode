@@ -136,7 +136,12 @@ public class McsreasymodeRngScreen extends Screen {
             public boolean get() { return McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts; }
             public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedHoglinBridgeRamparts = value; }
         });
-
+        this.rows.add(modeRow);
+        this.currentGroup.rows.add(modeRow);
+        this.addRow("mcsreasymode.screen.rng.rp_herd", "mcsreasymode.screen.rng.rp_herd.tooltip", new FeatureAccess() {
+            public boolean get() { return McsreasymodeRngScreen.this.config.rankedRuinedPortalAnimals; }
+            public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedRuinedPortalAnimals = value; }
+        });
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
         this.updateContentHeight();
         this.updateRowPositions();
