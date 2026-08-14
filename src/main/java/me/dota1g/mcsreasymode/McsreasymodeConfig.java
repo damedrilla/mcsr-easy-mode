@@ -12,6 +12,17 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Config(init = Config.InitPoint.PRELAUNCH)
 public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Category("rng")
@@ -39,6 +50,83 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         public HoglinStableRampartMode next() {
             HoglinStableRampartMode[] values = values();
             return values[(this.ordinal() + 1) % values.length];
+        }
+    }
+    @Config.Hide
+    public boolean autoFocusSearchField = true;
+
+    @Config.Hide
+    public boolean searchPresetsEnabled = true;
+
+    @Config.Ignored
+    public java.util.LinkedHashMap<Integer, String> searchPresets = defaultSearchPresets();
+
+    private static java.util.LinkedHashMap<Integer, String> defaultSearchPresets() {
+        java.util.LinkedHashMap<Integer, String> map = new java.util.LinkedHashMap<>();
+        map.put(org.lwjgl.glfw.GLFW.GLFW_KEY_B, "boat");
+        map.put(org.lwjgl.glfw.GLFW.GLFW_KEY_K, "bucket");
+        map.put(org.lwjgl.glfw.GLFW.GLFW_KEY_F, "flint_and_steel");
+        map.put(org.lwjgl.glfw.GLFW.GLFW_KEY_P, "ender_pearl");
+        return map;
+    }
+
+    private static
+    final Gson SEARCH_PRESETS_GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path SEARCH_PRESETS_PATH =
+            FabricLoader.getInstance().getConfigDir().resolve("mcsreasymode-search-presets.json");
+
+    public void loadSearchPresets() {
+        try {
+            if (Files.exists(SEARCH_PRESETS_PATH)) {
+                String json = new String(Files.readAllBytes(SEARCH_PRESETS_PATH), StandardCharsets.UTF_8);
+                Type type = new TypeToken<java.util.LinkedHashMap<Integer, String>>() {}.getType();
+                java.util.LinkedHashMap<Integer, String> loaded = SEARCH_PRESETS_GSON.fromJson(json, type);
+                if (loaded != null && !loaded.isEmpty()) {
+                    this.searchPresets = loaded;
+                }
+            }
+        } catch (IOException ignored) {
+        }
+    }
+    public void saveSearchPresets() {
+        try {
+            Files.createDirectories(SEARCH_PRESETS_PATH.getParent());
+            String json = SEARCH_PRESETS_GSON.toJson(this.searchPresets);
+            Files.write(SEARCH_PRESETS_PATH, json.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Config.Hide
+    public boolean worldSkinEnabled = false;
+
+    @Config.Ignored
+    public java.util.List<String> worldSkinPaths = new java.util.ArrayList<>();
+
+    private static final Gson WORLD_SKIN_GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path WORLD_SKIN_PATH =
+            FabricLoader.getInstance().getConfigDir().resolve("mcsreasymode-world-skins.json");
+
+    public void loadWorldSkins() {
+        try {
+            if (Files.exists(WORLD_SKIN_PATH)) {
+                String json = new String(Files.readAllBytes(WORLD_SKIN_PATH), StandardCharsets.UTF_8);
+                Type type = new TypeToken<java.util.List<String>>() {}.getType();
+                java.util.List<String> loaded = WORLD_SKIN_GSON.fromJson(json, type);
+                if (loaded != null) {
+                    this.worldSkinPaths = loaded;
+                }
+            }
+        } catch (IOException ignored) {
+        }
+    }
+
+    public void saveWorldSkins() {
+        try {
+            Files.createDirectories(WORLD_SKIN_PATH.getParent());
+            String json = WORLD_SKIN_GSON.toJson(this.worldSkinPaths);
+            Files.write(WORLD_SKIN_PATH, json.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ignored) {
         }
     }
 
@@ -86,6 +174,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     @Config.Hide
     public boolean rankedRuinedPortalAnimals = false;
+
+    @Config.Hide
+    public boolean fastQuickLoot = false;
 
     @Config.Category("mobs")
     @Config.Name("speedrunapi.config.mcsreasymode.option.disablePiglinAggression")
@@ -313,6 +404,8 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     {
         Mcsreasymode.CONFIG = this;
+        this.loadSearchPresets();
+        this.loadWorldSkins();
     }
 
     @Override

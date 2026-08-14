@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.client;
 
 import me.dota1g.mcsreasymode.McsreasymodeConfig;
+import me.dota1g.mcsreasymode.client.McsreasymodeSearchScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -49,6 +50,9 @@ public class McsreasymodeConfigScreen extends Screen {
     private SliderWidget heldPlaceSpeedSlider;
     private ButtonWidget handledHotkeysCustomizeButton;
     private ButtonWidget filterExplosionClutterDropsButton;
+    private ButtonWidget searchCraftingButton;
+    private ButtonWidget worldSkinButton;
+    private ButtonWidget fastLootButton;
     private int qolSectionY;
     private int sectionLeftX;
     private int sectionRightX;
@@ -91,9 +95,9 @@ public class McsreasymodeConfigScreen extends Screen {
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
         this.uiSectionY = 154;
-        this.qolSectionY = 416;
-        this.worldgenSectionY = 457;
-        this.funSectionY = 547;
+        this.qolSectionY = 458;      // was 437
+        this.worldgenSectionY = 520; // was 478
+        this.funSectionY = 610;      // was 568
         this.contentHeight = this.funSectionY + 159;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -131,6 +135,15 @@ public class McsreasymodeConfigScreen extends Screen {
             this.config.showHotbarHotkeys = !this.config.showHotbarHotkeys;
             button.setMessage(this.toggleValueText(this.config.showHotbarHotkeys));
             this.hotbarHotkeysCustomizeButton.active = this.config.showHotbarHotkeys;
+        }));
+        this.searchCraftingButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Open"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeSearchScreen(this.config, this));
+        }));
+
+        this.worldSkinButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Open"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeSkinScreen(this.config, this));
         }));
 
         this.hotbarHotkeysCustomizeButton = this.addButton(new ButtonWidget(this.valueButtonX + hotbarToggleWidth + gap, 0, hotbarCustomizeWidth, 20, new LiteralText("Customize"), button -> {
@@ -206,6 +219,12 @@ public class McsreasymodeConfigScreen extends Screen {
             this.config.filterExplosionClutterDrops = !this.config.filterExplosionClutterDrops;
             button.setMessage(this.toggleValueText(this.config.filterExplosionClutterDrops));
         }));
+
+        this.fastLootButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.fastQuickLoot), button -> {
+            this.config.fastQuickLoot = !this.config.fastQuickLoot;
+            button.setMessage(this.toggleValueText(this.config.fastQuickLoot));
+        }));
+
         this.villageStandardizationButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.standardizeVillages), button -> {
             this.config.standardizeVillages = !this.config.standardizeVillages;
             button.setMessage(this.toggleValueText(this.config.standardizeVillages));
@@ -300,8 +319,11 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 180), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
         this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 201), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
         this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 222), mouseX, mouseY, "Shows configurable precise, block, and local chunk coordinates without opening the debug screen.");
+        this.drawRowLabel(matrices, "Search Crafting", this.toScreenY(this.uiSectionY + 243), mouseX, mouseY, "Configure auto-focus and Alt+letter search presets for the crafting recipe book.");
+        this.drawRowLabel(matrices, "World Skin", this.toScreenY(this.uiSectionY + 264), mouseX, mouseY, "Randomly picks a skin from your configured pool each time you join a world.");
         this.drawSectionDivider(matrices, "QoL", this.toScreenY(this.qolSectionY));
         this.drawRowLabel(matrices, "Filter Explosion Clutter Drops", this.toScreenY(this.qolSectionY + 12), mouseX, mouseY, "Removes saplings, seeds, grass, ferns, and flowers dropped from TNT and other explosions.");
+        this.drawRowLabel(matrices, "Consistent Fast Looting", this.toScreenY(this.qolSectionY + 33), mouseX, mouseY, "Makes fast looting more forgiving for slower double clicks.");
         //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
@@ -390,6 +412,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.persistentCoordinatesButton, this.uiSectionY + 222);
         this.setButtonY(this.persistentCoordinatesCustomizeButton, this.uiSectionY + 222);
         this.setButtonY(this.filterExplosionClutterDropsButton, this.qolSectionY + 12);
+        this.setButtonY(this.fastLootButton, this.qolSectionY + 33);
         // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
@@ -400,6 +423,8 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.oneShotForRsgButton, this.funSectionY + 75);
         this.setButtonY(this.reducedPearlDamageButton, this.funSectionY + 96);
         this.setSliderY(this.heldPlaceSpeedSlider, this.funSectionY + 117);
+        this.setButtonY(this.searchCraftingButton, this.uiSectionY + 243);
+        this.setButtonY(this.worldSkinButton, this.uiSectionY + 264);
     }
 
     private void setSliderY(SliderWidget slider, int contentY) {

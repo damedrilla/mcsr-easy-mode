@@ -25,6 +25,7 @@ public final class RankedRngState {
     private static final int FLINT_PITY_BREAKS = 10;
     private static final int ONE_SHOT_IRON_MINIMUM = 26;
     private static final int ONE_SHOT_IRON_MAXIMUM = 36;
+    private static final int GLOBAL_PITY_PROC_CAP = 3;
 
     private static int pearlDryBarters;
     private static int obsidianDryBarters;
@@ -33,6 +34,8 @@ public final class RankedRngState {
     private static int oneShotIronGiven;
     private static int flintDryBreaks;
     private static int thrownEyeCount;
+    private static int pearlPityProcs;
+    private static int stringPityProcs;
     private static boolean bastionChestAdjusted;
     private static boolean blindPortalSurfacePending;
     private static boolean blindPortalSurfaceUsed;
@@ -45,6 +48,8 @@ public final class RankedRngState {
         resetBastionAttemptFields();
         flintDryBreaks = 0;
         thrownEyeCount = 0;
+        pearlPityProcs = 0;
+        stringPityProcs = 0;
         blindPortalSurfacePending = false;
         blindPortalSurfaceUsed = false;
         blindPortalForcedSurfaceY = null;
@@ -61,6 +66,8 @@ public final class RankedRngState {
         pearlDryBarters = 0;
         obsidianDryBarters = 0;
         stringDryBarters = 0;
+        pearlPityProcs = 0;
+        stringPityProcs = 0;
         oneShotIronBudget = 0;
         oneShotIronGiven = 0;
         bastionChestAdjusted = false;
@@ -121,11 +128,15 @@ public final class RankedRngState {
         }
 
         if (rankedBarterPity && !hasPearls && pearlDryBarters >= PEARL_PITY_BARTERS) {
-            int pearlCount = 4 + random.nextInt(5);
-            result.add(new ItemStack(Items.ENDER_PEARL, pearlCount));
-            Mcsreasymode.debug("Piglin barter pearl pity proc: added " + pearlCount + " ender pearls after " + PEARL_PITY_BARTERS + " dry barters.");
+            if (pearlPityProcs < GLOBAL_PITY_PROC_CAP) {
+                int pearlCount = 4 + random.nextInt(5);
+                result.add(new ItemStack(Items.ENDER_PEARL, pearlCount));
+                Mcsreasymode.debug("Piglin barter pearl pity proc: added " + pearlCount + " ender pearls after " + PEARL_PITY_BARTERS + " dry barters.");
+                pearlPityProcs++;
+            } else {
+                Mcsreasymode.debug("Max pity procs count reached for pearls.");
+            }
             pearlDryBarters = 0;
-            return result;
         }
 
         if (rankedBarterPity && !hasObsidian && obsidianDryBarters >= OBSIDIAN_PITY_BARTERS) {
@@ -133,7 +144,6 @@ public final class RankedRngState {
             Mcsreasymode.debug("Piglin barter obsidian pity proc: added 1 obsidian after " + OBSIDIAN_PITY_BARTERS + " dry barters.");
             obsidianDryBarters = 0;
         }
-        
         if (rankedStringPity && !hasString && stringDryBarters >= STRING_PITY_BARTERS) {
             int count = 8 + random.nextInt(15);
             if (oneShotForRsg) {
@@ -144,9 +154,12 @@ public final class RankedRngState {
                             + " iron ingots instead of string after " + STRING_PITY_BARTERS + " dry barters ("
                             + oneShotIronGiven + "/" + oneShotIronBudget + " budget used).");
                 }
-            } else {
+            } else if (stringPityProcs < GLOBAL_PITY_PROC_CAP) {
+                stringPityProcs++;
                 result.add(new ItemStack(Items.STRING, count));
                 Mcsreasymode.debug("Piglin barter string pity proc: added " + count + " strings after " + STRING_PITY_BARTERS + " dry barters.");
+            } else {
+                Mcsreasymode.debug("Max pity procs count reached for strings.");
             }
             stringDryBarters = 0;
         }
