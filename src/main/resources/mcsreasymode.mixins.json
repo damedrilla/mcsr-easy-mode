@@ -26,6 +26,7 @@
     "RecipeBookWidgetMixin",
     "LivingEntityMixin",
     "EndSpikeFeatureSpikeCacheMixin",
+    "ServerWorldEndPlatformMixin",
     "ItemInvoker",
     "EnderDragonFightMixin",
     "HoldingPatternPhaseAccessor",

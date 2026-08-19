@@ -25,9 +25,9 @@ public abstract class EnderDragonFightMixin {
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void mcsreasymode$forceFirstTarget(CallbackInfoReturnable<EnderDragonEntity> cir, EnderDragonEntity dragon) {
-//        if (!Mcsreasymode.CONFIG.forceDragonFirstTargetFront) {
-//            return;
-//        }
+        if (!Mcsreasymode.CONFIG.forceDragonFirstTargetFront) {
+            return;
+        }
         Phase phase = dragon.getPhaseManager().getCurrent();
         if (phase instanceof HoldingPatternPhase) {
             ((HoldingPatternPhaseAccessor) phase).mcsreasymode$setTarget(

@@ -19,9 +19,9 @@ public abstract class EndSpikeFeatureSpikeCacheMixin {
             target = "Ljava/util/Collections;shuffle(Ljava/util/List;Ljava/util/Random;)V"))
     private void mcsreasymode$forceFrontTowerHeight(List<?> list, Random random) {
         Collections.shuffle(list, random);
-//        if (!Mcsreasymode.CONFIG.forceFrontTowerM85) {
-//            return;
-//        }
+        if (!Mcsreasymode.CONFIG.forceFrontTowerM85) {
+            return;
+        }
         @SuppressWarnings("unchecked")
         List<Integer> intList = (List<Integer>) list;
         int currentPos = intList.indexOf(MCSREASYMODE$FORCED_HEIGHT_L);

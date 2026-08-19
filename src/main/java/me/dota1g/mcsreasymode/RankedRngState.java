@@ -273,7 +273,7 @@ public final class RankedRngState {
 
     private static final List<BlockPos> pendingRuinedPortalAnimalSpawns = new ArrayList<>();
     private static final EntityType<?>[] RUINED_PORTAL_ANIMAL_TYPES = new EntityType<?>[] {
-            EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.CHICKEN
+            EntityType.COW, EntityType.SHEEP, EntityType.CHICKEN
     };
     private static final int RUINED_PORTAL_ANIMAL_HERD_SIZE = 4;
     private static final int RUINED_PORTAL_ANIMAL_RADIUS_CHUNKS = 3;

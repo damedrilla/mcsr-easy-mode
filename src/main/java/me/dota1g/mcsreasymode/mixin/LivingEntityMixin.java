@@ -5,6 +5,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.BlazeEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
@@ -45,12 +51,58 @@ public abstract class LivingEntityMixin {
 
     @Redirect(method = "dropLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/loot/LootTable;generateLoot(Lnet/minecraft/loot/context/LootContext;Ljava/util/function/Consumer;)V"))
     private void mcsreasymode$trackGeneratedLoot(LootTable lootTable, LootContext context, Consumer<ItemStack> dropper) {
-        lootTable.generateLoot(context, stack -> {
-            if (this.mcsreasymode$trackingBlazeRodDrop && stack.getItem() == Items.BLAZE_ROD && !stack.isEmpty()) {
-                this.mcsreasymode$droppedBlazeRod = true;
+        // Capture generated drops so they can be reordered for animal food priority without affecting other mob logic
+        java.util.List<ItemStack> generated = new java.util.ArrayList<>();
+        lootTable.generateLoot(context, generated::add);
+
+        // Preserve existing blaze rod tracking logic
+        if (this.mcsreasymode$trackingBlazeRodDrop) {
+            for (ItemStack stack : generated) {
+                if (stack != null && !stack.isEmpty() && stack.getItem() == Items.BLAZE_ROD) {
+                    this.mcsreasymode$droppedBlazeRod = true;
+                    break;
+                }
             }
+        }
+
+        // Only reorder for common passive animals so blaze/blaze-rod behavior is untouched
+        Object self = this;
+        boolean reordered = false;
+        if (self instanceof CowEntity || self instanceof SheepEntity || self instanceof ChickenEntity || self instanceof PigEntity || self instanceof RabbitEntity) {
+            java.util.List<ItemStack> food = new java.util.ArrayList<>();
+            java.util.List<ItemStack> others = new java.util.ArrayList<>();
+            for (ItemStack stack : generated) {
+                if (stack != null && !stack.isEmpty() && mcsreasymode$isAnimalFood(stack.getItem())) {
+                    food.add(stack);
+                } else {
+                    others.add(stack);
+                }
+            }
+            if (!food.isEmpty()) {
+                generated.clear();
+                generated.addAll(food);
+                generated.addAll(others);
+                reordered = true;
+            }
+        }
+
+        // Emit drops in (possibly reordered) sequence
+        for (ItemStack stack : generated) {
             dropper.accept(stack);
-        });
+        }
+
+        if (reordered) {
+            Mcsreasymode.debug("Reordered entity drops to prioritize food for looting multiplier on animal drop.");
+        }
+    }
+
+    @Unique
+    private static boolean mcsreasymode$isAnimalFood(Item item) {
+        return item == Items.BEEF || item == Items.COOKED_BEEF
+                || item == Items.CHICKEN || item == Items.COOKED_CHICKEN
+                || item == Items.PORKCHOP || item == Items.COOKED_PORKCHOP
+                || item == Items.MUTTON || item == Items.COOKED_MUTTON
+                || item == Items.RABBIT || item == Items.COOKED_RABBIT;
     }
 
     @Inject(method = "dropLoot", at = @At("TAIL"))

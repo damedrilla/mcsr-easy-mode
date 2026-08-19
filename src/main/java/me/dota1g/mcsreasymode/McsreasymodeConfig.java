@@ -279,6 +279,21 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean funReducedPearlDamage = false;
 
     @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.forceDragonFirstTargetFront")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.forceDragonFirstTargetFront.description")
+    public boolean forceDragonFirstTargetFront = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.forceFrontTowerM85")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.forceFrontTowerM85.description")
+    public boolean forceFrontTowerM85 = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.preventBuriedEndSpawn")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.preventBuriedEndSpawn.description")
+    public boolean preventBuriedEndSpawn = false;
+
+    @Config.Category("fun")
     @Config.Name("speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks")
     @Config.Description("speedrunapi.config.mcsreasymode.option.heldPlaceDelayTicks.description")
     @Config.Hide
@@ -304,6 +319,21 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.showDebugChatLogs")
     @Config.Description("speedrunapi.config.mcsreasymode.option.showDebugChatLogs.description")
     public boolean showDebugChatLogs = false;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.debugForcePieChart")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.debugForcePieChart.description")
+    public boolean debugForcePieChart = true;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.debugShowEasyModeMarker")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.debugShowEasyModeMarker.description")
+    public boolean debugShowEasyModeMarker = true;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.debugHighlightImportantNumbers")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.debugHighlightImportantNumbers.description")
+    public boolean debugHighlightImportantNumbers = true;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hideAdvancementToasts")

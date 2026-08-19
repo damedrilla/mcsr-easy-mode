@@ -47,6 +47,12 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget ssgModeButton;
     private ButtonWidget oneShotForRsgButton;
     private ButtonWidget reducedPearlDamageButton;
+    private ButtonWidget debugForcePieChartButton;
+    private ButtonWidget debugShowEasyModeMarkerButton;
+    private ButtonWidget debugHighlightImportantNumbersButton;
+    private ButtonWidget forceDragonFirstTargetFrontButton;
+    private ButtonWidget forceFrontTowerM85Button;
+    private ButtonWidget preventBuriedEndSpawnButton;
     private SliderWidget heldPlaceSpeedSlider;
     private ButtonWidget handledHotkeysCustomizeButton;
     private ButtonWidget filterExplosionClutterDropsButton;
@@ -98,7 +104,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.qolSectionY = 458;      // was 437
         this.worldgenSectionY = 520; // was 478
         this.funSectionY = 610;      // was 568
-        this.contentHeight = this.funSectionY + 159;
+        this.contentHeight = this.funSectionY + 285; // increased to accommodate added UI and QoL buttons
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -211,10 +217,10 @@ public class McsreasymodeConfigScreen extends Screen {
         }));
         this.persistentCoordinatesCustomizeButton.active = this.config.showPersistentCoordinates;
 
-        // this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
-        //     assert this.client != null;
-        //     this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
-        // }));
+        this.netherTerrainButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
+        }));
         this.filterExplosionClutterDropsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.filterExplosionClutterDrops), button -> {
             this.config.filterExplosionClutterDrops = !this.config.filterExplosionClutterDrops;
             button.setMessage(this.toggleValueText(this.config.filterExplosionClutterDrops));
@@ -223,6 +229,21 @@ public class McsreasymodeConfigScreen extends Screen {
         this.fastLootButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.fastQuickLoot), button -> {
             this.config.fastQuickLoot = !this.config.fastQuickLoot;
             button.setMessage(this.toggleValueText(this.config.fastQuickLoot));
+        }));
+
+        this.debugForcePieChartButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugForcePieChart), button -> {
+            this.config.debugForcePieChart = !this.config.debugForcePieChart;
+            button.setMessage(this.toggleValueText(this.config.debugForcePieChart));
+        }));
+
+        this.debugShowEasyModeMarkerButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugShowEasyModeMarker), button -> {
+            this.config.debugShowEasyModeMarker = !this.config.debugShowEasyModeMarker;
+            button.setMessage(this.toggleValueText(this.config.debugShowEasyModeMarker));
+        }));
+
+        this.debugHighlightImportantNumbersButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugHighlightImportantNumbers), button -> {
+            this.config.debugHighlightImportantNumbers = !this.config.debugHighlightImportantNumbers;
+            button.setMessage(this.toggleValueText(this.config.debugHighlightImportantNumbers));
         }));
 
         this.villageStandardizationButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.standardizeVillages), button -> {
@@ -275,6 +296,21 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.funReducedPearlDamage));
         }));
 
+        this.forceDragonFirstTargetFrontButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.forceDragonFirstTargetFront), button -> {
+            this.config.forceDragonFirstTargetFront = !this.config.forceDragonFirstTargetFront;
+            button.setMessage(this.toggleValueText(this.config.forceDragonFirstTargetFront));
+        }));
+
+        this.forceFrontTowerM85Button = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.forceFrontTowerM85), button -> {
+            this.config.forceFrontTowerM85 = !this.config.forceFrontTowerM85;
+            button.setMessage(this.toggleValueText(this.config.forceFrontTowerM85));
+        }));
+
+        this.preventBuriedEndSpawnButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.preventBuriedEndSpawn), button -> {
+            this.config.preventBuriedEndSpawn = !this.config.preventBuriedEndSpawn;
+            button.setMessage(this.toggleValueText(this.config.preventBuriedEndSpawn));
+        }));
+
         this.heldPlaceSpeedSlider = this.addButton(new HeldPlaceSpeedSlider(this.valueButtonX, 0, this.valueButtonWidth, this.config));
 
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
@@ -311,29 +347,35 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Move Save & Quit", this.toScreenY(this.uiSectionY + 12), mouseX, mouseY, "Moves the pause menu Save & Quit button away from the usual misclick path.");
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 33), mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         this.drawRowLabel(matrices, "Debug Chat Logs", this.toScreenY(this.uiSectionY + 54), mouseX, mouseY, "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.");
-        this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
-        this.drawRowLabel(matrices, "Placement Outline", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Draws a cyan outline around the exact block cell your held block would place into.");
-        this.drawRowLabel(matrices, "Buried Treasure Chunk Assist", this.toScreenY(this.uiSectionY + 117), mouseX, mouseY, "Highlights the solid terrain block at local chunk coordinates 9, 9, including below water.");
-        this.drawRowLabel(matrices, "Async World List", this.toScreenY(this.uiSectionY + 138), mouseX, mouseY, "Loads single-player world metadata in the background. This convenience feature is");
-        this.drawRowLabel(matrices, "Bucket Desync Guard", this.toScreenY(this.uiSectionY + 159), mouseX, mouseY, "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions.");
-        this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 180), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
-        this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 201), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
-        this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 222), mouseX, mouseY, "Shows configurable precise, block, and local chunk coordinates without opening the debug screen.");
-        this.drawRowLabel(matrices, "Search Crafting", this.toScreenY(this.uiSectionY + 243), mouseX, mouseY, "Configure auto-focus and Alt+letter search presets for the crafting recipe book.");
-        this.drawRowLabel(matrices, "World Skin", this.toScreenY(this.uiSectionY + 264), mouseX, mouseY, "Randomly picks a skin from your configured pool each time you join a world.");
+        this.drawRowLabel(matrices, "Debug HUD: Force Pie Chart", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Forces the debug profiler pie chart to be visible.");
+        this.drawRowLabel(matrices, "Debug HUD: Easy Mode Marker", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Adds a right-side 'MCSR Easy Mode' marker to the debug overlay.");
+        this.drawRowLabel(matrices, "Debug HUD: Left Highlights", this.toScreenY(this.uiSectionY + 117), mouseX, mouseY, "Colors 'O:' heightmap entries red and restores custom Facing formatting.");
+        this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 138), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
+        this.drawRowLabel(matrices, "Placement Outline", this.toScreenY(this.uiSectionY + 159), mouseX, mouseY, "Draws a cyan outline around the exact block cell your held block would place into.");
+        this.drawRowLabel(matrices, "Buried Treasure Chunk Assist", this.toScreenY(this.uiSectionY + 180), mouseX, mouseY, "Highlights the solid terrain block at local chunk coordinates 9, 9, including below water.");
+        this.drawRowLabel(matrices, "Async World List", this.toScreenY(this.uiSectionY + 201), mouseX, mouseY, "Loads single-player world metadata in the background. This convenience feature is");
+        this.drawRowLabel(matrices, "Bucket Desync Guard", this.toScreenY(this.uiSectionY + 222), mouseX, mouseY, "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions.");
+        this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 243), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
+        this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 264), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
+        this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 285), mouseX, mouseY, "Shows configurable precise, block, and local chunk coordinates without opening the debug screen.");
+        this.drawRowLabel(matrices, "Search Crafting", this.toScreenY(this.uiSectionY + 306), mouseX, mouseY, "Configure auto-focus and Alt+letter search presets for the crafting recipe book.");
+        this.drawRowLabel(matrices, "World Skin", this.toScreenY(this.uiSectionY + 327), mouseX, mouseY, "Randomly picks a skin from your configured pool each time you join a world.");
         this.drawSectionDivider(matrices, "QoL", this.toScreenY(this.qolSectionY));
         this.drawRowLabel(matrices, "Filter Explosion Clutter Drops", this.toScreenY(this.qolSectionY + 12), mouseX, mouseY, "Removes saplings, seeds, grass, ferns, and flowers dropped from TNT and other explosions.");
         this.drawRowLabel(matrices, "Consistent Fast Looting", this.toScreenY(this.qolSectionY + 33), mouseX, mouseY, "Makes fast looting more forgiving for slower double clicks.");
-        //this.drawRowLabel(matrices, "Nether Terrain Alpha", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Experimental Nether terrain controls for opening terrain while preserving vanilla behavior unless enabled.");
-        this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
-        this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
-        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
+        this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Customize XZ scale and density for terrain generation in the Nether.");
+        this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
+        this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
+        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
         this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
         this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
         this.drawRowLabel(matrices, "One Shot for RSG", this.toScreenY(this.funSectionY + 75), mouseX, mouseY, "When Ranked Piglin String is enabled, turns string trades and pity into a capped 26-36 iron budget for one-shot practice.");
         this.drawRowLabel(matrices, "Reduced Pearl Damage", this.toScreenY(this.funSectionY + 96), mouseX, mouseY, "Removes ender pearl teleport damage for longer throws while preserving short hunger-reset pearls.");
-        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats from 5 to 20 attempts per second. Beds or buckets in either hand force vanilla timing.");
+        this.drawRowLabel(matrices, "Dragon Pathing", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Forces the dragon's first target to the front tower for consistent speedrun practice.");
+        this.drawRowLabel(matrices, "Forced M85 Tower", this.toScreenY(this.funSectionY + 138), mouseX, mouseY, "Forces the front end spike tower to M85 height for consistent speedrun conditions.");
+        this.drawRowLabel(matrices, "End Spawn Culling", this.toScreenY(this.funSectionY + 159), mouseX, mouseY, "Clears terrain around the end spawn platform to eliminate buried and overhang spawns while preserving natural look.");
+        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 180), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats from 5 to 20 attempts per second. Beds or buckets in either hand force vanilla timing.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -401,30 +443,36 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.hotbarHotkeysButton, this.uiSectionY + 33);
         this.setButtonY(this.hotbarHotkeysCustomizeButton, this.uiSectionY + 33);
         this.setButtonY(this.debugChatLogsButton, this.uiSectionY + 54);
-        this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 75);
-        this.setButtonY(this.blockPlacementOutlineButton, this.uiSectionY + 96);
-        this.setButtonY(this.buriedTreasureChunkAssistButton, this.uiSectionY + 117);
-        this.setButtonY(this.asyncWorldListLoadingButton, this.uiSectionY + 138);
-        this.setButtonY(this.bucketDesyncGuardButton, this.uiSectionY + 159);
-        this.setButtonY(this.godsensBoatStatusButton, this.uiSectionY + 180);
-        this.setButtonY(this.blazeSpawnerOverlayButton, this.uiSectionY + 201);
-        this.setButtonY(this.blazeSpawnerOverlayCustomizeButton, this.uiSectionY + 201);
-        this.setButtonY(this.persistentCoordinatesButton, this.uiSectionY + 222);
-        this.setButtonY(this.persistentCoordinatesCustomizeButton, this.uiSectionY + 222);
+        this.setButtonY(this.debugForcePieChartButton, this.uiSectionY + 75);
+        this.setButtonY(this.debugShowEasyModeMarkerButton, this.uiSectionY + 96);
+        this.setButtonY(this.debugHighlightImportantNumbersButton, this.uiSectionY + 117);
+        this.setButtonY(this.hideAdvancementToastsButton, this.uiSectionY + 138);
+        this.setButtonY(this.blockPlacementOutlineButton, this.uiSectionY + 159);
+        this.setButtonY(this.buriedTreasureChunkAssistButton, this.uiSectionY + 180);
+        this.setButtonY(this.asyncWorldListLoadingButton, this.uiSectionY + 201);
+        this.setButtonY(this.bucketDesyncGuardButton, this.uiSectionY + 222);
+        this.setButtonY(this.godsensBoatStatusButton, this.uiSectionY + 243);
+        this.setButtonY(this.blazeSpawnerOverlayButton, this.uiSectionY + 264);
+        this.setButtonY(this.blazeSpawnerOverlayCustomizeButton, this.uiSectionY + 264);
+        this.setButtonY(this.persistentCoordinatesButton, this.uiSectionY + 285);
+        this.setButtonY(this.persistentCoordinatesCustomizeButton, this.uiSectionY + 285);
         this.setButtonY(this.filterExplosionClutterDropsButton, this.qolSectionY + 12);
         this.setButtonY(this.fastLootButton, this.qolSectionY + 33);
-        // this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
-        this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 12);
-        this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 33);
-        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 54);
+        this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
+        this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 33);
+        this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 54);
+        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 75);
         this.setButtonY(this.funMinecartVelocityGlitchButton, this.funSectionY + 12);
         this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
         this.setButtonY(this.ssgModeButton, this.funSectionY + 54);
         this.setButtonY(this.oneShotForRsgButton, this.funSectionY + 75);
         this.setButtonY(this.reducedPearlDamageButton, this.funSectionY + 96);
-        this.setSliderY(this.heldPlaceSpeedSlider, this.funSectionY + 117);
-        this.setButtonY(this.searchCraftingButton, this.uiSectionY + 243);
-        this.setButtonY(this.worldSkinButton, this.uiSectionY + 264);
+        this.setButtonY(this.forceDragonFirstTargetFrontButton, this.funSectionY + 117);
+        this.setButtonY(this.forceFrontTowerM85Button, this.funSectionY + 138);
+        this.setButtonY(this.preventBuriedEndSpawnButton, this.funSectionY + 159);
+        this.setSliderY(this.heldPlaceSpeedSlider, this.funSectionY + 180);
+        this.setButtonY(this.searchCraftingButton, this.uiSectionY + 306);
+        this.setButtonY(this.worldSkinButton, this.uiSectionY + 327);
     }
 
     private void setSliderY(SliderWidget slider, int contentY) {
