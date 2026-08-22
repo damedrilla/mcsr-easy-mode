@@ -316,6 +316,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean showHotbarHotkeys = true;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys.description")
+    public boolean strictHotbarHotkeys = false;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.showDebugChatLogs")
     @Config.Description("speedrunapi.config.mcsreasymode.option.showDebugChatLogs.description")
     public boolean showDebugChatLogs = false;

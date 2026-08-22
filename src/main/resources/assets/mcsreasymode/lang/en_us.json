@@ -14,6 +14,8 @@
   "speedrunapi.config.mcsreasymode.option.moveSaveAndQuitButton.description": "Moves the pause menu Save and Quit button away from the center stack to reduce misclicks.",
   "speedrunapi.config.mcsreasymode.option.showHotbarHotkeys": "Show hotbar hotkeys",
   "speedrunapi.config.mcsreasymode.option.showHotbarHotkeys.description": "Displays keybind labels for hotbar slots and offhand.",
+  "speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys": "Strict hotbar hotkeys",
+  "speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys.description": "Disables mouse-wheel hotbar cycling in-world so slots must be selected with hotkeys. Menu scrolling remains available.",
   "speedrunapi.config.mcsreasymode.option.showDebugChatLogs": "Show debug logs in chat",
   "speedrunapi.config.mcsreasymode.option.showDebugChatLogs.description": "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.",
   "speedrunapi.config.mcsreasymode.option.filterExplosionClutterDrops": "TNT Anti-Clutter",

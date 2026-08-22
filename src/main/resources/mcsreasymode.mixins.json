@@ -66,6 +66,7 @@
     "InGameHudMixin",
     "MobSpawnerBlockEntityRendererMixin",
     "MinecraftClientMixin",
+    "MouseMixin",
     "SelectWorldScreenMixin",
     "SlotAccessor",
     "ToastManagerMixin",

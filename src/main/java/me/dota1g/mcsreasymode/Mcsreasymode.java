@@ -101,6 +101,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.showHotbarHotkeys;
     }
 
+    public static boolean isStrictHotbarHotkeyModeEnabled() {
+        return CONFIG != null && CONFIG.strictHotbarHotkeys;
+    }
+
     public static boolean shouldShowDebugChatLogs() {
         return CONFIG != null && CONFIG.showDebugChatLogs;
     }
