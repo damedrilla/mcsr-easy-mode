@@ -8,6 +8,7 @@
     "AbstractBlockMixin",
     "ExplosionMixin",
     "BastionRemnantGeneratorMixin",
+    "BastionRemnantFeatureConfigAccessor",
     "BlockMixin",
     "BuriedTreasureFeatureMixin",
     "CarverInvoker",
@@ -34,6 +35,7 @@
     "AbstractParentElementInvoker",
     "LootableContainerBlockEntityMixin",
     "MinecraftServerMixin",
+    "MultiNoiseBiomeSourceMixin",
     "HandledScreenQuickLootMixin",
     "MobEntityMixin",
     "MobSpawnerLogicAccessor",
@@ -45,6 +47,7 @@
     "OceanRavineCarverMixin",
     "PiglinBrainMixin",
     "PortalForcerMixin",
+    "PoolStructurePieceMixin",
     "ProjectileEntityMixin",
     "ServerPlayerInteractionManagerMixin",
     "ServerPlayerEntityMixin",
@@ -56,6 +59,7 @@
     "ItemRendererMixin"
   ],
   "client": [
+    "BackgroundRendererMixin",
     "BoatEntityClientMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientPlayerEntityMixin",

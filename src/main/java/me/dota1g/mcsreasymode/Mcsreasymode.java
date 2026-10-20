@@ -93,6 +93,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG == null || CONFIG.disableHoglinAggression;
     }
 
+    public static boolean isDrownedAggressionDisabled() {
+        return CONFIG == null || CONFIG.disableDrownedAggression;
+    }
+
     public static boolean shouldMoveSaveAndQuitButton() {
         return CONFIG == null || CONFIG.moveSaveAndQuitButton;
     }
@@ -114,6 +118,10 @@ public class Mcsreasymode implements ModInitializer {
     }
 
     public static boolean isFilterExplosionClutterDropsEnabled() {return CONFIG != null && CONFIG.filterExplosionClutterDrops;}
+    public static boolean shouldAutoSortEndEntryHotbar() {
+        return CONFIG != null && CONFIG.autoSortEndEntryHotbar;
+    }
+
     public static boolean shouldShowBlockPlacementOutline() {
         return CONFIG != null && CONFIG.showBlockPlacementOutline;
     }
@@ -166,6 +174,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.strongholdAntiCorruption;
     }
 
+    public static boolean isBastionAntiCorruptionEnabled() {
+        return CONFIG != null && CONFIG.bastionAntiCorruption;
+    }
+
     public static boolean isUnderwaterMagmaRavinesEnabled() {
         return CONFIG != null && CONFIG.underwaterMagmaRavines;
     }
@@ -188,6 +200,10 @@ public class Mcsreasymode implements ModInitializer {
 
     public static boolean isFunReducedPearlDamageEnabled() {
         return CONFIG != null && CONFIG.funReducedPearlDamage;
+    }
+
+    public static boolean shouldDisableFog() {
+        return CONFIG != null && CONFIG.funDisableFog;
     }
 
     public static int heldPlaceRatePerSecond() {

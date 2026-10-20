@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Mixin(BastionRemnantGenerator.class)
 public abstract class BastionRemnantGeneratorMixin {
@@ -33,7 +34,7 @@ public abstract class BastionRemnantGeneratorMixin {
     @Inject(method = "addPieces", at = @At("HEAD"), cancellable = true)
     private static void mcsreasymode$rerollBastionRamparts(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, BastionRemnantFeatureConfig config, CallbackInfo ci) {
         BastionRemnantGenerator.init();
-        StructurePoolFeatureConfig selectedConfig = config.getRandom(random);
+        StructurePoolFeatureConfig selectedConfig = mcsreasymode$selectWhitelistedType(config, random);
 
         boolean isHoglinStable = MCSREASYMODE_HOGLIN_STABLE_ORIGIN.equals(selectedConfig.startPool);
         boolean isBridge = MCSREASYMODE_BRIDGE_ORIGIN.equals(selectedConfig.startPool);
@@ -61,6 +62,34 @@ public abstract class BastionRemnantGeneratorMixin {
                 false
         );
         ci.cancel();
+    }
+
+    private static StructurePoolFeatureConfig mcsreasymode$selectWhitelistedType(BastionRemnantFeatureConfig config, ChunkRandom random) {
+        if (Mcsreasymode.CONFIG == null || Mcsreasymode.CONFIG.areAllBastionTypesEnabled()) {
+            return config.getRandom(random);
+        }
+
+        List<StructurePoolFeatureConfig> allowed = ((BastionRemnantFeatureConfigAccessor) (Object) config)
+                .mcsreasymode$getPossibleConfigs()
+                .stream()
+                .filter(candidate -> Mcsreasymode.CONFIG.isBastionTypeEnabled(candidate.startPool.getPath()))
+                .collect(Collectors.toList());
+        if (allowed.isEmpty()) {
+            Mcsreasymode.debugRateLimited(
+                    "worldgen.bastion_whitelist.empty",
+                    "Bastion type whitelist was empty; using vanilla bastion selection.",
+                    5000L
+            );
+            return config.getRandom(random);
+        }
+
+        StructurePoolFeatureConfig selected = allowed.get(random.nextInt(allowed.size()));
+        Mcsreasymode.debugRateLimited(
+                "worldgen.bastion_whitelist.selection",
+                "Bastion type whitelist selected " + selected.startPool.getPath() + ".",
+                1000L
+        );
+        return selected;
     }
 
     private static void mcsreasymode$rerollHoglinStable(ChunkGenerator chunkGenerator, StructureManager structureManager, BlockPos pos, List<StructurePiece> pieces, ChunkRandom random, StructurePoolFeatureConfig selectedConfig, CallbackInfo ci) {

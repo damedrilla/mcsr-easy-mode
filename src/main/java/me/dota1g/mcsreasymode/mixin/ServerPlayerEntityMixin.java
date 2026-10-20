@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
+import me.dota1g.mcsreasymode.EndEntryHotbarSorter;
 import me.dota1g.mcsreasymode.RankedRngState;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -10,12 +11,23 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
+    @Unique
+    private boolean mcsreasymode$sortAfterEndEntry;
+
+    @Inject(method = "changeDimension", at = @At("HEAD"))
+    private void mcsreasymode$rememberEndEntry(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        this.mcsreasymode$sortAfterEndEntry = player.getServerWorld().getRegistryKey() == World.OVERWORLD
+                && destination.getRegistryKey() == World.END;
+    }
+
     @Inject(method = "changeDimension", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/PortalForcer;createPortal(Lnet/minecraft/entity/Entity;)Z",
@@ -49,6 +61,22 @@ public abstract class ServerPlayerEntityMixin {
     @Inject(method = "changeDimension", at = @At("RETURN"))
     private void mcsreasymode$clearUnusedBlindPortalSurface(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
         RankedRngState.clearPendingBlindPortalSurface();
+    }
+
+    @Inject(method = "changeDimension", at = @At("RETURN"))
+    private void mcsreasymode$sortEndEntryHotbar(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
+        boolean shouldSort = this.mcsreasymode$sortAfterEndEntry;
+        this.mcsreasymode$sortAfterEndEntry = false;
+        if (!shouldSort || !Mcsreasymode.shouldAutoSortEndEntryHotbar() || cir.getReturnValue() == null) {
+            return;
+        }
+
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (destination.getRegistryKey() != World.END || player.isCreative() || player.isSpectator()) {
+            return;
+        }
+
+        EndEntryHotbarSorter.sort(player);
     }
 
     private int mcsreasymode$getGeneratedSurfaceY(ServerWorld destination, int x, int z) {

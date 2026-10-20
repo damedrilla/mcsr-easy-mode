@@ -176,6 +176,18 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean rankedRuinedPortalAnimals = false;
 
     @Config.Hide
+    public boolean bastionHousingEnabled = true;
+
+    @Config.Hide
+    public boolean bastionStablesEnabled = true;
+
+    @Config.Hide
+    public boolean bastionTreasureEnabled = true;
+
+    @Config.Hide
+    public boolean bastionBridgeEnabled = true;
+
+    @Config.Hide
     public boolean fastQuickLoot = false;
 
     @Config.Category("mobs")
@@ -193,15 +205,57 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.disableHoglinAggression.description")
     public boolean disableHoglinAggression = true;
 
+    @Config.Category("mobs")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.disableDrownedAggression")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.disableDrownedAggression.description")
+    public boolean disableDrownedAggression = true;
+
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.filterExplosionClutterDrops")
     @Config.Description("speedrunapi.config.mcsreasymode.option.filterExplosionClutterDrops.description")
     public boolean filterExplosionClutterDrops = false;
 
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.autoSortEndEntryHotbar")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.autoSortEndEntryHotbar.description")
+    public boolean autoSortEndEntryHotbar = false;
+
     @Config.Category("worldgen")
     @Config.Name("speedrunapi.config.mcsreasymode.option.openNetherTerrain")
     @Config.Description("speedrunapi.config.mcsreasymode.option.openNetherTerrain.description")
     public boolean openNetherTerrain = false;
+
+    @Config.Hide
+    public boolean removeBasaltDeltas = false;
+
+    @Config.Hide
+    public BasaltReplacementBiome basaltReplacementBiome = BasaltReplacementBiome.NETHER_WASTES;
+
+    public enum BasaltReplacementBiome {
+        NETHER_WASTES("Nether Wastes"),
+        SOUL_SAND_VALLEY("Soul Sand Valley"),
+        CRIMSON_FOREST("Crimson Forest"),
+        WARPED_FOREST("Warped Forest");
+
+        public final String displayName;
+
+        BasaltReplacementBiome(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public BasaltReplacementBiome next() {
+            return values()[(ordinal() + 1) % values().length];
+        }
+
+        public net.minecraft.world.biome.Biome biome() {
+            switch (this) {
+                case SOUL_SAND_VALLEY: return net.minecraft.world.biome.Biomes.SOUL_SAND_VALLEY;
+                case CRIMSON_FOREST: return net.minecraft.world.biome.Biomes.CRIMSON_FOREST;
+                case WARPED_FOREST: return net.minecraft.world.biome.Biomes.WARPED_FOREST;
+                default: return net.minecraft.world.biome.Biomes.NETHER_WASTES;
+            }
+        }
+    }
 
     @Config.Category("worldgen")
     @Config.Name("speedrunapi.config.mcsreasymode.option.netherTerrainXzScale")
@@ -249,6 +303,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean strongholdAntiCorruption = false;
 
     @Config.Category("worldgen")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.bastionAntiCorruption")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.bastionAntiCorruption.description")
+    public boolean bastionAntiCorruption = false;
+
+    @Config.Category("worldgen")
     @Config.Name("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines")
     @Config.Description("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines.description")
     public boolean underwaterMagmaRavines = false;
@@ -279,9 +338,20 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean funReducedPearlDamage = false;
 
     @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.funDisableFog")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.funDisableFog.description")
+    public boolean funDisableFog = false;
+
+    @Config.Category("fun")
     @Config.Name("speedrunapi.config.mcsreasymode.option.forceDragonFirstTargetFront")
     @Config.Description("speedrunapi.config.mcsreasymode.option.forceDragonFirstTargetFront.description")
     public boolean forceDragonFirstTargetFront = false;
+
+    @Config.Category("fun")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.dragonMinCirclingY")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.dragonMinCirclingY.description")
+    @Config.Numbers.Whole.Bounds(min = 0, max = 255)
+    public int dragonMinCirclingY = 0;
 
     @Config.Category("fun")
     @Config.Name("speedrunapi.config.mcsreasymode.option.forceFrontTowerM85")
@@ -514,6 +584,41 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         return !this.areAllRngFeaturesVanilla();
     }
 
+    public boolean isBastionTypeEnabled(String startPoolPath) {
+        switch (startPoolPath) {
+            case "bastion/units/base":
+                return this.bastionHousingEnabled;
+            case "bastion/hoglin_stable/origin":
+                return this.bastionStablesEnabled;
+            case "bastion/treasure/starters":
+                return this.bastionTreasureEnabled;
+            case "bastion/bridge/start":
+                return this.bastionBridgeEnabled;
+            default:
+                return true;
+        }
+    }
+
+    public int enabledBastionTypeCount() {
+        int count = 0;
+        if (this.bastionHousingEnabled) count++;
+        if (this.bastionStablesEnabled) count++;
+        if (this.bastionTreasureEnabled) count++;
+        if (this.bastionBridgeEnabled) count++;
+        return count;
+    }
+
+    public boolean areAllBastionTypesEnabled() {
+        return this.enabledBastionTypeCount() == 4;
+    }
+
+    public void setAllBastionTypesEnabled(boolean enabled) {
+        this.bastionHousingEnabled = enabled;
+        this.bastionStablesEnabled = enabled;
+        this.bastionTreasureEnabled = enabled;
+        this.bastionBridgeEnabled = enabled;
+    }
+
     public void updateRngModeFromFeatures() {
         if (this.areAllRngFeaturesRanked()) {
             this.rngMode = RngMode.RANKED;
@@ -544,6 +649,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             }
             if (!jsonObject.has("disableHoglinAggression")) {
                 jsonObject.addProperty("disableHoglinAggression", oldValue);
+            }
+            if (!jsonObject.has("disableDrownedAggression")) {
+                jsonObject.addProperty("disableDrownedAggression", oldValue);
             }
         }
         if (jsonObject.has("rngMode")) {

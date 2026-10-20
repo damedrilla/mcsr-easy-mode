@@ -26,6 +26,37 @@ The main config screen is scrollable and uses section dividers with compact rows
 
 Hover over labels to see short tooltips.
 
+## Basalt Delta Replacement
+
+Open **Worldgen -> Nether Terrain -> Customize** and turn **Remove Basalt Deltas**
+on. **Replace With** cycles through Nether Wastes (default), Soul Sand Valley,
+Crimson Forest, and Warped Forest. Removal is off by default and works independently
+of Open Nether Terrain and its terrain presets. The settings are saved as
+`removeBasaltDeltas` and `basaltReplacementBiome`.
+
+The replacement keeps the original basalt regions' climate positions and uses
+the selected biome's surfaces, decorations, mobs, and structure eligibility.
+Set it before loading a world. Already generated chunks stay unchanged; changing
+the setting in an existing world can create borders with newly generated chunks.
+
+## Minimum Dragon Circling Height
+
+In the Fun section, the **Minimum Dragon Circling Y** slider below Dragon Pathing
+sets `dragonMinCirclingY` from 0 to 255. **0 (Off)** is the default. Settings save
+when the config screen closes.
+
+Positive values raise circling targets below that world Y, including the forced
+first target from Dragon Pathing. Higher targets keep their original height and
+all targets retain their X/Z coordinates. The existing 0-15 random height offset
+is applied before the floor, with no additional random draws.
+
+This controls target height, not the dragon's instantaneous position. Fireball
+strafing, landing approach, and the final descent to the fountain are unchanged;
+the setting does not guarantee a particular perch height. If configuration is
+updated while circling, the floor is checked on the next server tick. Lowering
+or disabling it does not undo a target already raised; new targets use the new
+setting.
+
 ## RNG Submenu
 
 The RNG submenu is scrollable and supports:

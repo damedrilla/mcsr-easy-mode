@@ -1,5 +1,6 @@
 package me.dota1g.mcsreasymode.mixin;
 
+import me.dota1g.mcsreasymode.BastionProtection;
 import me.dota1g.mcsreasymode.StrongholdProtection;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.gen.StructureAccessor;
@@ -14,10 +15,12 @@ public abstract class ChunkGeneratorFeatureMixin {
     @Inject(method = "generateFeatures", at = @At("HEAD"))
     private void mcsreasymode$beginStrongholdProtection(ChunkRegion region, StructureAccessor accessor, CallbackInfo ci) {
         StrongholdProtection.beginFeatureGeneration();
+        BastionProtection.beginFeatureGeneration();
     }
 
     @Inject(method = "generateFeatures", at = @At("RETURN"))
     private void mcsreasymode$restoreStronghold(ChunkRegion region, StructureAccessor accessor, CallbackInfo ci) {
         StrongholdProtection.restoreAndEnd(region);
+        BastionProtection.restoreAndEnd(region);
     }
 }

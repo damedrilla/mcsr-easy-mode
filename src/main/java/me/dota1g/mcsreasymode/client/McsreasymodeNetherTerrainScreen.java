@@ -25,6 +25,7 @@ public class McsreasymodeNetherTerrainScreen extends Screen {
     private final McsreasymodeConfig config;
     private final Screen parent;
     private ButtonWidget enabledButton;
+    private ButtonWidget replacementButton;
 
     public McsreasymodeNetherTerrainScreen(McsreasymodeConfig config, Screen parent) {
         super(new LiteralText("Nether Terrain Alpha"));
@@ -36,7 +37,7 @@ public class McsreasymodeNetherTerrainScreen extends Screen {
     protected void init() {
         int contentWidth = Math.min(360, this.width - 36);
         int x = this.width / 2 - contentWidth / 2;
-        int y = Math.max(34, this.height / 2 - 96);
+        int y = Math.max(34, this.height / 2 - 100);
         int halfWidth = (contentWidth - 4) / 2;
 
         this.enabledButton = this.addButton(new ButtonWidget(x, y, contentWidth, 20, this.enabledText(), button -> {
@@ -44,20 +45,42 @@ public class McsreasymodeNetherTerrainScreen extends Screen {
             button.setMessage(this.enabledText());
         }));
 
-        this.addButton(new TerrainSliderWidget(x, y + 32, contentWidth, 20, "XZ Scale", AREG_XZ_SCALE, VANILLA_XZ_SCALE, this.config.netherTerrainXzScale, value -> this.config.netherTerrainXzScale = value));
-        this.addButton(new TerrainSliderWidget(x, y + 58, contentWidth, 20, "Density Factor", VANILLA_DENSITY_FACTOR, AREG_DENSITY_FACTOR, this.config.netherTerrainDensityFactor, value -> this.config.netherTerrainDensityFactor = value));
-        this.addButton(new TerrainSliderWidget(x, y + 84, contentWidth, 20, "Density Offset", AREG_DENSITY_OFFSET, VANILLA_DENSITY_OFFSET, this.config.netherTerrainDensityOffset, value -> this.config.netherTerrainDensityOffset = value));
+        this.addButton(new TerrainSliderWidget(x, y + 24, contentWidth, 20, "XZ Scale", AREG_XZ_SCALE, VANILLA_XZ_SCALE, this.config.netherTerrainXzScale, value -> this.config.netherTerrainXzScale = value));
+        this.addButton(new TerrainSliderWidget(x, y + 48, contentWidth, 20, "Density Factor", VANILLA_DENSITY_FACTOR, AREG_DENSITY_FACTOR, this.config.netherTerrainDensityFactor, value -> this.config.netherTerrainDensityFactor = value));
+        this.addButton(new TerrainSliderWidget(x, y + 72, contentWidth, 20, "Density Offset", AREG_DENSITY_OFFSET, VANILLA_DENSITY_OFFSET, this.config.netherTerrainDensityOffset, value -> this.config.netherTerrainDensityOffset = value));
 
-        this.addButton(new ButtonWidget(x, y + 116, halfWidth, 20, new LiteralText("Vanilla Values"), button -> {
+        if (this.config.basaltReplacementBiome == null) {
+            this.config.basaltReplacementBiome = McsreasymodeConfig.BasaltReplacementBiome.NETHER_WASTES;
+        }
+        this.addButton(new ButtonWidget(x, y + 96, contentWidth, 20, this.basaltText(), button -> {
+            this.config.removeBasaltDeltas = !this.config.removeBasaltDeltas;
+            button.setMessage(this.basaltText());
+            this.replacementButton.active = this.config.removeBasaltDeltas;
+        }));
+        this.replacementButton = this.addButton(new ButtonWidget(x, y + 120, contentWidth, 20, this.replacementText(), button -> {
+            this.config.basaltReplacementBiome = this.config.basaltReplacementBiome.next();
+            button.setMessage(this.replacementText());
+        }));
+        this.replacementButton.active = this.config.removeBasaltDeltas;
+
+        this.addButton(new ButtonWidget(x, y + 144, halfWidth, 20, new LiteralText("Vanilla Values"), button -> {
             this.setTerrainValues(VANILLA_XZ_SCALE, VANILLA_DENSITY_FACTOR, VANILLA_DENSITY_OFFSET);
             this.init(this.client, this.width, this.height);
         }));
-        this.addButton(new ButtonWidget(x + halfWidth + 4, y + 116, halfWidth, 20, new LiteralText("AreEssGee Values"), button -> {
+        this.addButton(new ButtonWidget(x + halfWidth + 4, y + 144, halfWidth, 20, new LiteralText("AreEssGee Values"), button -> {
             this.setTerrainValues(AREG_XZ_SCALE, AREG_DENSITY_FACTOR, AREG_DENSITY_OFFSET);
             this.init(this.client, this.width, this.height);
         }));
 
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
+    }
+
+    private Text basaltText() {
+        return new LiteralText("Remove Basalt Deltas: " + (this.config.removeBasaltDeltas ? "On" : "Off"));
+    }
+
+    private Text replacementText() {
+        return new LiteralText("Replace With: " + this.config.basaltReplacementBiome.displayName);
     }
 
     private Text enabledText() {

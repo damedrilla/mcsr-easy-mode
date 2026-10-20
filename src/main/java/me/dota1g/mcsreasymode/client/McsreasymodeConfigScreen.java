@@ -23,6 +23,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget piglinAggressionButton;
     private ButtonWidget ghastAggressionButton;
     private ButtonWidget hoglinAggressionButton;
+    private ButtonWidget drownedAggressionButton;
     private ButtonWidget moveSaveAndQuitButton;
     private ButtonWidget hotbarHotkeysButton;
     private ButtonWidget hotbarHotkeysCustomizeButton;
@@ -42,12 +43,15 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget oceanRavinesButton;
     private ButtonWidget villageStandardizationButton;
     private ButtonWidget strongholdAntiCorruptionButton;
+    private ButtonWidget bastionAntiCorruptionButton;
+    private ButtonWidget bastionTypesButton;
     private ButtonWidget underwaterMagmaRavinesButton;
     private ButtonWidget funMinecartVelocityGlitchButton;
     private ButtonWidget minecartVelocityDebuggerButton;
     private ButtonWidget ssgModeButton;
     private ButtonWidget oneShotForRsgButton;
     private ButtonWidget reducedPearlDamageButton;
+    private ButtonWidget disableFogButton;
     private ButtonWidget debugForcePieChartButton;
     private ButtonWidget debugShowEasyModeMarkerButton;
     private ButtonWidget debugHighlightImportantNumbersButton;
@@ -55,10 +59,12 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget forceFrontTowerM85Button;
     private ButtonWidget preventBuriedEndSpawnButton;
     private SliderWidget heldPlaceSpeedSlider;
+    private SliderWidget dragonMinCirclingYSlider;
     private ButtonWidget filterExplosionClutterDropsButton;
     private ButtonWidget searchCraftingButton;
     private ButtonWidget worldSkinButton;
     private ButtonWidget fastLootButton;
+    private ButtonWidget autoSortEndEntryHotbarButton;
     private int qolSectionY;
     private int sectionLeftX;
     private int sectionRightX;
@@ -100,11 +106,11 @@ public class McsreasymodeConfigScreen extends Screen {
         this.sectionRightX = rightX;
         this.rngSectionY = 6;
         this.aggressionSectionY = 62;
-        this.uiSectionY = 154;
-        this.qolSectionY = 541;
-        this.worldgenSectionY = 611;
-        this.funSectionY = 743;
-        this.contentHeight = this.funSectionY + 214;
+        this.uiSectionY = 175;
+        this.qolSectionY = 562;
+        this.worldgenSectionY = 653;
+        this.funSectionY = 827;
+        this.contentHeight = this.funSectionY + 256;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -130,6 +136,11 @@ public class McsreasymodeConfigScreen extends Screen {
         this.hoglinAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disableHoglinAggression), button -> {
             this.config.disableHoglinAggression = !this.config.disableHoglinAggression;
             button.setMessage(this.aggressionValueText(this.config.disableHoglinAggression));
+        }));
+
+        this.drownedAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disableDrownedAggression), button -> {
+            this.config.disableDrownedAggression = !this.config.disableDrownedAggression;
+            button.setMessage(this.aggressionValueText(this.config.disableDrownedAggression));
         }));
 
         this.moveSaveAndQuitButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.moveSaveAndQuitButton), button -> {
@@ -242,6 +253,11 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.fastQuickLoot));
         }));
 
+        this.autoSortEndEntryHotbarButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.autoSortEndEntryHotbar), button -> {
+            this.config.autoSortEndEntryHotbar = !this.config.autoSortEndEntryHotbar;
+            button.setMessage(this.toggleValueText(this.config.autoSortEndEntryHotbar));
+        }));
+
         this.debugForcePieChartButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugForcePieChart), button -> {
             this.config.debugForcePieChart = !this.config.debugForcePieChart;
             button.setMessage(this.toggleValueText(this.config.debugForcePieChart));
@@ -265,6 +281,16 @@ public class McsreasymodeConfigScreen extends Screen {
         this.strongholdAntiCorruptionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.strongholdAntiCorruption), button -> {
             this.config.strongholdAntiCorruption = !this.config.strongholdAntiCorruption;
             button.setMessage(this.toggleValueText(this.config.strongholdAntiCorruption));
+        }));
+
+        this.bastionAntiCorruptionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.bastionAntiCorruption), button -> {
+            this.config.bastionAntiCorruption = !this.config.bastionAntiCorruption;
+            button.setMessage(this.toggleValueText(this.config.bastionAntiCorruption));
+        }));
+
+        this.bastionTypesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeBastionTypesScreen(this.config, this));
         }));
 
         this.underwaterMagmaRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.underwaterMagmaRavines), button -> {
@@ -307,10 +333,17 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.funReducedPearlDamage));
         }));
 
+        this.disableFogButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funDisableFog), button -> {
+            this.config.funDisableFog = !this.config.funDisableFog;
+            button.setMessage(this.toggleValueText(this.config.funDisableFog));
+        }));
+
         this.forceDragonFirstTargetFrontButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.forceDragonFirstTargetFront), button -> {
             this.config.forceDragonFirstTargetFront = !this.config.forceDragonFirstTargetFront;
             button.setMessage(this.toggleValueText(this.config.forceDragonFirstTargetFront));
         }));
+
+        this.dragonMinCirclingYSlider = this.addButton(new DragonMinCirclingYSlider(this.valueButtonX, 0, this.valueButtonWidth, this.config));
 
         this.forceFrontTowerM85Button = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.forceFrontTowerM85), button -> {
             this.config.forceFrontTowerM85 = !this.config.forceFrontTowerM85;
@@ -356,6 +389,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Piglins", this.toScreenY(this.aggressionSectionY + 12), mouseX, mouseY, "Spoofs gold armor behavior so piglins stay neutral without taking an armor slot.");
         this.drawRowLabel(matrices, "Ghasts", this.toScreenY(this.aggressionSectionY + 33), mouseX, mouseY, "Prevents ghasts from choosing the player as an attack target.");
         this.drawRowLabel(matrices, "Hoglins", this.toScreenY(this.aggressionSectionY + 54), mouseX, mouseY, "Prevents hoglins from choosing the player as an attack target.");
+        this.drawRowLabel(matrices, "Drowned", this.toScreenY(this.aggressionSectionY + 75), mouseX, mouseY, "Prevents drowned from targeting the player with melee attacks or thrown tridents.");
         this.drawRowLabel(matrices, "Move Save & Quit", this.toScreenY(this.uiSectionY + 12), mouseX, mouseY, "Moves the pause menu Save & Quit button away from the usual misclick path.");
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 33), mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         this.drawRowLabel(matrices, "Debug Chat Logs", this.toScreenY(this.uiSectionY + 54), mouseX, mouseY, "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.");
@@ -375,20 +409,25 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Strict Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 348), mouseX, mouseY, "Disables mouse-wheel hotbar cycling in-world so slots can only be selected with hotkeys. Menu scrolling remains available.");
         this.drawRowLabel(matrices, "Filter Explosion Clutter Drops", this.toScreenY(this.qolSectionY + 12), mouseX, mouseY, "Removes saplings, seeds, grass, ferns, and flowers dropped from TNT and other explosions.");
         this.drawRowLabel(matrices, "Consistent Fast Looting", this.toScreenY(this.qolSectionY + 33), mouseX, mouseY, "Makes fast looting more forgiving for slower double clicks.");
+        this.drawRowLabel(matrices, "End Entry Hotbar Sort", this.toScreenY(this.qolSectionY + 54), mouseX, mouseY, "On End entry, sorts safe food, pickaxe, bow, bed, 32+ matching solid blocks, blast-resistant blocks, and pearls into slots 1-7.");
         this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Customize XZ scale and density for terrain generation in the Nether.");
         this.drawRowLabel(matrices, "Ocean Ravines", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Customize ocean ravine generation, rarity, and width.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
-        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 96), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
+        this.drawRowLabel(matrices, "Bastion Anti-Corruption", this.toScreenY(this.worldgenSectionY + 96), mouseX, mouseY, "Protects generated bastion blocks, interiors, and block entities from later biome features such as basalt columns.");
+        this.drawRowLabel(matrices, "Bastion Types", this.toScreenY(this.worldgenSectionY + 117), mouseX, mouseY, "Choose which vanilla bastion types may generate. Multiple types can be enabled together.");
+        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 138), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
         this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
         this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
         this.drawRowLabel(matrices, "One Shot for RSG", this.toScreenY(this.funSectionY + 75), mouseX, mouseY, "When Ranked Piglin String is enabled, turns string trades and pity into a capped 26-36 iron budget for one-shot practice.");
         this.drawRowLabel(matrices, "Reduced Pearl Damage", this.toScreenY(this.funSectionY + 96), mouseX, mouseY, "Removes ender pearl teleport damage for longer throws while preserving short hunger-reset pearls.");
         this.drawRowLabel(matrices, "Dragon Pathing", this.toScreenY(this.funSectionY + 117), mouseX, mouseY, "Forces the dragon's first target to the front tower for consistent speedrun practice.");
-        this.drawRowLabel(matrices, "Forced M85 Tower", this.toScreenY(this.funSectionY + 138), mouseX, mouseY, "Forces the front end spike tower to M85 height for consistent speedrun conditions.");
-        this.drawRowLabel(matrices, "End Spawn Culling", this.toScreenY(this.funSectionY + 159), mouseX, mouseY, "Clears terrain around the end spawn platform to eliminate buried and overhang spawns while preserving natural look.");
-        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 180), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats from 5 to 20 attempts per second. Beds or buckets in either hand force vanilla timing.");
+        this.drawRowLabel(matrices, "Minimum Dragon Circling Y", this.toScreenY(this.funSectionY + 138), mouseX, mouseY, "Minimum world Y for circling targets. 0 is Off. Does not set landing height or instantly raise the dragon.");
+        this.drawRowLabel(matrices, "Forced M85 Tower", this.toScreenY(this.funSectionY + 159), mouseX, mouseY, "Forces the front end spike tower to M85 height for consistent speedrun conditions.");
+        this.drawRowLabel(matrices, "End Spawn Culling", this.toScreenY(this.funSectionY + 180), mouseX, mouseY, "Clears terrain around the end spawn platform to eliminate buried and overhang spawns while preserving natural look.");
+        this.drawRowLabel(matrices, "Hold Place Speed", this.toScreenY(this.funSectionY + 201), mouseX, mouseY, "Changes held-use repeat speed for blocks and boats from 5 to 20 attempts per second. Beds or buckets in either hand force vanilla timing.");
+        this.drawRowLabel(matrices, "Disable Fog", this.toScreenY(this.funSectionY + 222), mouseX, mouseY, "Removes distance, water, lava, and status-effect fog. This practice convenience is not intended for verified speedruns.");
         this.drawScrollBar(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.renderHoveredTooltip(matrices, mouseX, mouseY);
@@ -452,6 +491,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.piglinAggressionButton, this.aggressionSectionY + 12);
         this.setButtonY(this.ghastAggressionButton, this.aggressionSectionY + 33);
         this.setButtonY(this.hoglinAggressionButton, this.aggressionSectionY + 54);
+        this.setButtonY(this.drownedAggressionButton, this.aggressionSectionY + 75);
         this.setButtonY(this.moveSaveAndQuitButton, this.uiSectionY + 12);
         this.setButtonY(this.hotbarHotkeysButton, this.uiSectionY + 33);
         this.setButtonY(this.hotbarHotkeysCustomizeButton, this.uiSectionY + 33);
@@ -471,20 +511,25 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.persistentCoordinatesCustomizeButton, this.uiSectionY + 285);
         this.setButtonY(this.filterExplosionClutterDropsButton, this.qolSectionY + 12);
         this.setButtonY(this.fastLootButton, this.qolSectionY + 33);
+        this.setButtonY(this.autoSortEndEntryHotbarButton, this.qolSectionY + 54);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.oceanRavinesButton, this.worldgenSectionY + 33);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 54);
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 75);
-        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 96);
+        this.setButtonY(this.bastionAntiCorruptionButton, this.worldgenSectionY + 96);
+        this.setButtonY(this.bastionTypesButton, this.worldgenSectionY + 117);
+        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 138);
         this.setButtonY(this.funMinecartVelocityGlitchButton, this.funSectionY + 12);
         this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
         this.setButtonY(this.ssgModeButton, this.funSectionY + 54);
         this.setButtonY(this.oneShotForRsgButton, this.funSectionY + 75);
         this.setButtonY(this.reducedPearlDamageButton, this.funSectionY + 96);
         this.setButtonY(this.forceDragonFirstTargetFrontButton, this.funSectionY + 117);
-        this.setButtonY(this.forceFrontTowerM85Button, this.funSectionY + 138);
-        this.setButtonY(this.preventBuriedEndSpawnButton, this.funSectionY + 159);
-        this.setSliderY(this.heldPlaceSpeedSlider, this.funSectionY + 180);
+        this.setSliderY(this.dragonMinCirclingYSlider, this.funSectionY + 138);
+        this.setButtonY(this.forceFrontTowerM85Button, this.funSectionY + 159);
+        this.setButtonY(this.preventBuriedEndSpawnButton, this.funSectionY + 180);
+        this.setSliderY(this.heldPlaceSpeedSlider, this.funSectionY + 201);
+        this.setButtonY(this.disableFogButton, this.funSectionY + 222);
         this.setButtonY(this.searchCraftingButton, this.uiSectionY + 306);
         this.setButtonY(this.worldSkinButton, this.uiSectionY + 327);
         this.setButtonY(this.strictHotbarHotkeysButton, this.uiSectionY + 348);
@@ -525,6 +570,31 @@ public class McsreasymodeConfigScreen extends Screen {
         int thumbY = trackTop + (thumbTravel <= 0 ? 0 : this.scrollOffset * thumbTravel / maxScroll);
         fill(matrices, trackX, trackTop, trackX + 4, trackBottom, 0x66000000);
         fill(matrices, trackX, thumbY, trackX + 4, thumbY + thumbHeight, 0xFFAAAAAA);
+    }
+
+    private static class DragonMinCirclingYSlider extends SliderWidget {
+        private final McsreasymodeConfig config;
+
+        DragonMinCirclingYSlider(int x, int y, int width, McsreasymodeConfig config) {
+            super(x, y, width, 20, new LiteralText(""), Math.max(0, Math.min(255, config.dragonMinCirclingY)) / 255.0D);
+            this.config = config;
+            this.updateMessage();
+        }
+
+        @Override
+        protected void updateMessage() {
+            int minimumY = this.minimumY();
+            this.setMessage(new LiteralText(minimumY == 0 ? "Off" : "Y = " + minimumY));
+        }
+
+        @Override
+        protected void applyValue() {
+            this.config.dragonMinCirclingY = this.minimumY();
+        }
+
+        private int minimumY() {
+            return (int) Math.round(this.value * 255.0D);
+        }
     }
 
     private static class HeldPlaceSpeedSlider extends SliderWidget {

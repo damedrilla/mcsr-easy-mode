@@ -1,5 +1,6 @@
 package me.dota1g.mcsreasymode.mixin;
 
+import me.dota1g.mcsreasymode.BastionProtection;
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.RankedRngState;
 import me.dota1g.mcsreasymode.SsgModeState;
@@ -25,6 +26,7 @@ public abstract class MinecraftServerMixin {
         RankedRngState.reset();
         SsgModeState.reset();
         StrongholdProtection.reset();
+        BastionProtection.reset();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
