@@ -37,19 +37,27 @@ public class McsreasymodePersistentCoordinatesScreen extends Screen {
             this.config.persistentCoordinatesLocalChunk = !this.config.persistentCoordinatesLocalChunk;
             button.setMessage(this.localChunkText());
         }));
+        this.addButton(new ButtonWidget(x, y + 72, width, 20, this.rotationText(), button -> {
+            this.config.persistentCoordinatesRotation = !this.config.persistentCoordinatesRotation;
+            button.setMessage(this.rotationText());
+        }));
         this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> this.onClose()));
     }
 
     private LiteralText preciseText() {
-        return this.toggleText("Coordinates", this.config.persistentCoordinatesPrecise);
+        return this.toggleText("Precise Coordinates (XYZ)", this.config.persistentCoordinatesPrecise);
     }
 
     private LiteralText blockText() {
-        return this.toggleText("Block Coordinates", this.config.persistentCoordinatesBlock);
+        return this.toggleText("Block Coordinates (B)", this.config.persistentCoordinatesBlock);
     }
 
     private LiteralText localChunkText() {
-        return this.toggleText("Local Chunk Coordinates", this.config.persistentCoordinatesLocalChunk);
+        return this.toggleText("Local Chunk Coordinates (LC)", this.config.persistentCoordinatesLocalChunk);
+    }
+
+    private LiteralText rotationText() {
+        return this.toggleText("Yaw / Pitch / Facing", this.config.persistentCoordinatesRotation);
     }
 
     private LiteralText toggleText(String label, boolean enabled) {

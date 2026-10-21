@@ -11,7 +11,6 @@
     "BastionRemnantFeatureConfigAccessor",
     "BlockMixin",
     "BuriedTreasureFeatureMixin",
-    "CarverInvoker",
     "RuinedPortalFeatureStartMixin",
     "ChestBlockMixin",
     "ChunkGeneratorTypePresetMixin",
@@ -53,8 +52,6 @@
     "ServerPlayerEntityMixin",
     "StrongholdPieceMixin",
     "StructurePieceMixin",
-    "UnderwaterCaveCarverInvoker",
-    "UnderwaterRavineCarverMixin",
     "VillageGeneratorMixin",
     "ItemRendererMixin"
   ],

@@ -178,10 +178,6 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.bastionAntiCorruption;
     }
 
-    public static boolean isUnderwaterMagmaRavinesEnabled() {
-        return CONFIG != null && CONFIG.underwaterMagmaRavines;
-    }
-
     public static boolean isFunMinecartVelocityGlitchEnabled() {
         return CONFIG != null && CONFIG.funStackedMinecartVelocityGlitch;
     }

@@ -26,6 +26,24 @@ The main config screen is scrollable and uses section dividers with compact rows
 
 Hover over labels to see short tooltips.
 
+## Persistent Coordinates
+
+Enable **Persistent Coordinates** in the UI section, then open **Customize** to
+choose the visible rows:
+
+- `XYZ`: precise player coordinates.
+- `B`: block coordinates (floored, including negative positions).
+- `LC`: local chunk coordinates, from 0 to 15 on each axis.
+- `Y: 90.0 P: 0.0 FD: West (-X)`: yaw and pitch in degrees, plus horizontal facing
+  (North `-Z`, South `+Z`, East `+X`, or West `-X`). Enable **Yaw / Pitch / Facing** to show this row;
+  it is off by default. Yaw is wrapped to the range -180 to 180 degrees.
+
+When Artificial ZSG is installed and its virtual coordinates apply to the current
+dimension, XYZ, B, and LC use that coordinate system and carry a `(V)` marker.
+This follows Artificial ZSG's Overworld and Nether rules; Y is unchanged. With
+the mod absent or virtual coordinates disabled, actual coordinates are shown.
+These settings only affect the HUD and do not move the player or change the world.
+
 ## Basalt Delta Replacement
 
 Open **Worldgen -> Nether Terrain -> Customize** and turn **Remove Basalt Deltas**

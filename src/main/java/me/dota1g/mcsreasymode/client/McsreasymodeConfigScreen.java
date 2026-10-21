@@ -45,7 +45,6 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget strongholdAntiCorruptionButton;
     private ButtonWidget bastionAntiCorruptionButton;
     private ButtonWidget bastionTypesButton;
-    private ButtonWidget underwaterMagmaRavinesButton;
     private ButtonWidget funMinecartVelocityGlitchButton;
     private ButtonWidget minecartVelocityDebuggerButton;
     private ButtonWidget ssgModeButton;
@@ -109,7 +108,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.uiSectionY = 175;
         this.qolSectionY = 562;
         this.worldgenSectionY = 653;
-        this.funSectionY = 827;
+        this.funSectionY = 806;
         this.contentHeight = this.funSectionY + 256;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -293,11 +292,6 @@ public class McsreasymodeConfigScreen extends Screen {
             this.client.openScreen(new McsreasymodeBastionTypesScreen(this.config, this));
         }));
 
-        this.underwaterMagmaRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.underwaterMagmaRavines), button -> {
-            this.config.underwaterMagmaRavines = !this.config.underwaterMagmaRavines;
-            button.setMessage(this.toggleValueText(this.config.underwaterMagmaRavines));
-        }));
-
         this.funMinecartVelocityGlitchButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funStackedMinecartVelocityGlitch), button -> {
             this.config.funStackedMinecartVelocityGlitch = !this.config.funStackedMinecartVelocityGlitch;
             button.setMessage(this.toggleValueText(this.config.funStackedMinecartVelocityGlitch));
@@ -403,7 +397,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Bucket Desync Guard", this.toScreenY(this.uiSectionY + 222), mouseX, mouseY, "Reduces ghost buckets by synchronizing click-time aim and correcting rejected fluid interactions.");
         this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 243), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
         this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 264), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
-        this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 285), mouseX, mouseY, "Shows configurable precise, block, and local chunk coordinates without opening the debug screen.");
+        this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 285), mouseX, mouseY, "Shows precise, block, local chunk coordinates and yaw/pitch/facing. Supports Artificial ZSG virtual coordinates.");
         this.drawRowLabel(matrices, "Search Crafting", this.toScreenY(this.uiSectionY + 306), mouseX, mouseY, "Configure auto-focus and Alt+letter search presets for the crafting recipe book.");
         this.drawRowLabel(matrices, "World Skin", this.toScreenY(this.uiSectionY + 327), mouseX, mouseY, "Randomly picks a skin from your configured pool each time you join a world.");
         this.drawRowLabel(matrices, "Strict Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 348), mouseX, mouseY, "Disables mouse-wheel hotbar cycling in-world so slots can only be selected with hotkeys. Menu scrolling remains available.");
@@ -416,7 +410,6 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawRowLabel(matrices, "Bastion Anti-Corruption", this.toScreenY(this.worldgenSectionY + 96), mouseX, mouseY, "Protects generated bastion blocks, interiors, and block entities from later biome features such as basalt columns.");
         this.drawRowLabel(matrices, "Bastion Types", this.toScreenY(this.worldgenSectionY + 117), mouseX, mouseY, "Choose which vanilla bastion types may generate. Multiple types can be enabled together.");
-        this.drawRowLabel(matrices, "Underwater Magma Ravines", this.toScreenY(this.worldgenSectionY + 138), mouseX, mouseY, "Makes underwater ravine floors use magma blocks for ocean magma-route practice.");
         this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
         this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
@@ -518,7 +511,6 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.strongholdAntiCorruptionButton, this.worldgenSectionY + 75);
         this.setButtonY(this.bastionAntiCorruptionButton, this.worldgenSectionY + 96);
         this.setButtonY(this.bastionTypesButton, this.worldgenSectionY + 117);
-        this.setButtonY(this.underwaterMagmaRavinesButton, this.worldgenSectionY + 138);
         this.setButtonY(this.funMinecartVelocityGlitchButton, this.funSectionY + 12);
         this.setButtonY(this.minecartVelocityDebuggerButton, this.funSectionY + 33);
         this.setButtonY(this.ssgModeButton, this.funSectionY + 54);

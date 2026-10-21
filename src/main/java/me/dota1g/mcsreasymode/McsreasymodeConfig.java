@@ -307,11 +307,6 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.bastionAntiCorruption.description")
     public boolean bastionAntiCorruption = false;
 
-    @Config.Category("worldgen")
-    @Config.Name("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines")
-    @Config.Description("speedrunapi.config.mcsreasymode.option.underwaterMagmaRavines.description")
-    public boolean underwaterMagmaRavines = false;
-
     @Config.Category("fun")
     @Config.Name("speedrunapi.config.mcsreasymode.option.funStackedMinecartVelocityGlitch")
     @Config.Description("speedrunapi.config.mcsreasymode.option.funStackedMinecartVelocityGlitch.description")
@@ -467,6 +462,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     @Config.Hide
     public boolean persistentCoordinatesLocalChunk = false;
+
+    @Config.Hide
+    public boolean persistentCoordinatesRotation = false;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.hotbarHotkeyPosition")
