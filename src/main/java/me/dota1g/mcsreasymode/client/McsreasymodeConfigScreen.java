@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.client;
 
 import me.dota1g.mcsreasymode.McsreasymodeConfig;
+import me.dota1g.mcsreasymode.BuildProfile;
 import me.dota1g.mcsreasymode.client.McsreasymodeSearchScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -64,6 +65,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget worldSkinButton;
     private ButtonWidget fastLootButton;
     private ButtonWidget autoSortEndEntryHotbarButton;
+    private ButtonWidget statusEffectTimersButton;
     private int qolSectionY;
     private int sectionLeftX;
     private int sectionRightX;
@@ -107,9 +109,9 @@ public class McsreasymodeConfigScreen extends Screen {
         this.aggressionSectionY = 62;
         this.uiSectionY = 175;
         this.qolSectionY = 562;
-        this.worldgenSectionY = 653;
-        this.funSectionY = 806;
-        this.contentHeight = this.funSectionY + 256;
+        this.worldgenSectionY = 674;
+        this.funSectionY = 827;
+        this.contentHeight = this.funSectionY + 256 - (BuildProfile.RELEASE ? 84 : 0);
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -237,10 +239,12 @@ public class McsreasymodeConfigScreen extends Screen {
             this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
         }));
 
-        this.oceanRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
-            assert this.client != null;
-            this.client.openScreen(new McsreasymodeOceanRavinesScreen(this.config, this));
-        }));
+        if (!BuildProfile.RELEASE) {
+            this.oceanRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+                assert this.client != null;
+                this.client.openScreen(new McsreasymodeOceanRavinesScreen(this.config, this));
+            }));
+        }
 
         this.filterExplosionClutterDropsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.filterExplosionClutterDrops), button -> {
             this.config.filterExplosionClutterDrops = !this.config.filterExplosionClutterDrops;
@@ -252,20 +256,29 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.fastQuickLoot));
         }));
 
-        this.autoSortEndEntryHotbarButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.autoSortEndEntryHotbar), button -> {
-            this.config.autoSortEndEntryHotbar = !this.config.autoSortEndEntryHotbar;
-            button.setMessage(this.toggleValueText(this.config.autoSortEndEntryHotbar));
+        this.statusEffectTimersButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showStatusEffectTimers), button -> {
+            this.config.showStatusEffectTimers = !this.config.showStatusEffectTimers;
+            button.setMessage(this.toggleValueText(this.config.showStatusEffectTimers));
         }));
+
+        if (!BuildProfile.RELEASE) {
+            this.autoSortEndEntryHotbarButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.autoSortEndEntryHotbar), button -> {
+                this.config.autoSortEndEntryHotbar = !this.config.autoSortEndEntryHotbar;
+                button.setMessage(this.toggleValueText(this.config.autoSortEndEntryHotbar));
+            }));
+        }
 
         this.debugForcePieChartButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugForcePieChart), button -> {
             this.config.debugForcePieChart = !this.config.debugForcePieChart;
             button.setMessage(this.toggleValueText(this.config.debugForcePieChart));
         }));
 
-        this.debugShowEasyModeMarkerButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugShowEasyModeMarker), button -> {
-            this.config.debugShowEasyModeMarker = !this.config.debugShowEasyModeMarker;
-            button.setMessage(this.toggleValueText(this.config.debugShowEasyModeMarker));
-        }));
+        if (!BuildProfile.RELEASE) {
+            this.debugShowEasyModeMarkerButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugShowEasyModeMarker), button -> {
+                this.config.debugShowEasyModeMarker = !this.config.debugShowEasyModeMarker;
+                button.setMessage(this.toggleValueText(this.config.debugShowEasyModeMarker));
+            }));
+        }
 
         this.debugHighlightImportantNumbersButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.debugHighlightImportantNumbers), button -> {
             this.config.debugHighlightImportantNumbers = !this.config.debugHighlightImportantNumbers;
@@ -287,10 +300,12 @@ public class McsreasymodeConfigScreen extends Screen {
             button.setMessage(this.toggleValueText(this.config.bastionAntiCorruption));
         }));
 
-        this.bastionTypesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
-            assert this.client != null;
-            this.client.openScreen(new McsreasymodeBastionTypesScreen(this.config, this));
-        }));
+        if (!BuildProfile.RELEASE) {
+            this.bastionTypesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+                assert this.client != null;
+                this.client.openScreen(new McsreasymodeBastionTypesScreen(this.config, this));
+            }));
+        }
 
         this.funMinecartVelocityGlitchButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.funStackedMinecartVelocityGlitch), button -> {
             this.config.funStackedMinecartVelocityGlitch = !this.config.funStackedMinecartVelocityGlitch;
@@ -388,7 +403,9 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 33), mouseX, mouseY, "Draws your hotbar and offhand keybind labels on the HUD and handled screens.");
         this.drawRowLabel(matrices, "Debug Chat Logs", this.toScreenY(this.uiSectionY + 54), mouseX, mouseY, "Echoes MCSR Easy Mode debug logs into in-game chat while keeping launcher logs enabled.");
         this.drawRowLabel(matrices, "Debug HUD: Force Pie Chart", this.toScreenY(this.uiSectionY + 75), mouseX, mouseY, "Forces the debug profiler pie chart to be visible.");
-        this.drawRowLabel(matrices, "Debug HUD: Easy Mode Marker", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Adds a right-side 'MCSR Easy Mode' marker to the debug overlay.");
+        if (!BuildProfile.RELEASE) {
+            this.drawRowLabel(matrices, "Debug HUD: Easy Mode Marker", this.toScreenY(this.uiSectionY + 96), mouseX, mouseY, "Adds a right-side 'MCSR Easy Mode' marker to the debug overlay.");
+        }
         this.drawRowLabel(matrices, "Debug HUD: Left Highlights", this.toScreenY(this.uiSectionY + 117), mouseX, mouseY, "Colors 'O:' heightmap entries red and restores custom Facing formatting.");
         this.drawRowLabel(matrices, "Hide Advancement Toasts", this.toScreenY(this.uiSectionY + 138), mouseX, mouseY, "Prevents advancement popups from covering inventory and crafting screens.");
         this.drawRowLabel(matrices, "Placement Outline", this.toScreenY(this.uiSectionY + 159), mouseX, mouseY, "Draws a cyan outline around the exact block cell your held block would place into.");
@@ -403,13 +420,20 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Strict Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 348), mouseX, mouseY, "Disables mouse-wheel hotbar cycling in-world so slots can only be selected with hotkeys. Menu scrolling remains available.");
         this.drawRowLabel(matrices, "Filter Explosion Clutter Drops", this.toScreenY(this.qolSectionY + 12), mouseX, mouseY, "Removes saplings, seeds, grass, ferns, and flowers dropped from TNT and other explosions.");
         this.drawRowLabel(matrices, "Consistent Fast Looting", this.toScreenY(this.qolSectionY + 33), mouseX, mouseY, "Makes fast looting more forgiving for slower double clicks.");
-        this.drawRowLabel(matrices, "End Entry Hotbar Sort", this.toScreenY(this.qolSectionY + 54), mouseX, mouseY, "On End entry, sorts safe food, pickaxe, bow, bed, 32+ matching solid blocks, blast-resistant blocks, and pearls into slots 1-7.");
-        this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Customize XZ scale and density for terrain generation in the Nether.");
-        this.drawRowLabel(matrices, "Ocean Ravines", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Customize ocean ravine generation, rarity, and width.");
+        if (!BuildProfile.RELEASE) {
+            this.drawRowLabel(matrices, "End Entry Hotbar Sort", this.toScreenY(this.qolSectionY + 54), mouseX, mouseY, "On End entry, sorts safe food, pickaxe, bow, bed, 32+ matching solid blocks, blast-resistant blocks, and pearls into slots 1-7.");
+        }
+        this.drawRowLabel(matrices, "Status Effect Timers", this.toScreenY(this.qolSectionY + 75), mouseX, mouseY, "Shows remaining effect time beneath transparent HUD icons in the top-right corner. Off restores vanilla icons.");
+        this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, BuildProfile.RELEASE ? "Customize local Nether routes and basalt biome replacement." : "Customize XZ scale, density, and local routes in the Nether.");
+        if (!BuildProfile.RELEASE) {
+            this.drawRowLabel(matrices, "Ocean Ravines", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Customize ocean ravine generation, rarity, and width.");
+        }
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawRowLabel(matrices, "Bastion Anti-Corruption", this.toScreenY(this.worldgenSectionY + 96), mouseX, mouseY, "Protects generated bastion blocks, interiors, and block entities from later biome features such as basalt columns.");
-        this.drawRowLabel(matrices, "Bastion Types", this.toScreenY(this.worldgenSectionY + 117), mouseX, mouseY, "Choose which vanilla bastion types may generate. Multiple types can be enabled together.");
+        if (!BuildProfile.RELEASE) {
+            this.drawRowLabel(matrices, "Bastion Types", this.toScreenY(this.worldgenSectionY + 117), mouseX, mouseY, "Choose which vanilla bastion types may generate. Multiple types can be enabled together.");
+        }
         this.drawRowLabel(matrices, "Stacked Minecart Velocity", this.toScreenY(this.funSectionY + 12), mouseX, mouseY, "Backports a silly beneficial minecart velocity bug. Charged stacked carts can boost projectiles and passengers.");
         this.drawRowLabel(matrices, "Minecart Velocity Debugger", this.toScreenY(this.funSectionY + 33), mouseX, mouseY, "Shows current charged minecart b/t and the active bow projectile boost while testing fun mode.");
         this.drawRowLabel(matrices, "SSG Mode", this.toScreenY(this.funSectionY + 54), mouseX, mouseY, this.config.funOneShotForRsg ? "Disabled while One Shot for RSG is on." : "Adds set-seed glitchless practice support: boosted first bastion chests and a 12-eye portal room.");
@@ -505,6 +529,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.filterExplosionClutterDropsButton, this.qolSectionY + 12);
         this.setButtonY(this.fastLootButton, this.qolSectionY + 33);
         this.setButtonY(this.autoSortEndEntryHotbarButton, this.qolSectionY + 54);
+        this.setButtonY(this.statusEffectTimersButton, this.qolSectionY + 75);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.oceanRavinesButton, this.worldgenSectionY + 33);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 54);
@@ -534,13 +559,21 @@ public class McsreasymodeConfigScreen extends Screen {
     }
 
     private void setButtonY(ButtonWidget button, int contentY) {
+        if (button == null) return;
         int y = this.toScreenY(contentY);
         button.y = y;
         button.visible = y + 20 > this.listTop && y < this.listBottom;
     }
 
     private int toScreenY(int contentY) {
-        return this.listTop + contentY - this.scrollOffset;
+        int compactY = contentY;
+        if (BuildProfile.RELEASE) {
+            for (int hiddenY : new int[]{this.uiSectionY + 96, this.qolSectionY + 54,
+                    this.worldgenSectionY + 33, this.worldgenSectionY + 117}) {
+                if (contentY > hiddenY) compactY -= 21;
+            }
+        }
+        return this.listTop + compactY - this.scrollOffset;
     }
 
     private int maxScroll() {

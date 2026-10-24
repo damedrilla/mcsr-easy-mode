@@ -7,6 +7,7 @@ import me.dota1g.mcsreasymode.client.GodsensBoatStatusRenderer;
 import me.dota1g.mcsreasymode.client.BlazeSpawnerOverlayHudRenderer;
 import me.dota1g.mcsreasymode.client.MinecartVelocityDebugRenderer;
 import me.dota1g.mcsreasymode.client.PersistentCoordinatesRenderer;
+import me.dota1g.mcsreasymode.client.StatusEffectTimerRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -22,6 +23,14 @@ public abstract class InGameHudMixin {
     @Shadow
     @Final
     private MinecraftClient client;
+
+    @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
+    private void mcsreasymode$renderStatusEffectTimers(MatrixStack matrices, CallbackInfo ci) {
+        if (Mcsreasymode.CONFIG != null && Mcsreasymode.CONFIG.showStatusEffectTimers) {
+            StatusEffectTimerRenderer.render(matrices, this.client);
+            ci.cancel();
+        }
+    }
 
     @Inject(method = "render", at = @At("TAIL"))
     private void mcsreasymode$renderHotbarHotkeys(MatrixStack matrices, float tickDelta, CallbackInfo ci) {

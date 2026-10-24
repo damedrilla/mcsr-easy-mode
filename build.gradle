@@ -11,6 +11,12 @@ buildscript {
 apply plugin: 'fabric-loom'
 apply plugin: 'maven-publish'
 
+// Release output is isolated so regular and preserved jars remain untouched.
+def releaseProfile = providers.gradleProperty('releaseBuild').map { it.toBoolean() }.getOrElse(false)
+if (releaseProfile) {
+    layout.buildDirectory = layout.projectDirectory.dir('build-release')
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/mcsreasymode.accesswidener")
 }
@@ -19,7 +25,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
+    archivesName = project.archives_base_name + (releaseProfile ? '-release' : '')
 }
 
 repositories {
@@ -36,6 +42,10 @@ dependencies {
 }
 
 processResources {
+    inputs.property "releaseBuild", releaseProfile
+    filesMatching("mcsreasymode-build.properties") {
+        expand releaseBuild: releaseProfile
+    }
     inputs.property "version", project.version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "loader_version", project.loader_version
@@ -94,3 +104,24 @@ publishing {
         // retrieving dependencies.
     }
 }
+
+// Exercise clearance after noise-grid interpolation without adding a test framework.
+sourceSets {
+    routeTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+tasks.register('routeShapeTest', JavaExec) {
+    dependsOn routeTestClasses
+    classpath = sourceSets.routeTest.runtimeClasspath
+    mainClass = 'me.dota1g.mcsreasymode.NetherRouteShapeTest'
+}
+tasks.named('check') { dependsOn 'routeShapeTest' }
+
+tasks.register('routeStateTest', JavaExec) {
+    dependsOn routeTestClasses
+    classpath = sourceSets.routeTest.runtimeClasspath + sourceSets.main.runtimeClasspath
+    mainClass = 'me.dota1g.mcsreasymode.NetherRouteStateTest'
+}
+tasks.named('check') { dependsOn 'routeStateTest' }

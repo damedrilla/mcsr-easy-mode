@@ -3,6 +3,11 @@ package me.dota1g.mcsreasymode.mixin;
 import me.dota1g.mcsreasymode.Mcsreasymode;
 import me.dota1g.mcsreasymode.EndEntryHotbarSorter;
 import me.dota1g.mcsreasymode.RankedRngState;
+import me.dota1g.mcsreasymode.NetherRouteEntry;
+import me.dota1g.mcsreasymode.NetherRouteState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -26,6 +31,23 @@ public abstract class ServerPlayerEntityMixin {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         this.mcsreasymode$sortAfterEndEntry = player.getServerWorld().getRegistryKey() == World.OVERWORLD
                 && destination.getRegistryKey() == World.END;
+    }
+
+    @Inject(method = "changeDimension", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/PortalForcer;usePortal(Lnet/minecraft/entity/Entity;F)Z",
+            ordinal = 0))
+    private void mcsreasymode$captureNetherRouteEntry(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (player.getServerWorld().getRegistryKey() != World.OVERWORLD
+                || destination.getRegistryKey() != World.NETHER) return;
+        ChunkGenerator generator = destination.getChunkManager().getChunkGenerator();
+        if (!(generator instanceof NetherRouteEntry)) return;
+        // Vanilla has scaled/clamped X/Z here, but portal search has not loaded chunks yet.
+        // Capturing even with routes disabled preserves the first entry if enabled later.
+        NetherRouteState state = destination.getPersistentStateManager().getOrCreate(NetherRouteState::new, NetherRouteState.ID);
+        BlockPos entry = state.capture(MathHelper.floor(player.getX()), MathHelper.floor(player.getZ()));
+        ((NetherRouteEntry) generator).mcsreasymode$setNetherRouteEntry(entry);
     }
 
     @Inject(method = "changeDimension", at = @At(

@@ -13,6 +13,7 @@ MCSR Easy Mode is a Fabric `1.16.1` practice mod that adds toggleable quality-of
 Highlights:
 
 - Toggle piglin, ghast, and hoglin aggression.
+- Show remaining status-effect time beneath transparent top-right HUD icons (QoL: Status Effect Timers).
 - Configure RNG as `Vanilla`, `Ranked`, or per-feature `Custom`.
 - Standardize key speedrun resources such as rods, pearls, obsidian, string, flint, eyes, and selected chest loot.
 - Improve hoglin stable layouts while preserving vanilla bastion placement rules.
@@ -21,6 +22,14 @@ Highlights:
 - Display keybind labels on the vanilla hotbar and hotbar slots inside inventory/container screens.
 - Hide advancement toasts and optionally echo debug logs into chat.
 - Mark the F3 debug HUD with `MCSR Easy Mode` and the active RNG mode.
+
+## Local Nether routes (experimental)
+
+In **Nether Terrain**, enable **Entry -> Bastion** and/or **Bastion -> Fortress**. Both default to off and work with vanilla noise values or global noise tuning. Choose settings before creating a world; existing chunks are not regenerated.
+
+The anchor uses the player's first intended Nether destination X/Z, captured after coordinate scaling and border clamping but before portal search generates chunks. It is saved with the world and stays fixed on later entries and reloads. Routing height remains Y 64. Until an entry is captured, terrain is left unchanged. The mod selects the nearest valid bastion start within 1,024 blocks, then the nearest valid fortress start within 1,024 blocks of that bastion. Missing targets leave the corresponding route unchanged. These are bounded searches, not Ranked's distance guarantees or its exact terrain check.
+
+Routes favor nearby existing cavities, then locally reduce terrain density in broad, blended openings. Structures generate afterward. The lava sea and bedrock bands are preserved; bridging and elevation changes may still be necessary. This does not guarantee a safe walking route, a particular structure entrance, or an exact match to the final portal blocks (portal placement can shift the destination). Previously generated chunks are not modified.
 
 ## Requirements
 
@@ -73,3 +82,11 @@ The compiled jar is created at:
 ```text
 build/libs/mcsreasymode-<version>.jar
 ```
+
+## Release build
+
+Run `gradle build -PreleaseBuild=true` to build the release UI profile into `build-release/libs/mcsreasymode-release-<version>.jar`. The regular `gradle build` keeps all settings and writes to `build/libs/`. Each profile has its own build output; no clean is required when switching.
+
+The release settings hide the Easy Mode marker toggle, bastion type selector, End entry hotbar sort, global Nether noise controls and presets, and ocean ravine controls. Local Nether route and basalt replacement settings remain available. Hiding these controls preserves their saved values and runtime behavior; the Easy Mode marker remains present by default.
+
+The pre-release-settings jar is preserved separately under `artifacts/preserved/`, outside both build directories.

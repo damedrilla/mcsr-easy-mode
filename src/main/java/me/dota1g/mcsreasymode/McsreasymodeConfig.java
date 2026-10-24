@@ -225,6 +225,12 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Description("speedrunapi.config.mcsreasymode.option.openNetherTerrain.description")
     public boolean openNetherTerrain = false;
 
+    // Local route opening is independent of the global Nether noise preset.
+    @Config.Hide
+    public boolean openNetherEntryToBastion = false;
+    @Config.Hide
+    public boolean openNetherBastionToFortress = false;
+
     @Config.Hide
     public boolean removeBasaltDeltas = false;
 
@@ -379,6 +385,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.showHotbarHotkeys")
     @Config.Description("speedrunapi.config.mcsreasymode.option.showHotbarHotkeys.description")
     public boolean showHotbarHotkeys = true;
+
+    @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.showStatusEffectTimers")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.showStatusEffectTimers.description")
+    public boolean showStatusEffectTimers = true;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys")

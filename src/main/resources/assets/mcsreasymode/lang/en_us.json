@@ -1,4 +1,6 @@
 {
+  "speedrunapi.config.mcsreasymode.option.showStatusEffectTimers": "Status Effect Timers",
+  "speedrunapi.config.mcsreasymode.option.showStatusEffectTimers.description": "Shows remaining effect time beneath transparent top-right HUD icons. Off restores the vanilla display.",
   "speedrunapi.config.mcsreasymode.option.dragonMinCirclingY": "Minimum Dragon Circling Y",
   "speedrunapi.config.mcsreasymode.option.dragonMinCirclingY.description": "Minimum world Y for dragon circling targets (0-255). 0 is Off. Does not change landing height or instantly raise the dragon.",
   "speedrunapi.config.mcsreasymode.category.rng": "RNG",
