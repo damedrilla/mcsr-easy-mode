@@ -1,4 +1,6 @@
 {
+  "key.mcsreasymode.cyclePiePath": "Cycle Pie Chart Path",
+  "key.categories.mcsreasymode": "MCSR Easy Mode",
   "speedrunapi.config.mcsreasymode.option.showStatusEffectTimers": "Status Effect Timers",
   "speedrunapi.config.mcsreasymode.option.showStatusEffectTimers.description": "Shows remaining effect time beneath transparent top-right HUD icons. Off restores the vanilla display.",
   "speedrunapi.config.mcsreasymode.option.dragonMinCirclingY": "Minimum Dragon Circling Y",

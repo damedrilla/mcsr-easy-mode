@@ -1,6 +1,7 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
+import me.dota1g.mcsreasymode.client.PieChartShortcuts;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.BedItem;
@@ -22,6 +23,16 @@ public abstract class MinecraftClientMixin {
     @Shadow private int itemUseCooldown;
     @Shadow public ClientPlayerEntity player;
     @Shadow public HitResult crosshairTarget;
+
+    @Inject(method = "openScreen", at = @At("HEAD"))
+    private void mcsreasymode$keepPieShortcutKey(net.minecraft.client.gui.screen.Screen screen, CallbackInfo ci) {
+        PieChartShortcuts.beforeScreenChange((MinecraftClient) (Object) this);
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void mcsreasymode$cyclePieChartPath(CallbackInfo ci) {
+        PieChartShortcuts.tick((MinecraftClient) (Object) this);
+    }
 
     @Inject(
             method = "doItemUse",

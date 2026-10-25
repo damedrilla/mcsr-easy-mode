@@ -70,6 +70,8 @@
     "InGameHudMixin",
     "MobSpawnerBlockEntityRendererMixin",
     "MinecraftClientMixin",
+    "MinecraftClientPieAccessor",
+    "KeyboardPieShortcutMixin",
     "MouseMixin",
     "SelectWorldScreenMixin",
     "SlotAccessor",

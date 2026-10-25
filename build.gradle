@@ -125,3 +125,10 @@ tasks.register('routeStateTest', JavaExec) {
     mainClass = 'me.dota1g.mcsreasymode.NetherRouteStateTest'
 }
 tasks.named('check') { dependsOn 'routeStateTest' }
+
+tasks.register('pieChartPathsTest', JavaExec) {
+    dependsOn routeTestClasses
+    classpath = sourceSets.routeTest.runtimeClasspath
+    mainClass = 'me.dota1g.mcsreasymode.PieChartPathsTest'
+}
+tasks.named('check') { dependsOn 'pieChartPathsTest' }

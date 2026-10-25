@@ -1,7 +1,6 @@
 package me.dota1g.mcsreasymode.client;
 
 import me.dota1g.mcsreasymode.McsreasymodeConfig;
-import me.dota1g.mcsreasymode.BuildProfile;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -41,20 +40,18 @@ public class McsreasymodeNetherTerrainScreen extends Screen {
         int contentWidth = Math.min(360, this.width - 36);
         int x = this.width / 2 - contentWidth / 2;
         int y = Math.max(34, this.height / 2 - 100);
-        int biomeY = y + (BuildProfile.RELEASE ? 0 : 96);
-        int routeY = y + (BuildProfile.RELEASE ? 24 : 144);
+        int biomeY = y + 96;
+        int routeY = y + 144;
         int halfWidth = (contentWidth - 4) / 2;
 
-        if (!BuildProfile.RELEASE) {
-            this.enabledButton = this.addButton(new ButtonWidget(x, y, contentWidth, 20, this.enabledText(), button -> {
-                this.config.openNetherTerrain = !this.config.openNetherTerrain;
-                button.setMessage(this.enabledText());
-            }));
+        this.enabledButton = this.addButton(new ButtonWidget(x, y, contentWidth, 20, this.enabledText(), button -> {
+            this.config.openNetherTerrain = !this.config.openNetherTerrain;
+            button.setMessage(this.enabledText());
+        }));
 
-            this.addButton(new TerrainSliderWidget(x, y + 24, contentWidth, 20, "XZ Scale", AREG_XZ_SCALE, VANILLA_XZ_SCALE, this.config.netherTerrainXzScale, value -> this.config.netherTerrainXzScale = value));
-            this.addButton(new TerrainSliderWidget(x, y + 48, contentWidth, 20, "Density Factor", VANILLA_DENSITY_FACTOR, AREG_DENSITY_FACTOR, this.config.netherTerrainDensityFactor, value -> this.config.netherTerrainDensityFactor = value));
-            this.addButton(new TerrainSliderWidget(x, y + 72, contentWidth, 20, "Density Offset", AREG_DENSITY_OFFSET, VANILLA_DENSITY_OFFSET, this.config.netherTerrainDensityOffset, value -> this.config.netherTerrainDensityOffset = value));
-        }
+        this.addButton(new TerrainSliderWidget(x, y + 24, contentWidth, 20, "XZ Scale", AREG_XZ_SCALE, VANILLA_XZ_SCALE, this.config.netherTerrainXzScale, value -> this.config.netherTerrainXzScale = value));
+        this.addButton(new TerrainSliderWidget(x, y + 48, contentWidth, 20, "Density Factor", VANILLA_DENSITY_FACTOR, AREG_DENSITY_FACTOR, this.config.netherTerrainDensityFactor, value -> this.config.netherTerrainDensityFactor = value));
+        this.addButton(new TerrainSliderWidget(x, y + 72, contentWidth, 20, "Density Offset", AREG_DENSITY_OFFSET, VANILLA_DENSITY_OFFSET, this.config.netherTerrainDensityOffset, value -> this.config.netherTerrainDensityOffset = value));
 
         if (this.config.basaltReplacementBiome == null) {
             this.config.basaltReplacementBiome = McsreasymodeConfig.BasaltReplacementBiome.NETHER_WASTES;
@@ -70,16 +67,14 @@ public class McsreasymodeNetherTerrainScreen extends Screen {
         }));
         this.replacementButton.active = this.config.removeBasaltDeltas;
 
-        if (!BuildProfile.RELEASE) {
-            this.addButton(new ButtonWidget(x, y + 120, halfWidth, 20, new LiteralText("Vanilla Values"), button -> {
-                this.setTerrainValues(VANILLA_XZ_SCALE, VANILLA_DENSITY_FACTOR, VANILLA_DENSITY_OFFSET);
-                this.init(this.client, this.width, this.height);
-            }));
-            this.addButton(new ButtonWidget(x + halfWidth + 4, y + 120, halfWidth, 20, new LiteralText("AreEssGee Values"), button -> {
-                this.setTerrainValues(AREG_XZ_SCALE, AREG_DENSITY_FACTOR, AREG_DENSITY_OFFSET);
-                this.init(this.client, this.width, this.height);
-            }));
-        }
+        this.addButton(new ButtonWidget(x, y + 120, halfWidth, 20, new LiteralText("Vanilla Values"), button -> {
+            this.setTerrainValues(VANILLA_XZ_SCALE, VANILLA_DENSITY_FACTOR, VANILLA_DENSITY_OFFSET);
+            this.init(this.client, this.width, this.height);
+        }));
+        this.addButton(new ButtonWidget(x + halfWidth + 4, y + 120, halfWidth, 20, new LiteralText("AreEssGee Values"), button -> {
+            this.setTerrainValues(AREG_XZ_SCALE, AREG_DENSITY_FACTOR, AREG_DENSITY_OFFSET);
+            this.init(this.client, this.width, this.height);
+        }));
 
         this.entryRouteButton = this.addButton(new ButtonWidget(x, routeY, halfWidth, 20,
                 routeText("Entry -> Bastion", this.config.openNetherEntryToBastion), button -> {

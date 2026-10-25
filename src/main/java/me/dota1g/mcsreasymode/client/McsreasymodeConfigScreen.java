@@ -66,6 +66,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget fastLootButton;
     private ButtonWidget autoSortEndEntryHotbarButton;
     private ButtonWidget statusEffectTimersButton;
+    private ButtonWidget pieChartPathsButton;
     private int qolSectionY;
     private int sectionLeftX;
     private int sectionRightX;
@@ -109,9 +110,9 @@ public class McsreasymodeConfigScreen extends Screen {
         this.aggressionSectionY = 62;
         this.uiSectionY = 175;
         this.qolSectionY = 562;
-        this.worldgenSectionY = 674;
-        this.funSectionY = 827;
-        this.contentHeight = this.funSectionY + 256 - (BuildProfile.RELEASE ? 84 : 0);
+        this.worldgenSectionY = 695;
+        this.funSectionY = 848;
+        this.contentHeight = this.funSectionY + 256 - (BuildProfile.RELEASE ? 63 : 0);
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
@@ -239,12 +240,10 @@ public class McsreasymodeConfigScreen extends Screen {
             this.client.openScreen(new McsreasymodeNetherTerrainScreen(this.config, this));
         }));
 
-        if (!BuildProfile.RELEASE) {
-            this.oceanRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
-                assert this.client != null;
-                this.client.openScreen(new McsreasymodeOceanRavinesScreen(this.config, this));
-            }));
-        }
+        this.oceanRavinesButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+            assert this.client != null;
+            this.client.openScreen(new McsreasymodeOceanRavinesScreen(this.config, this));
+        }));
 
         this.filterExplosionClutterDropsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.filterExplosionClutterDrops), button -> {
             this.config.filterExplosionClutterDrops = !this.config.filterExplosionClutterDrops;
@@ -254,6 +253,10 @@ public class McsreasymodeConfigScreen extends Screen {
         this.fastLootButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.fastQuickLoot), button -> {
             this.config.fastQuickLoot = !this.config.fastQuickLoot;
             button.setMessage(this.toggleValueText(this.config.fastQuickLoot));
+        }));
+
+        this.pieChartPathsButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, new LiteralText("Customize"), button -> {
+            this.client.openScreen(new McsreasymodePiePathsScreen(this.config, this));
         }));
 
         this.statusEffectTimersButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showStatusEffectTimers), button -> {
@@ -423,11 +426,10 @@ public class McsreasymodeConfigScreen extends Screen {
         if (!BuildProfile.RELEASE) {
             this.drawRowLabel(matrices, "End Entry Hotbar Sort", this.toScreenY(this.qolSectionY + 54), mouseX, mouseY, "On End entry, sorts safe food, pickaxe, bow, bed, 32+ matching solid blocks, blast-resistant blocks, and pearls into slots 1-7.");
         }
+        this.drawRowLabel(matrices, "Pie Chart Paths", this.toScreenY(this.qolSectionY + 96), mouseX, mouseY, "Edit named profiler paths and bind a key to cycle between them. The shortcut also opens the debug pie chart.");
         this.drawRowLabel(matrices, "Status Effect Timers", this.toScreenY(this.qolSectionY + 75), mouseX, mouseY, "Shows remaining effect time beneath transparent HUD icons in the top-right corner. Off restores vanilla icons.");
-        this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, BuildProfile.RELEASE ? "Customize local Nether routes and basalt biome replacement." : "Customize XZ scale, density, and local routes in the Nether.");
-        if (!BuildProfile.RELEASE) {
-            this.drawRowLabel(matrices, "Ocean Ravines", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Customize ocean ravine generation, rarity, and width.");
-        }
+        this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Customize XZ scale, density, and local routes in the Nether.");
+        this.drawRowLabel(matrices, "Ocean Ravines", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Customize ocean ravine generation, rarity, and width.");
         this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawRowLabel(matrices, "Bastion Anti-Corruption", this.toScreenY(this.worldgenSectionY + 96), mouseX, mouseY, "Protects generated bastion blocks, interiors, and block entities from later biome features such as basalt columns.");
@@ -530,6 +532,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.fastLootButton, this.qolSectionY + 33);
         this.setButtonY(this.autoSortEndEntryHotbarButton, this.qolSectionY + 54);
         this.setButtonY(this.statusEffectTimersButton, this.qolSectionY + 75);
+        this.setButtonY(this.pieChartPathsButton, this.qolSectionY + 96);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.oceanRavinesButton, this.worldgenSectionY + 33);
         this.setButtonY(this.villageStandardizationButton, this.worldgenSectionY + 54);
@@ -569,7 +572,7 @@ public class McsreasymodeConfigScreen extends Screen {
         int compactY = contentY;
         if (BuildProfile.RELEASE) {
             for (int hiddenY : new int[]{this.uiSectionY + 96, this.qolSectionY + 54,
-                    this.worldgenSectionY + 33, this.worldgenSectionY + 117}) {
+                    this.worldgenSectionY + 117}) {
                 if (contentY > hiddenY) compactY -= 21;
             }
         }

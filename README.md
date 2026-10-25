@@ -87,6 +87,14 @@ build/libs/mcsreasymode-<version>.jar
 
 Run `gradle build -PreleaseBuild=true` to build the release UI profile into `build-release/libs/mcsreasymode-release-<version>.jar`. The regular `gradle build` keeps all settings and writes to `build/libs/`. Each profile has its own build output; no clean is required when switching.
 
-The release settings hide the Easy Mode marker toggle, bastion type selector, End entry hotbar sort, global Nether noise controls and presets, and ocean ravine controls. Local Nether route and basalt replacement settings remain available. Hiding these controls preserves their saved values and runtime behavior; the Easy Mode marker remains present by default.
+The release settings hide the Easy Mode marker toggle, bastion type selector, and End entry hotbar sort. Nether terrain controls (including global noise sliders and presets), local Nether routes, basalt replacement, and ocean ravine settings remain available. Hiding these controls preserves their saved values and runtime behavior; the Easy Mode marker remains present by default.
 
 The pre-release-settings jar is preserved separately under `artifacts/preserved/`, outside both build directories.
+
+## Pie chart shortcuts
+
+Open **QoL > Pie Chart Paths** to edit the ordered path list. Names are optional; paths use dotted notation such as `root.gameRenderer.level.entities`. Apply edits, add/remove entries, or move them earlier/later in the cycle.
+
+Bind **Cycle Pie Chart Path** using the editor's Key button or Minecraft Controls under **MCSR Easy Mode**. It starts unbound to avoid conflicting with existing keys. Press it in-world to open the debug pie chart and jump to the next configured path; normal number-key navigation still works. A path can be selected before profiler data for that section exists.
+
+Paths are saved to `config/mcsreasymode-pie-paths.json`. The shortcut key is saved independently in `config/mcsreasymode-pie-key.txt`, so StandardSettings cannot reset it to unbound. Changes made through Minecraft Controls are also remembered. StandardSettings is not required. Its world-join path reset can coexist with these in-world shortcuts.

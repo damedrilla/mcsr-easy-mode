@@ -6,5 +6,6 @@ public class McsreasymodeClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        PieChartShortcuts.register();
     }
 }

@@ -52,6 +52,40 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             return values[(this.ordinal() + 1) % values.length];
         }
     }
+    @Config.Ignored
+    public java.util.List<PieChartPath> pieChartPaths = defaultPieChartPaths();
+
+    private static final Path PIE_PATHS_FILE = FabricLoader.getInstance().getConfigDir().resolve("mcsreasymode-pie-paths.json");
+    private static final Gson PIE_PATHS_GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    public static java.util.List<PieChartPath> defaultPieChartPaths() {
+        return new java.util.ArrayList<>(java.util.Arrays.asList(
+                new PieChartPath("Mapless / Preemptive", "root.gameRenderer.level.entities"),
+                new PieChartPath("Village / Fortress", "root.tick.level.entities.blockEntities")));
+    }
+
+    public void loadPieChartPaths() {
+        if (!Files.exists(PIE_PATHS_FILE)) return;
+        try {
+            Type type = new TypeToken<java.util.List<PieChartPath>>() {}.getType();
+            java.util.List<PieChartPath> loaded = PIE_PATHS_GSON.fromJson(new String(Files.readAllBytes(PIE_PATHS_FILE), StandardCharsets.UTF_8), type);
+            if (loaded != null) this.pieChartPaths = loaded;
+        } catch (IOException | RuntimeException exception) {
+            Mcsreasymode.LOGGER.warn("Unable to load pie chart paths; keeping defaults", exception);
+        }
+    }
+
+    public void savePieChartPaths() throws IOException {
+        Files.createDirectories(PIE_PATHS_FILE.getParent());
+        Path temporary = Files.createTempFile(PIE_PATHS_FILE.getParent(), "mcsreasymode-pie-", ".tmp");
+        try {
+            Files.write(temporary, PIE_PATHS_GSON.toJson(this.pieChartPaths).getBytes(StandardCharsets.UTF_8));
+            Files.move(temporary, PIE_PATHS_FILE, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } finally {
+            Files.deleteIfExists(temporary);
+        }
+    }
+
     @Config.Hide
     public boolean autoFocusSearchField = true;
 
@@ -519,6 +553,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     {
         Mcsreasymode.CONFIG = this;
         this.loadSearchPresets();
+        this.loadPieChartPaths();
         this.loadWorldSkins();
     }
 
