@@ -132,3 +132,24 @@ tasks.register('pieChartPathsTest', JavaExec) {
     mainClass = 'me.dota1g.mcsreasymode.PieChartPathsTest'
 }
 tasks.named('check') { dependsOn 'pieChartPathsTest' }
+
+tasks.register('villageLavaPoolTest', JavaExec) {
+    dependsOn routeTestClasses
+    classpath = sourceSets.routeTest.runtimeClasspath + sourceSets.main.runtimeClasspath
+    mainClass = 'me.dota1g.mcsreasymode.VillageLavaPoolTest'
+}
+tasks.named('check') { dependsOn 'villageLavaPoolTest' }
+
+tasks.register('villageSmithSiteTest', JavaExec) {
+    dependsOn routeTestClasses
+    classpath = sourceSets.routeTest.runtimeClasspath + sourceSets.main.runtimeClasspath
+    mainClass = 'me.dota1g.mcsreasymode.VillageSmithSiteTest'
+}
+tasks.named('check') { dependsOn 'villageSmithSiteTest' }
+
+tasks.register('villageResourceTest', JavaExec) {
+    dependsOn routeTestClasses
+    classpath = sourceSets.routeTest.runtimeClasspath + sourceSets.main.runtimeClasspath
+    mainClass = 'me.dota1g.mcsreasymode.VillageResourceTest'
+}
+tasks.named('check') { dependsOn 'villageResourceTest' }

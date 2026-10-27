@@ -40,8 +40,6 @@ public abstract class LootableContainerBlockEntityMixin {
     @Unique
     private static final Identifier MCSREASYMODE_SHIPWRECK_TREASURE_CHEST = new Identifier("minecraft", "chests/shipwreck_treasure");
     @Unique
-    private static final Identifier MCSREASYMODE_VILLAGE_WEAPONSMITH_CHEST = new Identifier("minecraft", "chests/village/village_weaponsmith");
-    @Unique
     private static final Identifier MCSREASYMODE_BASTION_OTHER_CHEST = new Identifier("minecraft", "chests/bastion_other");
     @Unique
     private static final Identifier MCSREASYMODE_BASTION_BRIDGE_CHEST = new Identifier("minecraft", "chests/bastion_bridge");
@@ -160,9 +158,6 @@ public abstract class LootableContainerBlockEntityMixin {
         }
         if (MCSREASYMODE_SHIPWRECK_TREASURE_CHEST.equals(vanillaLootTableId)) {
             return new Identifier(Mcsreasymode.MOD_ID, "chests/shipwreck_treasure");
-        }
-        if (MCSREASYMODE_VILLAGE_WEAPONSMITH_CHEST.equals(vanillaLootTableId)) {
-            return new Identifier(Mcsreasymode.MOD_ID, "chests/village/village_weaponsmith");
         }
         return null;
     }

@@ -25,7 +25,9 @@ public class McsreasymodeSearchScreen extends Screen {
     private int capturingIndex = -1;
 
     private ButtonWidget autoFocusButton;
+    private ButtonWidget chatFocusButton;
     private ButtonWidget presetsEnabledButton;
+    private ButtonWidget backspaceModeButton;
 
     private int contentLeft;
     private int contentRight;
@@ -45,7 +47,7 @@ public class McsreasymodeSearchScreen extends Screen {
         int contentWidth = Math.min(640, this.width - 72);
         this.contentLeft = this.width / 2 - contentWidth / 2;
         this.contentRight = this.contentLeft + contentWidth;
-        this.listTop = 92;
+        this.listTop = 140;
         this.listBottom = this.height - 60;
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
 
@@ -60,15 +62,27 @@ public class McsreasymodeSearchScreen extends Screen {
         }
 
         this.autoFocusButton = this.addButton(new ButtonWidget(this.contentLeft, 42, contentWidth, 20,
-                this.toggleText("Auto-focus search field", this.config.autoFocusSearchField), button -> {
+                this.toggleText("Focus search on open", this.config.autoFocusSearchField), button -> {
             this.config.autoFocusSearchField = !this.config.autoFocusSearchField;
-            button.setMessage(this.toggleText("Auto-focus search field", this.config.autoFocusSearchField));
+            button.setMessage(this.toggleText("Focus search on open", this.config.autoFocusSearchField));
         }));
 
-        this.presetsEnabledButton = this.addButton(new ButtonWidget(this.contentLeft, 66, contentWidth, 20,
+        this.chatFocusButton = this.addButton(new ButtonWidget(this.contentLeft, 66, contentWidth, 20,
+                this.toggleText("Force search focus with chat key", this.config.focusSearchOnChatKey), button -> {
+            this.config.focusSearchOnChatKey = !this.config.focusSearchOnChatKey;
+            button.setMessage(this.toggleText("Force search focus with chat key", this.config.focusSearchOnChatKey));
+        }));
+
+        this.presetsEnabledButton = this.addButton(new ButtonWidget(this.contentLeft, 90, contentWidth, 20,
                 this.toggleText("Preset hotkeys (Alt+key)", this.config.searchPresetsEnabled), button -> {
             this.config.searchPresetsEnabled = !this.config.searchPresetsEnabled;
             button.setMessage(this.toggleText("Preset hotkeys (Alt+key)", this.config.searchPresetsEnabled));
+        }));
+
+        this.backspaceModeButton = this.addButton(new ButtonWidget(this.contentLeft, 114, contentWidth, 20,
+                this.backspaceModeText(), button -> {
+            this.config.searchBackspaceMode = this.config.searchBackspaceMode.next();
+            button.setMessage(this.backspaceModeText());
         }));
 
         this.layoutRows();
@@ -182,6 +196,10 @@ public class McsreasymodeSearchScreen extends Screen {
 
     private Text toggleText(String label, boolean enabled) {
         return new LiteralText(label + ": " + (enabled ? "On" : "Off"));
+    }
+
+    private Text backspaceModeText() {
+        return new LiteralText("Backspace: " + this.config.searchBackspaceMode.displayName());
     }
 
     @Override

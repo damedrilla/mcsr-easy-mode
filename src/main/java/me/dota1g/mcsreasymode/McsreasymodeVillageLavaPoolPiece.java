@@ -7,6 +7,7 @@ import net.minecraft.structure.StructurePiece;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
@@ -14,6 +15,7 @@ import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 import java.util.Random;
+import java.util.Arrays;
 
 public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
     public static final int FOOTPRINT_X = 16;
@@ -23,13 +25,21 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
     private final int originX;
     private final int originZ;
     private final long lakeSeed;
+    private int lakeBottomY;
+    private final boolean needsSupport;
+    private final boolean legacyElevation;
+    private boolean elevationResolved;
 
-    public McsreasymodeVillageLavaPoolPiece(int originX, int originZ, long lakeSeed) {
+    public McsreasymodeVillageLavaPoolPiece(int originX, int originZ, int lakeBottomY, long lakeSeed, boolean needsSupport) {
         super(McsreasymodeStructurePieces.VILLAGE_LAVA_POOL, 0);
         this.originX = originX;
         this.originZ = originZ;
         this.lakeSeed = lakeSeed;
-        this.boundingBox = new BlockBox(originX, 0, originZ, originX + FOOTPRINT_X - 1, 255, originZ + FOOTPRINT_Z - 1);
+        this.lakeBottomY = lakeBottomY;
+        this.needsSupport = needsSupport;
+        this.legacyElevation = false;
+        this.elevationResolved = false;
+        this.boundingBox = new BlockBox(originX, lakeBottomY, originZ, originX + FOOTPRINT_X - 1, lakeBottomY + FOOTPRINT_Y - 1, originZ + FOOTPRINT_Z - 1);
     }
 
     public McsreasymodeVillageLavaPoolPiece(CompoundTag tag) {
@@ -37,7 +47,13 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
         this.originX = tag.getInt("OriginX");
         this.originZ = tag.getInt("OriginZ");
         this.lakeSeed = tag.contains("LakeSeed") ? tag.getLong("LakeSeed") : (((long) this.originX << 32) ^ this.originZ);
-        this.boundingBox = new BlockBox(this.originX, 0, this.originZ, this.originX + FOOTPRINT_X - 1, 255, this.originZ + FOOTPRINT_Z - 1);
+        this.legacyElevation = !tag.contains("LakeBottomY");
+        this.lakeBottomY = tag.getInt("LakeBottomY");
+        this.needsSupport = tag.getBoolean("NeedsSupport");
+        this.elevationResolved = tag.getBoolean("ElevationResolved");
+        this.boundingBox = this.legacyElevation
+                ? new BlockBox(this.originX, 0, this.originZ, this.originX + FOOTPRINT_X - 1, 255, this.originZ + FOOTPRINT_Z - 1)
+                : new BlockBox(this.originX, this.lakeBottomY, this.originZ, this.originX + FOOTPRINT_X - 1, this.lakeBottomY + FOOTPRINT_Y - 1, this.originZ + FOOTPRINT_Z - 1);
     }
 
     @Override
@@ -45,29 +61,120 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
         tag.putInt("OriginX", this.originX);
         tag.putInt("OriginZ", this.originZ);
         tag.putLong("LakeSeed", this.lakeSeed);
+        if (!this.legacyElevation) {
+            tag.putInt("LakeBottomY", this.lakeBottomY);
+            tag.putBoolean("NeedsSupport", this.needsSupport);
+            tag.putBoolean("ElevationResolved", this.elevationResolved);
+        }
+    }
+
+    @Override
+    public boolean intersectsChunk(ChunkPos chunkPos, int offset) {
+        // SurfaceChunkGenerator uses this hook to blend structure pieces into terrain.
+        // The lake carves its own cavity during structure generation, so blending its
+        // 16x16 bounding box creates a square depression around an otherwise small lake.
+        return false;
     }
 
     @Override
     public boolean generate(ServerWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
-        int lakeBottomY = this.getAverageSurfaceY(world) - 4;
+        if (!this.legacyElevation && !this.elevationResolved) {
+            this.resolveElevation(world);
+        }
+        int lakeBottomY = this.legacyElevation ? this.getAverageSurfaceY(world) - 4 : this.lakeBottomY;
         if (lakeBottomY <= 4) {
             return false;
         }
 
-        boolean[] shape = this.createVanillaLakeShape();
+        Random lakeRandom = new Random(this.lakeSeed);
+        boolean[] shape = createVanillaLakeShape(lakeRandom);
+        if (!this.legacyElevation) {
+            this.prepareWetGround(world, chunkBox, lakeBottomY);
+        }
+        if (!this.legacyElevation && (this.needsSupport || !isValidBoundary(world, this.originX, this.originZ, lakeBottomY, shape))) {
+            this.prepareBoundary(world, chunkBox, lakeBottomY, shape);
+        }
         this.carveLake(world, chunkBox, lakeBottomY, shape);
         this.restoreSurface(world, chunkBox, lakeBottomY, shape);
-        this.addStoneRim(world, chunkBox, lakeBottomY, shape);
+        this.addStoneRim(world, chunkBox, lakeBottomY, shape, lakeRandom);
         Mcsreasymode.debugRateLimited(
                 "village.lava_pool.generated." + this.originX + "." + this.originZ,
-                "Village lava pool generated near standardized smith at X " + this.originX + ", Y " + lakeBottomY + ", Z " + this.originZ + ".",
+                "Village lava pool generated at X " + this.originX + ", Y " + lakeBottomY + ", Z " + this.originZ + ".",
                 5000L
         );
         return true;
     }
 
-    private boolean[] createVanillaLakeShape() {
-        Random random = new Random(this.lakeSeed);
+    private void prepareWetGround(ServerWorldAccess world, BlockBox chunkBox, int bottomY) {
+        int shoreY = bottomY + 5;
+        for (int x = 0; x < FOOTPRINT_X; x++) {
+            for (int z = 0; z < FOOTPRINT_Z; z++) {
+                int worldX = this.originX + x;
+                int worldZ = this.originZ + z;
+                int groundY = world.getTopY(Heightmap.Type.OCEAN_FLOOR, worldX, worldZ);
+                int waterTopY = world.getTopY(Heightmap.Type.WORLD_SURFACE, worldX, worldZ);
+                if (waterTopY <= groundY || !world.getBlockState(new BlockPos(worldX, waterTopY - 1, worldZ)).getMaterial().isLiquid()) continue;
+                int edge = Math.min(Math.min(x, 15 - x), Math.min(z, 15 - z));
+                int targetY = Math.max(waterTopY + 1, Math.min(shoreY, waterTopY + 1 + edge));
+                BlockState top = world.getBiome(this.pos(x, targetY - 1, z)).getSurfaceConfig().getTopMaterial();
+                for (int y = groundY; y < targetY; y++) {
+                    this.set(world, chunkBox, x, y, z, y == targetY - 1 ? top : Blocks.STONE.getDefaultState());
+                }
+            }
+        }
+    }
+
+    private void resolveElevation(ServerWorldAccess world) {
+        int[] dryGround = new int[FOOTPRINT_X * FOOTPRINT_Z];
+        int[] surfaceHeights = new int[FOOTPRINT_X * FOOTPRINT_Z];
+        int dryCount = 0;
+        int sampleCount = 0;
+        for (int x = 0; x < FOOTPRINT_X; x++) {
+            for (int z = 0; z < FOOTPRINT_Z; z++) {
+                int worldX = this.originX + x;
+                int worldZ = this.originZ + z;
+                int ground = world.getTopY(Heightmap.Type.OCEAN_FLOOR, worldX, worldZ);
+                int surface = world.getTopY(Heightmap.Type.WORLD_SURFACE, worldX, worldZ);
+                surfaceHeights[sampleCount++] = surface;
+                if (surface <= ground || !world.getBlockState(new BlockPos(worldX, surface - 1, worldZ)).getMaterial().isLiquid()) {
+                    dryGround[dryCount++] = ground;
+                }
+            }
+        }
+        if (dryCount == 0) {
+            for (int x = -8; x < FOOTPRINT_X + 8; x++) {
+                for (int z = -8; z < FOOTPRINT_Z + 8; z++) {
+                    if (x >= 0 && x < FOOTPRINT_X && z >= 0 && z < FOOTPRINT_Z) continue;
+                    int worldX = this.originX + x;
+                    int worldZ = this.originZ + z;
+                    int ground = world.getTopY(Heightmap.Type.OCEAN_FLOOR, worldX, worldZ);
+                    int surface = world.getTopY(Heightmap.Type.WORLD_SURFACE, worldX, worldZ);
+                    if (surface <= ground || !world.getBlockState(new BlockPos(worldX, surface - 1, worldZ)).getMaterial().isLiquid()) {
+                        if (dryCount == dryGround.length) dryGround = Arrays.copyOf(dryGround, dryGround.length * 2);
+                        dryGround[dryCount++] = ground;
+                    }
+                }
+            }
+        }
+        this.resolveElevationFromGround(dryGround, dryCount, surfaceHeights, sampleCount);
+    }
+
+    void resolveElevationFromGround(int[] dryGround, int dryCount, int[] surfaceHeights, int sampleCount) {
+        int anchor;
+        if (dryCount > 0) {
+            Arrays.sort(dryGround, 0, dryCount);
+            anchor = dryGround[dryCount / 4];
+        } else {
+            Arrays.sort(surfaceHeights, 0, sampleCount);
+            anchor = surfaceHeights[sampleCount / 4];
+        }
+        this.lakeBottomY = Math.max(5, Math.min(248, anchor - 5));
+        this.boundingBox = new BlockBox(this.originX, this.lakeBottomY, this.originZ,
+                this.originX + FOOTPRINT_X - 1, this.lakeBottomY + FOOTPRINT_Y - 1, this.originZ + FOOTPRINT_Z - 1);
+        this.elevationResolved = true;
+    }
+
+    private static boolean[] createVanillaLakeShape(Random random) {
         boolean[] shape = new boolean[FOOTPRINT_X * FOOTPRINT_Z * FOOTPRINT_Y];
         int blobCount = random.nextInt(4) + 4;
 
@@ -94,6 +201,50 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
         }
 
         return shape;
+    }
+
+    public static boolean isVanillaSite(ChunkGenerator generator, int originX, int originZ, int bottomY, long lakeSeed) {
+        boolean[] shape = createVanillaLakeShape(new Random(lakeSeed));
+        for (int x = 0; x < FOOTPRINT_X; x++) {
+            for (int z = 0; z < FOOTPRINT_Z; z++) {
+                BlockView column = generator.getColumnSample(originX + x, originZ + z);
+                for (int y = 0; y < FOOTPRINT_Y; y++) {
+                    if (!isBoundary(shape, x, z, y)) continue;
+                    BlockState state = column.getBlockState(new BlockPos(originX + x, bottomY + y, originZ + z));
+                    if (invalidBoundary(state, y)) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean isValidBoundary(ServerWorldAccess world, int originX, int originZ, int bottomY, boolean[] shape) {
+        for (int x = 0; x < FOOTPRINT_X; x++) {
+            for (int z = 0; z < FOOTPRINT_Z; z++) {
+                for (int y = 0; y < FOOTPRINT_Y; y++) {
+                    if (isBoundary(shape, x, z, y) && invalidBoundary(world.getBlockState(new BlockPos(originX + x, bottomY + y, originZ + z)), y)) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean invalidBoundary(BlockState state, int y) {
+        return y >= 4 ? state.getMaterial().isLiquid() : !state.getMaterial().isSolid() && state != Blocks.LAVA.getDefaultState();
+    }
+
+    private void prepareBoundary(ServerWorldAccess world, BlockBox chunkBox, int bottomY, boolean[] shape) {
+        for (int x = 0; x < FOOTPRINT_X; x++) {
+            for (int z = 0; z < FOOTPRINT_Z; z++) {
+                for (int y = 0; y < FOOTPRINT_Y; y++) {
+                    if (!isBoundary(shape, x, z, y)) continue;
+                    BlockPos pos = this.pos(x, bottomY + y, z);
+                    if (invalidBoundary(world.getBlockState(pos), y)) {
+                        this.set(world, chunkBox, x, bottomY + y, z, Blocks.STONE.getDefaultState());
+                    }
+                }
+            }
+        }
     }
 
     private void carveLake(ServerWorldAccess world, BlockBox chunkBox, int lakeBottomY, boolean[] shape) {
@@ -129,8 +280,7 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
         }
     }
 
-    private void addStoneRim(ServerWorldAccess world, BlockBox chunkBox, int lakeBottomY, boolean[] shape) {
-        Random random = new Random(this.lakeSeed ^ 0x5DEECE66DL);
+    private void addStoneRim(ServerWorldAccess world, BlockBox chunkBox, int lakeBottomY, boolean[] shape, Random random) {
         for (int x = 0; x < FOOTPRINT_X; x++) {
             for (int z = 0; z < FOOTPRINT_Z; z++) {
                 for (int y = 0; y < FOOTPRINT_Y; y++) {
@@ -141,7 +291,7 @@ public class McsreasymodeVillageLavaPoolPiece extends StructurePiece {
                         continue;
                     }
                     BlockPos pos = this.pos(x, lakeBottomY + y, z);
-                    if (world.getBlockState(pos).getMaterial().isSolid() || world.getBlockState(pos).getMaterial().isLiquid()) {
+                    if (world.getBlockState(pos).getMaterial().isSolid()) {
                         this.set(world, chunkBox, x, lakeBottomY + y, z, Blocks.STONE.getDefaultState());
                     }
                 }

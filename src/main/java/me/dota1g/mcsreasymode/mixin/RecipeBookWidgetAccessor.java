@@ -11,6 +11,9 @@ public interface RecipeBookWidgetAccessor {
     @Accessor("searchField")
     TextFieldWidget mcsreasymode$getSearchField();
 
+    @Accessor("searching")
+    void mcsreasymode$setSearching(boolean searching);
+
     @Invoker("refreshResults")
     void mcsreasymode$refreshResults(boolean resetCurrentPage);
 }

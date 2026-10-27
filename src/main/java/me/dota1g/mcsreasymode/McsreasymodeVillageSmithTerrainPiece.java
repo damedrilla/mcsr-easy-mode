@@ -1,9 +1,5 @@
 package me.dota1g.mcsreasymode;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructurePiece;
@@ -69,44 +65,14 @@ public class McsreasymodeVillageSmithTerrainPiece extends StructurePiece {
     }
 
     @Override
-    public boolean generate(ServerWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        for (int x = this.boundingBox.minX; x <= this.boundingBox.maxX; x++) {
-            for (int z = this.boundingBox.minZ; z <= this.boundingBox.maxZ; z++) {
-                for (int y = this.boundingBox.minY; y <= this.boundingBox.maxY; y++) {
-                    mutable.set(x, y, z);
-                    if (!chunkBox.contains(mutable)) {
-                        continue;
-                    }
-
-                    BlockState state = world.getBlockState(mutable);
-                    if (isTerrainToClear(state)) {
-                        world.setBlockState(mutable, Blocks.AIR.getDefaultState(), 2);
-                    }
-                }
-            }
-        }
-        return true;
+    public boolean intersectsChunk(ChunkPos chunkPos, int offset) {
+        // Legacy helper pieces must not alter the noise terrain around a smith.
+        return false;
     }
 
-    private static boolean isTerrainToClear(BlockState state) {
-        Block block = state.getBlock();
-        return block == Blocks.GRASS_BLOCK
-                || block == Blocks.DIRT
-                || block == Blocks.COARSE_DIRT
-                || block == Blocks.PODZOL
-                || block == Blocks.STONE
-                || block == Blocks.GRANITE
-                || block == Blocks.DIORITE
-                || block == Blocks.ANDESITE
-                || block == Blocks.GRAVEL
-                || block == Blocks.SAND
-                || block == Blocks.RED_SAND
-                || block == Blocks.SANDSTONE
-                || block == Blocks.RED_SANDSTONE
-                || block == Blocks.CLAY
-                || block == Blocks.SNOW
-                || block == Blocks.SNOW_BLOCK
-                || block instanceof LeavesBlock;
+    @Override
+    public boolean generate(ServerWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
+        // Kept for loading old village NBT; the terrain-wide clearing caused trenches.
+        return true;
     }
 }

@@ -16,8 +16,11 @@ import java.io.IOException;
 import java.util.List;
 
 public class McsreasymodeConfigScreen extends Screen {
+    private static final String[] TAB_LABELS = {"RNG", "Mobs", "UI", "QoL", "World", "Fun"};
+    private static final int[] SECTION_HEIGHTS = {56, 113, 387, 133, 153, 256};
     private final McsreasymodeConfig config;
     private final Screen parent;
+    private int selectedTab;
 
     private ButtonWidget rngModeButton;
     private ButtonWidget rngInfoButton;
@@ -66,6 +69,7 @@ public class McsreasymodeConfigScreen extends Screen {
     private ButtonWidget fastLootButton;
     private ButtonWidget autoSortEndEntryHotbarButton;
     private ButtonWidget statusEffectTimersButton;
+    private ButtonWidget statusEffectTimerPositionButton;
     private ButtonWidget pieChartPathsButton;
     private int qolSectionY;
     private int sectionLeftX;
@@ -102,7 +106,7 @@ public class McsreasymodeConfigScreen extends Screen {
         int rngInfoButtonX = rightX - infoButtonWidth;
         int hotbarToggleWidth = (this.valueButtonWidth - gap) / 2;
         int hotbarCustomizeWidth = this.valueButtonWidth - gap - hotbarToggleWidth;
-        this.listTop = 42;
+        this.listTop = 58;
         this.listBottom = this.height - 34;
         this.sectionLeftX = leftX;
         this.sectionRightX = rightX;
@@ -112,8 +116,17 @@ public class McsreasymodeConfigScreen extends Screen {
         this.qolSectionY = 562;
         this.worldgenSectionY = 695;
         this.funSectionY = 848;
-        this.contentHeight = this.funSectionY + 256 - (BuildProfile.RELEASE ? 63 : 0);
+        this.updateContentHeight();
         this.scrollOffset = Math.min(this.scrollOffset, this.maxScroll());
+
+        int tabGap = 3;
+        int tabWidth = Math.min(94, (this.width - 24 - tabGap * (TAB_LABELS.length - 1)) / TAB_LABELS.length);
+        int tabLeft = (this.width - tabWidth * TAB_LABELS.length - tabGap * (TAB_LABELS.length - 1)) / 2;
+        for (int i = 0; i < TAB_LABELS.length; i++) {
+            final int tab = i;
+            this.addButton(new ButtonWidget(tabLeft + i * (tabWidth + tabGap), 30, tabWidth, 20,
+                    new LiteralText(TAB_LABELS[i]), button -> this.selectTab(tab)));
+        }
 
         this.rngModeButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, rngValueButtonWidth, 20, this.rngModeValueText(), button -> {
             assert this.client != null;
@@ -259,10 +272,18 @@ public class McsreasymodeConfigScreen extends Screen {
             this.client.openScreen(new McsreasymodePiePathsScreen(this.config, this));
         }));
 
-        this.statusEffectTimersButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.showStatusEffectTimers), button -> {
+        this.statusEffectTimersButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, hotbarToggleWidth, 20, this.toggleValueText(this.config.showStatusEffectTimers), button -> {
             this.config.showStatusEffectTimers = !this.config.showStatusEffectTimers;
             button.setMessage(this.toggleValueText(this.config.showStatusEffectTimers));
+            this.statusEffectTimerPositionButton.active = this.config.showStatusEffectTimers;
         }));
+
+        this.statusEffectTimerPositionButton = this.addButton(new ButtonWidget(this.valueButtonX + hotbarToggleWidth + gap, 0,
+                hotbarCustomizeWidth, 20, this.statusEffectPositionText(), button -> {
+            this.config.statusEffectTimersAboveHunger = !this.config.statusEffectTimersAboveHunger;
+            button.setMessage(this.statusEffectPositionText());
+        }));
+        this.statusEffectTimerPositionButton.active = this.config.showStatusEffectTimers;
 
         if (!BuildProfile.RELEASE) {
             this.autoSortEndEntryHotbarButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.toggleValueText(this.config.autoSortEndEntryHotbar), button -> {
@@ -385,11 +406,20 @@ public class McsreasymodeConfigScreen extends Screen {
         return new LiteralText(enabled ? "On" : "Off");
     }
 
+    private Text statusEffectPositionText() {
+        return new LiteralText(this.config.statusEffectTimersAboveHunger ? "Above Hunger" : "Top Right");
+    }
+
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         this.hoveredTooltip = null;
-        this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 18, 0xFFFFFF);
+        this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 12, 0xFFFFFF);
+        int tabGap = 3;
+        int tabWidth = Math.min(94, (this.width - 24 - tabGap * (TAB_LABELS.length - 1)) / TAB_LABELS.length);
+        int tabLeft = (this.width - tabWidth * TAB_LABELS.length - tabGap * (TAB_LABELS.length - 1)) / 2;
+        int selectedLeft = tabLeft + this.selectedTab * (tabWidth + tabGap);
+        fill(matrices, selectedLeft, 50, selectedLeft + tabWidth, 52, 0xFF55FFFF);
         fill(matrices, this.sectionLeftX - 14, this.listTop - 6, this.sectionRightX + 18, this.listBottom + 6, 0x66000000);
         this.drawSectionDivider(matrices, "RNG", this.toScreenY(this.rngSectionY));
         this.drawSectionDivider(matrices, "Anti-Aggression", this.toScreenY(this.aggressionSectionY));
@@ -418,7 +448,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawRowLabel(matrices, "Godsens Boat Status", this.toScreenY(this.uiSectionY + 243), mouseX, mouseY, "Shows a yellow Eye while resetting and a red Eye when boat steering dirties the angle. A successful reset fades out to a clean, hidden state.");
         this.drawRowLabel(matrices, "Blaze Spawner Overlay", this.toScreenY(this.uiSectionY + 264), mouseX, mouseY, "Shows practice information for visible blaze spawners, including countdown, blocked or bright spawn areas, and availability percentages.");
         this.drawRowLabel(matrices, "Persistent Coordinates", this.toScreenY(this.uiSectionY + 285), mouseX, mouseY, "Shows precise, block, local chunk coordinates and yaw/pitch/facing. Supports Artificial ZSG virtual coordinates.");
-        this.drawRowLabel(matrices, "Search Crafting", this.toScreenY(this.uiSectionY + 306), mouseX, mouseY, "Configure auto-focus and Alt+letter search presets for the crafting recipe book.");
+        this.drawRowLabel(matrices, "Search Crafting", this.toScreenY(this.uiSectionY + 306), mouseX, mouseY, "Choose search focus, backspace behavior, and Alt+letter presets for the recipe book.");
         this.drawRowLabel(matrices, "World Skin", this.toScreenY(this.uiSectionY + 327), mouseX, mouseY, "Randomly picks a skin from your configured pool each time you join a world.");
         this.drawRowLabel(matrices, "Strict Hotbar Hotkeys", this.toScreenY(this.uiSectionY + 348), mouseX, mouseY, "Disables mouse-wheel hotbar cycling in-world so slots can only be selected with hotkeys. Menu scrolling remains available.");
         this.drawRowLabel(matrices, "Filter Explosion Clutter Drops", this.toScreenY(this.qolSectionY + 12), mouseX, mouseY, "Removes saplings, seeds, grass, ferns, and flowers dropped from TNT and other explosions.");
@@ -427,10 +457,10 @@ public class McsreasymodeConfigScreen extends Screen {
             this.drawRowLabel(matrices, "End Entry Hotbar Sort", this.toScreenY(this.qolSectionY + 54), mouseX, mouseY, "On End entry, sorts safe food, pickaxe, bow, bed, 32+ matching solid blocks, blast-resistant blocks, and pearls into slots 1-7.");
         }
         this.drawRowLabel(matrices, "Pie Chart Paths", this.toScreenY(this.qolSectionY + 96), mouseX, mouseY, "Edit named profiler paths and bind a key to cycle between them. The shortcut also opens the debug pie chart.");
-        this.drawRowLabel(matrices, "Status Effect Timers", this.toScreenY(this.qolSectionY + 75), mouseX, mouseY, "Shows remaining effect time beneath transparent HUD icons in the top-right corner. Off restores vanilla icons.");
+        this.drawRowLabel(matrices, "Status Effect Timers", this.toScreenY(this.qolSectionY + 75), mouseX, mouseY, "Shows effect icons with timers in the top-right corner or compactly above hunger. Off restores vanilla icons.");
         this.drawRowLabel(matrices, "Nether Terrain", this.toScreenY(this.worldgenSectionY + 12), mouseX, mouseY, "Customize XZ scale, density, and local routes in the Nether.");
         this.drawRowLabel(matrices, "Ocean Ravines", this.toScreenY(this.worldgenSectionY + 33), mouseX, mouseY, "Customize ocean ravine generation, rarity, and width.");
-        this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "If a vanilla village has no smith, adds a matching vanilla smith template and a nearby lava pool.");
+        this.drawRowLabel(matrices, "Village Standardization", this.toScreenY(this.worldgenSectionY + 54), mouseX, mouseY, "Adds three lava pools, a smith if needed, and village-wide loot. Taiga chests collectively have 10 obsidian plus four iron ingots or an iron pickaxe.");
         this.drawRowLabel(matrices, "Stronghold Anti-Corruption", this.toScreenY(this.worldgenSectionY + 75), mouseX, mouseY, "Protects generated stronghold rooms from caves, liquids, and later world-generation features.");
         this.drawRowLabel(matrices, "Bastion Anti-Corruption", this.toScreenY(this.worldgenSectionY + 96), mouseX, mouseY, "Protects generated bastion blocks, interiors, and block entities from later biome features such as basalt columns.");
         if (!BuildProfile.RELEASE) {
@@ -532,6 +562,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.setButtonY(this.fastLootButton, this.qolSectionY + 33);
         this.setButtonY(this.autoSortEndEntryHotbarButton, this.qolSectionY + 54);
         this.setButtonY(this.statusEffectTimersButton, this.qolSectionY + 75);
+        this.setButtonY(this.statusEffectTimerPositionButton, this.qolSectionY + 75);
         this.setButtonY(this.pieChartPathsButton, this.qolSectionY + 96);
         this.setButtonY(this.netherTerrainButton, this.worldgenSectionY + 12);
         this.setButtonY(this.oceanRavinesButton, this.worldgenSectionY + 33);
@@ -568,13 +599,43 @@ public class McsreasymodeConfigScreen extends Screen {
         button.visible = y + 20 > this.listTop && y < this.listBottom;
     }
 
+    private void selectTab(int tab) {
+        if (this.selectedTab == tab) return;
+        this.selectedTab = tab;
+        this.scrollOffset = 0;
+        this.updateContentHeight();
+        this.updateButtonPositions();
+    }
+
+    private void updateContentHeight() {
+        this.contentHeight = SECTION_HEIGHTS[this.selectedTab];
+        if (BuildProfile.RELEASE && this.selectedTab >= 2 && this.selectedTab <= 4) {
+            this.contentHeight -= 21;
+        }
+    }
+
+    private int sectionStart(int tab) {
+        switch (tab) {
+            case 0: return this.rngSectionY;
+            case 1: return this.aggressionSectionY;
+            case 2: return this.uiSectionY;
+            case 3: return this.qolSectionY;
+            case 4: return this.worldgenSectionY;
+            default: return this.funSectionY;
+        }
+    }
+
     private int toScreenY(int contentY) {
-        int compactY = contentY;
+        int start = this.sectionStart(this.selectedTab);
+        if (contentY < start || contentY >= start + SECTION_HEIGHTS[this.selectedTab]) {
+            return -1000;
+        }
+        int compactY = contentY - start;
         if (BuildProfile.RELEASE) {
-            for (int hiddenY : new int[]{this.uiSectionY + 96, this.qolSectionY + 54,
-                    this.worldgenSectionY + 117}) {
-                if (contentY > hiddenY) compactY -= 21;
-            }
+            int hiddenY = this.selectedTab == 2 ? this.uiSectionY + 96
+                    : this.selectedTab == 3 ? this.qolSectionY + 54
+                    : this.selectedTab == 4 ? this.worldgenSectionY + 117 : Integer.MAX_VALUE;
+            if (contentY > hiddenY) compactY -= 21;
         }
         return this.listTop + compactY - this.scrollOffset;
     }

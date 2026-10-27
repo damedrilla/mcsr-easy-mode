@@ -27,7 +27,7 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$renderStatusEffectTimers(MatrixStack matrices, CallbackInfo ci) {
         if (Mcsreasymode.CONFIG != null && Mcsreasymode.CONFIG.showStatusEffectTimers) {
-            StatusEffectTimerRenderer.render(matrices, this.client);
+            StatusEffectTimerRenderer.render(matrices, this.client, Mcsreasymode.CONFIG.statusEffectTimersAboveHunger);
             ci.cancel();
         }
     }

@@ -24,6 +24,7 @@ Hoglin anti-aggression clears attack targeting and suppresses angry ambient beha
 - Side mouse buttons are shortened to labels such as `M4` and `M5`.
 - Hotbar label customization includes label corner, text size, background, and live previews.
 - HUD hotbar labels and inventory/container hotbar labels have separate styling controls.
+- Status effect timers can use the existing transparent top-right icons or a compact row just above the hunger bar. More effects wrap upward; turning timers off restores vanilla effect icons.
 - Optional debug chat logs echo MCSR Easy Mode debug events into in-game chat while keeping launcher logs.
 - Optional advancement toast hiding prevents advancement popups from covering routing/crafting.
 - The F3 debug HUD shows `MCSR Easy Mode` and the active RNG mode.
@@ -86,7 +87,6 @@ Supported non-bastion tables include:
 - Desert pyramid
 - Shipwreck supply
 - Shipwreck treasure
-- Village weaponsmith
 
 ## Hoglin Stable Standardization
 
@@ -117,12 +117,11 @@ These options are separate from RNG mode and are disabled by default.
 
 ### Village Standardization
 
-When a vanilla village generates without a smith, the mod adds:
+When Village Standardization is enabled, every vanilla village receives three distinct lava pools within six chunks of its center. The mod adds a matching vanilla smith when none generated, and a chest-bearing smith if the existing smith has no loot chest.
 
-- one vanilla NBT-backed smith template matching the village type
-- one nearby custom lava pool
+Supported smith templates include desert, plains, savanna, snowy, and taiga village smiths. The mod also plans all village chest loot from the village's generated type, independent of the `Other Chest Loot Tables` option. It adds only missing resources: taiga villages receive at least 10 obsidian and either four chest iron ingots or an iron pickaxe; villages without chest food or haybales receive bread; villages with less than 10 obsidian receive enough iron for at least 7 including the golem, or 4 iron plus 3 diamonds. Other villages with at least 10 obsidian do not receive guaranteed chest iron. The separate `Iron Golem Drops` option still controls whether golems drop exactly 4 iron; the village plan counts the conservative vanilla minimum when it is off. The taiga mining route is an Easy Mode addition beyond the Ranked reference.
 
-Supported smith templates include desert, plains, savanna, snowy, and taiga village smiths. The mod does not force village spawning; it only adjusts villages that already generated.
+Village chest contents are determined during structure generation, so opening order, chunk order, and reloads do not reroll them. The old fixed weaponsmith loot table is retired. Already generated villages and filled chests are not changed. The mod does not force village spawning; it only adjusts villages that already generated.
 
 ### Stronghold Anti-Corruption
 

@@ -1,6 +1,8 @@
 package me.dota1g.mcsreasymode.mixin;
 
 import me.dota1g.mcsreasymode.Mcsreasymode;
+import me.dota1g.mcsreasymode.McsreasymodeConfig;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -19,8 +21,15 @@ public abstract class RecipeBookWidgetKeyMixin {
 
     @Shadow private TextFieldWidget searchField;
 
+    @Shadow private boolean searching;
+
     @Shadow
     private void refreshResults(boolean resetCurrentPage) {
+        throw new AssertionError("mixin shadow not applied");
+    }
+
+    @Shadow
+    private void refreshSearchResults() {
         throw new AssertionError("mixin shadow not applied");
     }
 
@@ -33,6 +42,28 @@ public abstract class RecipeBookWidgetKeyMixin {
 
     private static final double MCSREASYMODE$BASE_INTERVAL_MS = 1000.0 / 17.6; // ~79ms, matches AHK CPS
     private static final double MCSREASYMODE$JITTER_MS = MCSREASYMODE$BASE_INTERVAL_MS * 0.3;
+
+    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    private void mcsreasymode$backspaceMode(int keyCode, int scanCode, int modifiers,
+                                            CallbackInfoReturnable<Boolean> cir) {
+        McsreasymodeConfig.SearchBackspaceMode mode = Mcsreasymode.CONFIG.searchBackspaceMode;
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (mode == McsreasymodeConfig.SearchBackspaceMode.NORMAL || keyCode != GLFW.GLFW_KEY_BACKSPACE
+                || searchField == null || !searchField.isFocused()
+                || !((RecipeBookWidget) (Object) this).isOpen()
+                || client.player == null || client.player.isSpectator()) {
+            return;
+        }
+
+        searching = false;
+        if (mode == McsreasymodeConfig.SearchBackspaceMode.TO_WHITESPACE) {
+            searchField.eraseWords(-1);
+        } else {
+            searchField.setText("");
+        }
+        this.refreshSearchResults();
+        cir.setReturnValue(true);
+    }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$presetSearch(int keyCode, int scanCode, int modifiers,

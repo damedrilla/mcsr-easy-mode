@@ -90,6 +90,33 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean autoFocusSearchField = true;
 
     @Config.Hide
+    public boolean focusSearchOnChatKey = true;
+
+    public enum SearchBackspaceMode {
+        NORMAL("Normal"),
+        TO_WHITESPACE("To whitespace"),
+        CLEAR_ALL("Clear all");
+
+        private final String displayName;
+
+        SearchBackspaceMode(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String displayName() {
+            return this.displayName;
+        }
+
+        public SearchBackspaceMode next() {
+            SearchBackspaceMode[] values = values();
+            return values[(this.ordinal() + 1) % values.length];
+        }
+    }
+
+    @Config.Hide
+    public SearchBackspaceMode searchBackspaceMode = SearchBackspaceMode.NORMAL;
+
+    @Config.Hide
     public boolean searchPresetsEnabled = true;
 
     @Config.Ignored
@@ -426,6 +453,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean showStatusEffectTimers = true;
 
     @Config.Category("ui")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.statusEffectTimersAboveHunger")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.statusEffectTimersAboveHunger.description")
+    public boolean statusEffectTimersAboveHunger = false;
+
+    @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys")
     @Config.Description("speedrunapi.config.mcsreasymode.option.strictHotbarHotkeys.description")
     public boolean strictHotbarHotkeys = false;
@@ -683,6 +715,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
 
     @Override
     public void onLoad(JsonObject jsonObject, SpeedrunConfigParsedMetadata metadata) {
+        if (!jsonObject.has("focusSearchOnChatKey") && jsonObject.has("autoFocusSearchField")) {
+            jsonObject.addProperty("focusSearchOnChatKey", jsonObject.get("autoFocusSearchField").getAsBoolean());
+        }
         if (jsonObject.has("disableAggression")) {
             boolean oldValue = jsonObject.get("disableAggression").getAsBoolean();
             if (!jsonObject.has("disablePiglinAggression")) {
