@@ -14,7 +14,7 @@ The main config screen is scrollable and uses section dividers with compact rows
 
 - `RNG` -> opens the per-feature RNG submenu.
 - `i` -> opens the Ranked standardization summary.
-- `Piglins` -> `Disabled / Vanilla`.
+- `Piglins` -> `Follow Only / Attack if Provoked / Vanilla`.
 - `Ghasts` -> `Disabled / Vanilla`.
 - `Hoglins` -> `Disabled / Vanilla`.
 - `Move Save & Quit` -> `On / Off`.

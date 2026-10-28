@@ -85,6 +85,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG == null || CONFIG.disablePiglinAggression;
     }
 
+    public static boolean shouldSuppressProvokedPiglinAttacks() {
+        return isPiglinAggressionDisabled() && (CONFIG == null || !CONFIG.piglinAttackWhenProvoked);
+    }
+
     public static boolean isGhastAggressionDisabled() {
         return CONFIG == null || CONFIG.disableGhastAggression;
     }

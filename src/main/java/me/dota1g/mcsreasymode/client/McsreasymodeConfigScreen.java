@@ -138,9 +138,17 @@ public class McsreasymodeConfigScreen extends Screen {
             this.client.openScreen(new McsreasymodeAdjustmentsScreen(this));
         }));
 
-        this.piglinAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disablePiglinAggression), button -> {
-            this.config.disablePiglinAggression = !this.config.disablePiglinAggression;
-            button.setMessage(this.aggressionValueText(this.config.disablePiglinAggression));
+        this.piglinAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.piglinAggressionValueText(), button -> {
+            if (!this.config.disablePiglinAggression) {
+                this.config.disablePiglinAggression = true;
+                this.config.piglinAttackWhenProvoked = false;
+            } else if (!this.config.piglinAttackWhenProvoked) {
+                this.config.piglinAttackWhenProvoked = true;
+            } else {
+                this.config.disablePiglinAggression = false;
+                this.config.piglinAttackWhenProvoked = false;
+            }
+            button.setMessage(this.piglinAggressionValueText());
         }));
 
         this.ghastAggressionButton = this.addButton(new ButtonWidget(this.valueButtonX, 0, this.valueButtonWidth, 20, this.aggressionValueText(this.config.disableGhastAggression), button -> {
@@ -402,6 +410,11 @@ public class McsreasymodeConfigScreen extends Screen {
         return new LiteralText(enabled ? "Disabled" : "Vanilla");
     }
 
+    private Text piglinAggressionValueText() {
+        if (!this.config.disablePiglinAggression) return new LiteralText("Vanilla");
+        return new LiteralText(this.config.piglinAttackWhenProvoked ? "Attack if Provoked" : "Follow Only");
+    }
+
     private Text toggleValueText(boolean enabled) {
         return new LiteralText(enabled ? "On" : "Off");
     }
@@ -428,7 +441,7 @@ public class McsreasymodeConfigScreen extends Screen {
         this.drawSectionDivider(matrices, "Worldgen", this.toScreenY(this.worldgenSectionY));
         this.drawSectionDivider(matrices, "Fun Mode", this.toScreenY(this.funSectionY));
         this.drawRowLabel(matrices, "RNG", this.toScreenY(this.rngSectionY + 12), mouseX, mouseY, "Opens per-feature Vanilla or Ranked standardization toggles.");
-        this.drawRowLabel(matrices, "Piglins", this.toScreenY(this.aggressionSectionY + 12), mouseX, mouseY, "Spoofs gold armor behavior so piglins stay neutral without taking an armor slot.");
+        this.drawRowLabel(matrices, "Piglins", this.toScreenY(this.aggressionSectionY + 12), mouseX, mouseY, "Follow Only: angry piglins approach without damage. Attack if Provoked: chest, gold-block, or direct attacks can trigger combat. Vanilla: normal piglin behavior.");
         this.drawRowLabel(matrices, "Ghasts", this.toScreenY(this.aggressionSectionY + 33), mouseX, mouseY, "Prevents ghasts from choosing the player as an attack target.");
         this.drawRowLabel(matrices, "Hoglins", this.toScreenY(this.aggressionSectionY + 54), mouseX, mouseY, "Prevents hoglins from choosing the player as an attack target.");
         this.drawRowLabel(matrices, "Drowned", this.toScreenY(this.aggressionSectionY + 75), mouseX, mouseY, "Prevents drowned from targeting the player with melee attacks or thrown tridents.");

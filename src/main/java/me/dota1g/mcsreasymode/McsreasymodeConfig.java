@@ -257,6 +257,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean disablePiglinAggression = true;
 
     @Config.Category("mobs")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.piglinAttackWhenProvoked")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.piglinAttackWhenProvoked.description")
+    public boolean piglinAttackWhenProvoked = false;
+
+    @Config.Category("mobs")
     @Config.Name("speedrunapi.config.mcsreasymode.option.disableGhastAggression")
     @Config.Description("speedrunapi.config.mcsreasymode.option.disableGhastAggression.description")
     public boolean disableGhastAggression = true;

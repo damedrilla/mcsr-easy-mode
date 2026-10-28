@@ -12,7 +12,9 @@
   "speedrunapi.config.mcsreasymode.option.rngMode.description": "Switches between vanilla Minecraft RNG and Ranked-style RNG adjustments.",
   "speedrunapi.config.mcsreasymode.category.mobs": "Mobs",
   "speedrunapi.config.mcsreasymode.option.disablePiglinAggression": "Disable piglin aggression",
-  "speedrunapi.config.mcsreasymode.option.disablePiglinAggression.description": "Prevents piglins from targeting or attacking.",
+  "speedrunapi.config.mcsreasymode.option.disablePiglinAggression.description": "Spoofs gold armor so piglins stay neutral until provoked. Pair with Piglin Attacks if Provoked to allow combat after chest, gold-block, or direct attack triggers.",
+  "speedrunapi.config.mcsreasymode.option.piglinAttackWhenProvoked": "Piglin attacks if provoked",
+  "speedrunapi.config.mcsreasymode.option.piglinAttackWhenProvoked.description": "When piglin aggression is disabled, allow melee and crossbow attacks against players after a vanilla anger trigger. Off keeps angry piglins following without damage.",
   "speedrunapi.config.mcsreasymode.option.disableGhastAggression": "Disable ghast aggression",
   "speedrunapi.config.mcsreasymode.option.disableGhastAggression.description": "Prevents ghasts from targeting, attacking, or shooting fireballs.",
   "speedrunapi.config.mcsreasymode.option.disableHoglinAggression": "Disable hoglin aggression",
@@ -114,7 +116,7 @@
   "mcsreasymode.screen.rng.bastion_chest_loot": "Bastion Chest Loot",
   "mcsreasymode.screen.rng.bastion_chest_loot.tooltip": "Uses ranked bastion chest standardization for required iron and obsidian, then returns to vanilla.",
   "mcsreasymode.screen.rng.other_chest_loot_tables": "Other Chest Loot Tables",
-  "mcsreasymode.screen.rng.other_chest_loot_tables.tooltip": "Uses ranked custom loot tables for supported non-bastion, non-village chests. Village loot follows Village Standardization.",
+  "mcsreasymode.screen.rng.other_chest_loot_tables.tooltip": "Plans Overworld ruined portal loot from the generated frame. With RP Animals enabled, food is split evenly between chest food and a Fire Aspect golden sword with nearby animals. Village loot follows Village Standardization.",
   "mcsreasymode.screen.rng.buried_treasure_chance": "Buried Treasure Chance",
   "mcsreasymode.screen.rng.buried_treasure_chance.tooltip": "Raises buried treasure generation chance to AreEssGee's 7% per eligible chunk.",
   "mcsreasymode.screen.rng.hoglin_stable_ramparts": "Hoglin Stable Ramparts",
@@ -132,5 +134,5 @@
   "mcsreasymode.screen.rng.group.world_interaction": "World Interactions",
   "mcsreasymode.screen.rng.group.bastion_standardization" : "Bastions",
   "mcsreasymode.screen.rng.rp_herd": "RP Animals",
-  "mcsreasymode.screen.rng.rp_herd.tooltip" : "Guarantees animals around Ruined Portal for food"
+  "mcsreasymode.screen.rng.rp_herd.tooltip" : "With ranked portal loot, enables the 50/50 animal-and-Fire-Aspect-sword food route. Otherwise guarantees animals near each ruined portal."
 }

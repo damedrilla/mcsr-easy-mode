@@ -8,7 +8,7 @@ Aggression toggles are mob-specific:
 - Ghasts
 - Hoglins
 
-Piglin anti-aggression spoofs gold armor checks, so the player does not need to wear gold armor. Vanilla anger triggers such as attacking piglins, opening guarded containers, or mining guarded gold-related blocks can still provoke piglins.
+Piglin anti-aggression spoofs gold armor checks, so the player does not need to wear gold armor. The Mobs menu offers three piglin modes. `Follow Only` keeps vanilla anger triggers (attacking piglins, opening guarded containers, or mining guarded gold-related blocks), but angry piglins follow without hurting players. `Attack if Provoked` keeps the same neutral behavior until one of those triggers, then allows melee and crossbow attacks against players. `Vanilla` restores normal piglin behavior. Piglins can still fight other mobs in every mode.
 
 Ghast anti-aggression blocks targeting and fireball behavior.
 
@@ -78,15 +78,16 @@ The bastion chest adjustment:
 - keeps the original vanilla bastion table inside the Ranked table before adding the guaranteed items
 - does not currently apply to `bastion_hoglin_stable` or `bastion_treasure` chests
 
-When `Other Chest Loot Tables` is Ranked, the mod swaps selected vanilla chest loot tables to mod-owned Ranked tables at generation time. When set to Vanilla, these chests use the normal Minecraft loot tables because the mod does not globally override the `minecraft` namespace loot tables.
+When `Other Chest Loot Tables` is Ranked, the mod uses custom loot tables for the selected chests below and a structure-aware plan for Overworld ruined portal chests. When set to Vanilla, these chests use the normal Minecraft loot tables because the mod does not globally override the `minecraft` namespace loot tables.
 
 Supported non-bastion tables include:
 
-- Ruined portal
 - Buried treasure
 - Desert pyramid
 - Shipwreck supply
 - Shipwreck treasure
+
+Ruined portal loot starts with a deterministic roll of the vanilla chest table. With `RP Animals` enabled, each eligible portal independently chooses chest food or nearby animals plus a Fire Aspect golden sword with equal probability. The animal route removes golden apples and golden carrots from the vanilla chest roll; the chest route keeps them and supplies golden carrots if none were rolled. With `RP Animals` disabled, every planned chest supplies food. The mod also ensures ignition and at least 18 spare iron nuggets. It counts the portal's usable frame obsidian after vanilla's crying-obsidian processing, then adds only the remaining chest obsidian needed for a minimum portal. Where a template lava source survives, one in five portals uses a water bucket to cast one missing frame block and receives one less obsidian; otherwise the route uses obsidian. Portals without surviving template lava always use obsidian. Portals whose vanilla chest is lost to terrain are not given a replacement chest. The plan and filled chest inventory are saved during generation, so opening the chest does not reroll it. Nether ruined portals and existing filled chests are unchanged.
 
 ## Hoglin Stable Standardization
 

@@ -7,6 +7,8 @@ import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.HoglinEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.DrownedEntity;
+import net.minecraft.entity.mob.PiglinEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -39,6 +41,12 @@ public abstract class MobEntityMixin {
 
     @Inject(method = "tryAttack", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$cancelAttack(Entity target, CallbackInfoReturnable<Boolean> cir) {
+        Object self = this;
+        if (self instanceof PiglinEntity && target instanceof PlayerEntity && Mcsreasymode.shouldSuppressProvokedPiglinAttacks()) {
+            Mcsreasymode.debugRateLimited("piglin.melee", "Piglin followed angry target without melee damage.", 2000L);
+            cir.setReturnValue(false);
+            return;
+        }
         if (this.mcsreasymode$shouldDisableAggression()) {
             Mcsreasymode.debugRateLimited(this.mcsreasymode$getAggressionLogKey() + ".attack", this.mcsreasymode$getAggressionLogName() + " aggression cancelled: attack blocked.", 2000L);
             cir.setReturnValue(false);

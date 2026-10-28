@@ -30,8 +30,6 @@ import java.util.Random;
 @Mixin(LootableContainerBlockEntity.class)
 public abstract class LootableContainerBlockEntityMixin {
     @Unique
-    private static final Identifier MCSREASYMODE_RUINED_PORTAL_CHEST = new Identifier("minecraft", "chests/ruined_portal");
-    @Unique
     private static final Identifier MCSREASYMODE_BURIED_TREASURE_CHEST = new Identifier("minecraft", "chests/buried_treasure");
     @Unique
     private static final Identifier MCSREASYMODE_DESERT_PYRAMID_CHEST = new Identifier("minecraft", "chests/desert_pyramid");
@@ -143,9 +141,6 @@ public abstract class LootableContainerBlockEntityMixin {
         }
         if (!Mcsreasymode.isRankedChestLootTablesEnabled()) {
             return null;
-        }
-        if (MCSREASYMODE_RUINED_PORTAL_CHEST.equals(vanillaLootTableId)) {
-            return new Identifier(Mcsreasymode.MOD_ID, "chests/ruined_portal");
         }
         if (MCSREASYMODE_BURIED_TREASURE_CHEST.equals(vanillaLootTableId)) {
             return new Identifier(Mcsreasymode.MOD_ID, "chests/buried_treasure");
