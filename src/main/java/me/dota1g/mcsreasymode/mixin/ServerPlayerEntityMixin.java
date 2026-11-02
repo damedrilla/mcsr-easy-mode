@@ -37,10 +37,16 @@ public abstract class ServerPlayerEntityMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/world/PortalForcer;usePortal(Lnet/minecraft/entity/Entity;F)Z",
             ordinal = 0))
-    private void mcsreasymode$captureNetherRouteEntry(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
+    private void mcsreasymode$prepareNetherEntry(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         if (player.getServerWorld().getRegistryKey() != World.OVERWORLD
                 || destination.getRegistryKey() != World.NETHER) return;
+        if (Mcsreasymode.isRankedNetherEntryHeightEnabled()) {
+            // Normalize before the first lookup so both existing-portal linking and
+            // portal creation use Y64. Vanilla still chooses the final terrain height.
+            // enteredNetherPos has already recorded the actual Overworld position.
+            player.refreshPositionAndAngles(player.getX(), 64.0D, player.getZ(), player.yaw, player.pitch);
+        }
         ChunkGenerator generator = destination.getChunkManager().getChunkGenerator();
         if (!(generator instanceof NetherRouteEntry)) return;
         // Vanilla has scaled/clamped X/Z here, but portal search has not loaded chunks yet.

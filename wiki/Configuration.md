@@ -17,6 +17,7 @@ The main config screen is scrollable and uses section dividers with compact rows
 - `Piglins` -> `Follow Only / Attack if Provoked / Vanilla`.
 - `Ghasts` -> `Disabled / Vanilla`.
 - `Hoglins` -> `Disabled / Vanilla`.
+- `No Blaze Melee Attack` (Mobs tab) -> `On / Off`; defaults to Off. Fireball attacks remain vanilla.
 - `Move Save & Quit` -> `On / Off`.
 - `Hotbar Hotkeys` -> `On / Off`, plus `Customize`.
 - `Debug Chat Logs` -> `On / Off`.
@@ -92,6 +93,7 @@ Individual toggles:
 - Piglin string
 - Flint
 - Blind portal anti-cave
+- Nether entry height (treats Overworld portal height as Y64 for Nether linking and creation)
 - Bastion chest loot
 - Other chest loot tables
 - Hoglin stable ramparts

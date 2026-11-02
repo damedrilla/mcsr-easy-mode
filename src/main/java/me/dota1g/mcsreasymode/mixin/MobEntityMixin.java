@@ -4,6 +4,7 @@ import me.dota1g.mcsreasymode.Mcsreasymode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.GhastEntity;
+import net.minecraft.entity.mob.BlazeEntity;
 import net.minecraft.entity.mob.HoglinEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.DrownedEntity;
@@ -42,6 +43,10 @@ public abstract class MobEntityMixin {
     @Inject(method = "tryAttack", at = @At("HEAD"), cancellable = true)
     private void mcsreasymode$cancelAttack(Entity target, CallbackInfoReturnable<Boolean> cir) {
         Object self = this;
+        if (self instanceof BlazeEntity && Mcsreasymode.isBlazeMeleeAttackDisabled()) {
+            cir.setReturnValue(false);
+            return;
+        }
         if (self instanceof PiglinEntity && target instanceof PlayerEntity && Mcsreasymode.shouldSuppressProvokedPiglinAttacks()) {
             Mcsreasymode.debugRateLimited("piglin.melee", "Piglin followed angry target without melee damage.", 2000L);
             cir.setReturnValue(false);

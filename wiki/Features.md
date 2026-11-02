@@ -14,6 +14,8 @@ Ghast anti-aggression blocks targeting and fireball behavior.
 
 Hoglin anti-aggression clears attack targeting and suppresses angry ambient behavior.
 
+`No Blaze Melee Attack` in the Mobs tab blocks blaze melee attacks when enabled. It defaults to off and preserves vanilla targeting, movement, and fireball behavior.
+
 ## UI Features
 
 - Move the pause menu `Save and Quit` button to the bottom-left corner.
@@ -46,6 +48,7 @@ The RNG submenu includes one-button `Toggle All` behavior plus per-feature toggl
 - Piglin string
 - Flint
 - Blind portal anti-cave
+- Nether entry height
 - Bastion chest loot
 - Other chest loot tables
 - Hoglin stable ramparts
@@ -100,6 +103,10 @@ The mod preserves vanilla bastion placement, spacing, and quadrant rules. It doe
 To keep placement vanilla-adjacent, the mod rerolls the vanilla hoglin stable jigsaw assembly at the same generated bastion position until it finds adjacent full-height ramparts, or keeps the best fallback after a limited number of attempts.
 
 Only hoglin stable internals are standardized this way. Other bastion types use vanilla structure assembly.
+
+## Nether Entry Height
+
+When `Nether Entry Height` is Ranked, every player portal entry from the Overworld to the Nether uses Y64 as the destination search height, regardless of the Overworld portal's actual height. This applies to both finding existing portals and creating new ones. X/Z scaling and border clamping are unchanged, and terrain still determines the final Nether portal height; the portal is not forced to Y64. Return trips to the Overworld keep their existing behavior. This toggle follows Ranked mode and `Toggle All`, and defaults to Vanilla.
 
 ## Blind Portal Anti-Cave
 

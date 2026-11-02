@@ -213,6 +213,9 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     public boolean rankedBlindPortal = false;
 
     @Config.Hide
+    public boolean rankedNetherEntryHeight = false;
+
+    @Config.Hide
     public boolean rankedBastionChestLoot = false;
 
     @Config.Hide
@@ -275,6 +278,11 @@ public class McsreasymodeConfig implements SpeedrunConfig {
     @Config.Name("speedrunapi.config.mcsreasymode.option.disableDrownedAggression")
     @Config.Description("speedrunapi.config.mcsreasymode.option.disableDrownedAggression.description")
     public boolean disableDrownedAggression = true;
+
+    @Config.Category("mobs")
+    @Config.Name("speedrunapi.config.mcsreasymode.option.disableBlazeMeleeAttack")
+    @Config.Description("speedrunapi.config.mcsreasymode.option.disableBlazeMeleeAttack.description")
+    public boolean disableBlazeMeleeAttack = false;
 
     @Config.Category("ui")
     @Config.Name("speedrunapi.config.mcsreasymode.option.filterExplosionClutterDrops")
@@ -626,6 +634,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
         this.rankedPiglinString = ranked;
         this.rankedFlint = ranked;
         this.rankedBlindPortal = ranked;
+        this.rankedNetherEntryHeight = ranked;
         this.rankedBastionChestLoot = ranked;
         this.rankedChestLootTables = ranked;
         this.rankedBuriedTreasureChance = ranked;
@@ -641,6 +650,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && this.rankedPiglinString
                 && this.rankedFlint
                 && this.rankedBlindPortal
+                && this.rankedNetherEntryHeight
                 && this.rankedBastionChestLoot
                 && this.rankedChestLootTables
                 && this.rankedBuriedTreasureChance
@@ -655,6 +665,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
                 && !this.rankedPiglinString
                 && !this.rankedFlint
                 && !this.rankedBlindPortal
+                && !this.rankedNetherEntryHeight
                 && !this.rankedBastionChestLoot
                 && !this.rankedChestLootTables
                 && !this.rankedBuriedTreasureChance
@@ -747,6 +758,7 @@ public class McsreasymodeConfig implements SpeedrunConfig {
             this.migrateRngFeature(jsonObject, "rankedPiglinString", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedFlint", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBlindPortal", oldRankedMode);
+            this.migrateRngFeature(jsonObject, "rankedNetherEntryHeight", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBastionChestLoot", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedChestLootTables", oldRankedMode);
             this.migrateRngFeature(jsonObject, "rankedBuriedTreasureChance", oldRankedMode);

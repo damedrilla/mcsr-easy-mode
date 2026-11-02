@@ -87,7 +87,7 @@ build/libs/mcsreasymode-<version>.jar
 
 Run `gradle build -PreleaseBuild=true` to build the release UI profile into `build-release/libs/mcsreasymode-release-<version>.jar`. The regular `gradle build` keeps all settings and writes to `build/libs/`. Each profile has its own build output; no clean is required when switching.
 
-The release settings hide the Easy Mode marker toggle, bastion type selector, and End entry hotbar sort. Nether terrain controls (including global noise sliders and presets), local Nether routes, basalt replacement, and ocean ravine settings remain available. Hiding these controls preserves their saved values and runtime behavior; the Easy Mode marker remains present by default.
+The release settings hide the Easy Mode marker toggle and End entry hotbar sort. Bastion type selection, Nether terrain controls (including global noise sliders and presets), local Nether routes, basalt replacement, and ocean ravine settings remain available. Hiding these controls preserves their saved values and runtime behavior; the Easy Mode marker remains present by default.
 
 The pre-release-settings jar is preserved separately under `artifacts/preserved/`, outside both build directories.
 

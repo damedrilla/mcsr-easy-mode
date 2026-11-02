@@ -16,6 +16,7 @@ public class McsreasymodeAdjustmentsScreen extends Screen {
             "Piglin barters pity 8-24 strings after 24 dry barters.",
             "Gravel keeps 10% flint odds with no more than 9 dry breaks.",  
             "First Nether Y48+ blind travel portal creates on the surface.",
+            "Overworld-to-Nether portal search and creation use Y64 as the input height.",
             "First eligible bastion chest uses Ranked loot, then later ones are vanilla.",
             "Selected chest loot tables swap to Ranked versions only in Ranked mode.",
             "Ruined portal and buried treasure chests use speedrun-focused tables.",

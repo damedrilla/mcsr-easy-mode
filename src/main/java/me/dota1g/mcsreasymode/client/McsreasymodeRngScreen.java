@@ -105,6 +105,10 @@
                 public boolean get() { return McsreasymodeRngScreen.this.config.rankedEyeBreaks; }
                 public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedEyeBreaks = value; }
             });
+            this.addRow("mcsreasymode.screen.rng.nether_entry_height", "mcsreasymode.screen.rng.nether_entry_height.tooltip", new FeatureAccess() {
+                public boolean get() { return McsreasymodeRngScreen.this.config.rankedNetherEntryHeight; }
+                public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedNetherEntryHeight = value; }
+            });
             this.addRow("mcsreasymode.screen.rng.blind_portal", "mcsreasymode.screen.rng.blind_portal.tooltip", new FeatureAccess() {
                 public boolean get() { return McsreasymodeRngScreen.this.config.rankedBlindPortal; }
                 public void set(boolean value) { McsreasymodeRngScreen.this.config.rankedBlindPortal = value; }

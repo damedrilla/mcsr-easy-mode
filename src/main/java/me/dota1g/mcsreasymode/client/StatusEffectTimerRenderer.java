@@ -8,6 +8,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.tag.FluidTags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +47,14 @@ public final class StatusEffectTimerRenderer {
 
     private static void renderCompact(MatrixStack matrices, MinecraftClient client,
             List<StatusEffectInstance> beneficial, List<StatusEffectInstance> harmful) {
-        // Hunger occupies the right half of the hotbar. Air bubbles can appear
-        // immediately above it, so the lowest timer row ends above both bars.
+        // Match vanilla air-bar visibility, including air refilling after surfacing.
+        // Leave a small gap above hunger and reserve another bar only when needed.
         int left = client.getWindow().getScaledWidth() / 2 + 10;
         int rightEdge = client.getWindow().getScaledWidth() / 2 + 95;
         int right = rightEdge;
-        int bottomRowY = client.getWindow().getScaledHeight() - 73;
+        boolean airBarVisible = client.player.isSubmergedIn(FluidTags.WATER)
+                || client.player.getAir() < client.player.getMaxAir();
+        int bottomRowY = client.getWindow().getScaledHeight() - 63 - (airBarVisible ? 10 : 0);
         int row = 0;
         List<StatusEffectInstance> effects = new ArrayList<>(beneficial);
         effects.addAll(harmful);

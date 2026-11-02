@@ -56,6 +56,10 @@ public class Mcsreasymode implements ModInitializer {
         return CONFIG != null && CONFIG.rankedFlint;
     }
 
+    public static boolean isRankedNetherEntryHeightEnabled() {
+        return CONFIG != null && CONFIG.rankedNetherEntryHeight;
+    }
+
     public static boolean isRankedBlindPortalEnabled() {
         return CONFIG != null && CONFIG.rankedBlindPortal;
     }
@@ -95,6 +99,10 @@ public class Mcsreasymode implements ModInitializer {
 
     public static boolean isHoglinAggressionDisabled() {
         return CONFIG == null || CONFIG.disableHoglinAggression;
+    }
+
+    public static boolean isBlazeMeleeAttackDisabled() {
+        return CONFIG != null && CONFIG.disableBlazeMeleeAttack;
     }
 
     public static boolean isDrownedAggressionDisabled() {
